@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Premium Luxury Effects */
+@layer components {
+  /* Premium Dark Background Gradient */
+  .luxury-bg {
+    @apply bg-gradient-to-br from-luxury-dark via-luxury-secondary to-luxury-tertiary;
+  }
+
+  /* Gold swirl ornament with enhanced glow */
+  .ornament-swirl {
+    @apply relative inline-block;
+  }
+
+  .ornament-swirl::before {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 215, 0, 0.4) 50%, transparent 100%);
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 50% 85%, 18% 100%, 0% 38%);
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+  }
+
+  /* Enhanced Sparkle particles */
+  .sparkle {
+    @apply absolute rounded-full bg-gold-primary;
+    animation: sparklePulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+  }
+
+  /* Premium Glow Effect */
+  .soft-glow {
+    @apply shadow-glow;
+  }
+
+  .premium-glow {
+    @apply shadow-premium;
+  }
+
+  /* Premium Glass Card Effect */
+  .glass-card {
+    @apply bg-glass-dark backdrop-blur-xl border border-gold-primary/30 rounded-2xl;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Ruby Glass Card */
+  .glass-card-ruby {
+    @apply bg-glass-dark backdrop-blur-xl border border-ruby-luxury/40 rounded-2xl shadow-glow-ruby;
+  }
+
+  /* Emerald Glass Card */
+  .glass-card-emerald {
+    @apply bg-glass-dark backdrop-blur-xl border border-emerald-luxury/40 rounded-2xl shadow-glow-emerald;
+  }
+
+  /* Sapphire Glass Card */
+  .glass-card-sapphire {
+    @apply bg-glass-dark backdrop-blur-xl border border-sapphire-luxury/40 rounded-2xl shadow-glow-sapphire;
+  }
+
+  /* Premium Gold Text Gradient */
+  .text-gold-gradient {
+    @apply text-transparent bg-clip-text;
+    background: linear-gradient(135deg, #FFD700 0%, #FFED4E 50%, #F5D547 100%);
+  }
+
+  /* Jewel Tone Gradients */
+  .text-ruby-gradient {
+    @apply text-transparent bg-clip-text;
+    background: linear-gradient(135deg, #8B1538 0%, #D4536F 100%);
+  }
+
+  .text-emerald-gradient {
+    @apply text-transparent bg-clip-text;
+    background: linear-gradient(135deg, #0F7938 0%, #4CAF50 100%);
+  }
+
+  .text-sapphire-gradient {
+    @apply text-transparent bg-clip-text;
+    background: linear-gradient(135deg, #0F3A7D 0%, #4A90E2 100%);
+  }
+
+  /* Concentric rings effect with jewel tones */
+  .spotlight-rings {
+    @apply relative;
+  }
+
+  .spotlight-rings::before {
+    content: '';
+    @apply absolute inset-0 rounded-full pointer-events-none;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    transform: scale(1.3);
+  }
+
+  .spotlight-rings::after {
+    content: '';
+    @apply absolute inset-0 rounded-full pointer-events-none;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    transform: scale(1.6);
+  }
+
+  /* Luxury serif typography */
+  .luxury-serif {
+    @apply font-serif font-light tracking-widest;
+  }
+
+  /* Floating nav */
+  .floating-nav {
+    @apply fixed top-8 left-1/2 -translate-x-1/2 z-50;
+  }
+
+  /* Premium Hover Effects */
+  .hover-gold-glow {
+    @apply transition-all duration-300 hover:shadow-glow hover:text-gold-primary cursor-pointer;
+  }
+
+  .hover-ruby-glow {
+    @apply transition-all duration-300 hover:shadow-glow-ruby hover:text-ruby-luxury cursor-pointer;
+  }
+
+  .hover-emerald-glow {
+    @apply transition-all duration-300 hover:shadow-glow-emerald hover:text-emerald-luxury cursor-pointer;
+  }
+
+  .hover-sapphire-glow {
+    @apply transition-all duration-300 hover:shadow-glow-sapphire hover:text-sapphire-luxury cursor-pointer;
+  }
+
+  /* Hero spotlight container with jewel gradients */
+  .hero-spotlight {
+    @apply relative w-96 h-96 mx-auto;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.25) 0%, transparent 70%);
+  }
+
+  .hero-spotlight-ruby {
+    @apply relative w-96 h-96 mx-auto;
+    background: radial-gradient(circle, rgba(139, 21, 56, 0.25) 0%, transparent 70%);
+  }
+
+  .hero-spotlight-emerald {
+    @apply relative w-96 h-96 mx-auto;
+    background: radial-gradient(circle, rgba(15, 121, 56, 0.25) 0%, transparent 70%);
+  }
+
+  /* Premium Animated Gradients */
+  .animated-gradient {
+    background: linear-gradient(-45deg, #0A0E27, #111B3D, #0F1428, #0A0E27);
+    background-size: 400% 400%;
+    animation: gradientPremium 20s ease infinite;
+  }
+
+  /* Gradient with Jewel Accents */
+  .gradient-jewels {
+    background: linear-gradient(135deg, rgba(15, 121, 56, 0.1), rgba(255, 215, 0, 0.1), rgba(139, 21, 56, 0.1), rgba(15, 58, 125, 0.1));
+    background-size: 400% 400%;
+    animation: gradientPremium 25s ease infinite;
+  }
+
+  /* Premium Button Styles */
+  .btn-premium-gold {
+    @apply relative px-8 py-3 text-white font-semibold rounded-lg overflow-hidden;
+    background: linear-gradient(135deg, #FFD700, #F5D547);
+    color: #0A0E27;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .btn-premium-gold:hover {
+    @apply scale-105;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
+  }
+
+  .btn-premium-ruby {
+    @apply relative px-8 py-3 text-white font-semibold rounded-lg overflow-hidden;
+    background: linear-gradient(135deg, #8B1538, #D4536F);
+    box-shadow: 0 0 30px rgba(139, 21, 56, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .btn-premium-ruby:hover {
+    @apply scale-105;
+    box-shadow: 0 0 50px rgba(139, 21, 56, 0.7);
+  }
+
+  /* Shimmer effect for premium elements */
+  .shimmer {
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 215, 0, 0.1));
+    background-size: 200% 200%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  /* Eye-catching accent borders */
+  .border-gold-glow {
+    @apply border-gold-primary/50 border-2;
+    box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+
+  .border-ruby-glow {
+    @apply border-ruby-luxury/50 border-2;
+    box-shadow: inset 0 0 20px rgba(139, 21, 56, 0.2);
+  }
+
+  .border-emerald-glow {
+    @apply border-emerald-luxury/50 border-2;
+    box-shadow: inset 0 0 20px rgba(15, 121, 56, 0.2);
+  }
+}
+
+@keyframes sparklePulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes gradientPremium {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    background-position: 200% center;
+  }
+  50% {
+    background-position: -200% center;
+  }
+}

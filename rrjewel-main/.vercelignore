@@ -1,0 +1,16 @@
+.git
+.gitignore
+README.md
+node_modules
+npm-debug.log
+server/node_modules
+server/uploads
+.env.local
+.env.*.local
+dist/.vite
+src/
+tsconfig.node.json
+vite.config.ts
+tailwind.config.js
+postcss.config.js
+eslint.config.js
