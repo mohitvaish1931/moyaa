@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, User, Heart, ShoppingBag, ChevronDown, Menu, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
