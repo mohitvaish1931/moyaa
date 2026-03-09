@@ -18,39 +18,64 @@ const upload = multer({ storage });
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const items = await Product.find().sort({ createdAt: -1 });
-  res.json(items);
+  try {
+    const items = await Product.find().sort({ createdAt: -1 });
+    res.json(items);
+  } catch (err) {
+    console.error('GET /api/products error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.get('/:id', async (req, res) => {
-  const item = await Product.findById(req.params.id);
-  if (!item) return res.status(404).json({ error: 'Not found' });
-  res.json(item);
+  try {
+    const item = await Product.findById(req.params.id);
+    if (!item) return res.status(404).json({ error: 'Not found' });
+    res.json(item);
+  } catch (err) {
+    console.error('GET /api/products/:id error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.post('/', upload.single('image'), async (req, res) => {
-  const body = { ...req.body };
-  if (req.file) {
-    body.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  try {
+    const body = { ...req.body };
+    if (req.file) {
+      body.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    }
+    const p = new Product(body);
+    await p.save();
+    res.status(201).json(p);
+  } catch (err) {
+    console.error('POST /api/products error:', err);
+    res.status(500).json({ error: err.message });
   }
-  const p = new Product(body);
-  await p.save();
-  res.status(201).json(p);
 });
 
 router.put('/:id', upload.single('image'), async (req, res) => {
-  const body = { ...req.body };
-  if (req.file) {
-    body.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  try {
+    const body = { ...req.body };
+    if (req.file) {
+      body.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    }
+    const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
+    if (!updated) return res.status(404).json({ error: 'Not found' });
+    res.json(updated);
+  } catch (err) {
+    console.error('PUT /api/products/:id error:', err);
+    res.status(500).json({ error: err.message });
   }
-  const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
-  if (!updated) return res.status(404).json({ error: 'Not found' });
-  res.json(updated);
 });
 
 router.delete('/:id', async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
-  res.json({ ok: true });
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('DELETE /api/products/:id error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 export default router;

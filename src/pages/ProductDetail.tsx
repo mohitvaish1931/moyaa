@@ -9,7 +9,7 @@ const ProductDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
-  const product = state.products.find(p => p.id === Number(id));
+  const product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
 
   if (!product) {
     return (
@@ -24,8 +24,9 @@ const ProductDetail = () => {
     );
   }
 
-  const isInWishlist = state.wishlist.find(item => item.id === product.id);
-  const images = product.images || [product.image];
+  const isInWishlist = state.wishlist.find(item => item.id === product.id || (item as any)._id === (product as any)._id);
+  const images = (product.images && product.images.length > 0) ? product.images : (product.image ? [product.image] : ['https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=600']);
+  const productId = (product as any)._id || product.id;
 
   const toggleWishlist = () => {
     if (isInWishlist) {
@@ -160,14 +161,14 @@ const ProductDetail = () => {
             {/* Description */}
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-3">Description</h3>
-              <p className="text-gray-700 leading-relaxed">{product.description}</p>
+              <p className="text-gray-700 leading-relaxed">{product.description || 'This exquisite piece from our collection showcases premium craftsmanship and elegant design. Perfect for everyday wear or special occasions.'}</p>
             </div>
 
             {/* Key Features */}
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-3">Key Features</h3>
               <ul className="space-y-2">
-                {product.features.map((feature, index) => (
+                {(product.features && product.features.length > 0 ? product.features : ['Premium quality materials', 'Handcrafted with precision', 'Hypoallergenic and skin-safe', 'Elegant luxury finish']).map((feature: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-gold-primary">✨</span>
                     <span className="text-gray-700">{feature}</span>
@@ -181,7 +182,7 @@ const ProductDetail = () => {
               <div className="bg-gray-50 border border-gold-primary/20 p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-gray-900 mb-2">Materials</h4>
                 <ul className="text-sm text-gray-700 space-y-1">
-                  {product.materials.map((material, index) => (
+                  {(product.materials && product.materials.length > 0 ? product.materials : ['High-grade alloy', 'Gold/Silver plating', 'Anti-tarnish coating']).map((material: string, index: number) => (
                     <li key={index}>• {material}</li>
                   ))}
                 </ul>
@@ -282,7 +283,7 @@ const ProductDetail = () => {
               <h3 className="text-lg font-medium text-gray-900 mb-3">Care Instructions</h3>
               <div className="bg-gray-50 border border-gold-primary/20 p-4 rounded-lg">
                 <ul className="space-y-2">
-                  {product.careInstructions.map((instruction, index) => (
+                  {(product.careInstructions && product.careInstructions.length > 0 ? product.careInstructions : ['Keep away from water and chemicals', 'Store in a dry, cool place', 'Clean gently with a soft cloth', 'Avoid perfume and body spray contact']).map((instruction: string, index: number) => (
                     <li key={index} className="flex items-start space-x-2">
                       <span className="text-gold-primary mt-1">✓</span>
                       <span className="text-gray-700 text-sm">{instruction}</span>

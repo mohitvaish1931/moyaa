@@ -1,66 +1,12 @@
 import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 
 const Bracelets = () => {
   const { state, dispatch } = useAppContext();
 
-  const bracelets = [
-    {
-      id: 1,
-      name: 'CLASSIC CHAIN BRACELET',
-      price: 999,
-      originalPrice: 1299,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 2,
-      name: 'ETERNA DUO KADA',
-      price: 899,
-      originalPrice: 999,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 3,
-      name: 'NOVA KADA',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 4,
-      name: 'SERENITY KADA',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 5,
-      name: 'GOLDEN TWIST BRACELET',
-      price: 1199,
-      originalPrice: 1499,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 6,
-      name: 'ELEGANT BANGLE SET',
-      price: 1299,
-      originalPrice: 1599,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    }
-  ];
+  const bracelets = state.products.filter(p => p.category?.toLowerCase() === 'bracelets' || p.category?.toLowerCase() === 'bracelet');
 
   const toggleWishlist = (product: any) => {
     const isInWishlist = state.wishlist.find(item => item.id === product.id);
@@ -94,7 +40,7 @@ const Bracelets = () => {
             const isInWishlist = state.wishlist.find(item => item.id === product.id);
             
             return (
-              <div key={product.id} className="group cursor-pointer">
+              <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id} className="group cursor-pointer">
                 {/* Product Image */}
                 <div className="relative overflow-hidden rounded-lg bg-gray-50 border border-gold-primary/20 aspect-square mb-4">
                   {/* Sale Badge */}
@@ -143,7 +89,7 @@ const Bracelets = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

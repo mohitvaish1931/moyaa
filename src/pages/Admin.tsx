@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, TrendingUp } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { API_ENDPOINTS } from '../utils/api';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -31,7 +32,7 @@ const Admin = () => {
         const form = e.target as HTMLFormElement;
         const fd = new FormData(form);
         try {
-          const res = await fetch(`/api/products`, { method: 'POST', body: fd });
+          const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
           if (!res.ok) throw new Error('Create failed');
           const created = await res.json();
           dispatch({ type: 'ADD_PRODUCT', payload: created });
@@ -131,7 +132,7 @@ const Admin = () => {
       if (!url) return;
       (async () => {
         try {
-          const res = await fetch(`${API}/api/videos`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: title || 'Video', url }) });
+          const res = await fetch(API_ENDPOINTS.VIDEOS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: title || 'Video', url }) });
           if (!res.ok) throw new Error('Video add failed');
           const v = await res.json();
           dispatch({ type: 'SET_VIDEOS', payload: [v, ...state.videos] });
@@ -167,8 +168,8 @@ const Admin = () => {
           </button>
         </div>
         <div className="space-y-2">
-          {state.videos.map(v => (
-            <div key={v.id} className="flex justify-between items-center p-2 bg-luxury-secondary border border-emerald-luxury/20 rounded">
+          {state.videos.map((v, i) => (
+            <div key={(v as any)._id || v.id || i} className="flex justify-between items-center p-2 bg-luxury-secondary border border-emerald-luxury/20 rounded">
               <div>
                 <div className="font-medium text-platinum">{v.title}</div>
                 <div className="text-sm text-platinum/60 truncate max-w-md">{v.url}</div>
@@ -178,9 +179,10 @@ const Admin = () => {
                 <button 
                   onClick={async () => {
                     try {
-                      const res = await fetch(`${API}/api/videos/${v._id || v.id}`, { method: 'DELETE' });
+                      const videoAny = v as any;
+                      const res = await fetch(`${API_ENDPOINTS.VIDEOS}/${videoAny._id || v.id}`, { method: 'DELETE' });
                       if (!res.ok) throw new Error('Delete failed');
-                      dispatch({ type: 'SET_VIDEOS', payload: state.videos.filter(x => x.id !== v.id && x._id !== v._id) });
+                      dispatch({ type: 'SET_VIDEOS', payload: state.videos.filter(x => x.id !== v.id && (x as any)._id !== videoAny._id) });
                     } catch (e) {
                       dispatch({ type: 'REMOVE_VIDEO', payload: v.id });
                     }
@@ -207,13 +209,13 @@ const Admin = () => {
     const submit = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        const formEl = e.target as HTMLFormElement;
         const fd = new FormData();
         // include fields from form state
         Object.keys(form).forEach(k => {
           if (form[k] !== undefined && form[k] !== null) fd.append(k, form[k]);
         });
-        const res = await fetch(`/api/products/${form.id}`, { method: 'PUT', body: fd });
+        const url = `${API_ENDPOINTS.PRODUCTS}/${form.id}`;
+        const res = await fetch(url, { method: 'PUT', body: fd });
         if (!res.ok) throw new Error('Update failed');
         const updated = await res.json();
         dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
@@ -317,7 +319,7 @@ const Admin = () => {
       const id = Date.now().toString();
       (async () => {
         try {
-          const res = await fetch(`/api/banners`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, type }) });
+          const res = await fetch(API_ENDPOINTS.BANNERS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, type }) });
           if (!res.ok) throw new Error('Add banner failed');
           const b = await res.json();
           dispatch({ type: 'SET_BANNERS', payload: [b, ...state.banners] });
@@ -357,7 +359,7 @@ const Admin = () => {
         </div>
         <div className="space-y-2">
           {state.banners.map((b, i) => (
-            <div key={b.id} className="flex justify-between items-center p-2 bg-luxury-secondary border border-ruby-luxury/20 rounded">
+            <div key={(b as any)._id || b.id || i} className="flex justify-between items-center p-2 bg-luxury-secondary border border-ruby-luxury/20 rounded">
               <div>
                 <div className="font-medium text-platinum">{b.text}</div>
                 <div className="text-sm text-platinum/60">{b.type}</div>
@@ -392,9 +394,10 @@ const Admin = () => {
                 <button 
                   onClick={async () => {
                     try {
-                      const res = await fetch(`/api/banners/${b._id || b.id}`, { method: 'DELETE' });
+                      const bannerAny = b as any;
+                      const res = await fetch(`${API_ENDPOINTS.BANNERS}/${bannerAny._id || b.id}`, { method: 'DELETE' });
                       if (!res.ok) throw new Error('Delete failed');
-                      dispatch({ type: 'SET_BANNERS', payload: state.banners.filter(x => x.id !== b.id && x._id !== b._id) });
+                      dispatch({ type: 'SET_BANNERS', payload: state.banners.filter(x => x.id !== b.id && (x as any)._id !== bannerAny._id) });
                     } catch (e) {
                       dispatch({ type: 'REMOVE_BANNER', payload: b.id });
                     }
@@ -421,7 +424,7 @@ const Admin = () => {
       (async () => {
         const payload = { code, discountPercent: discount, active: true, productId: productId === '' ? null : Number(productId), expiresAt, usageLimit: usageLimit === '' ? null : Number(usageLimit), used: 0 };
         try {
-          const res = await fetch(`/api/coupons`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          const res = await fetch(API_ENDPOINTS.COUPONS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
           if (!res.ok) throw new Error('Create coupon failed');
           const c = await res.json();
           dispatch({ type: 'ADD_COUPON', payload: c });
@@ -443,8 +446,8 @@ const Admin = () => {
           <button onClick={generateCode} className="bg-brand text-platinum px-4 rounded col-span-2">Generate Coupon</button>
         </div>
         <div className="space-y-2">
-          {state.coupons.map(c => (
-            <div key={c.code} className="flex justify-between items-center p-2 border rounded">
+          {state.coupons.map((c, i) => (
+            <div key={(c as any)._id || c.code || i} className="flex justify-between items-center p-2 border rounded">
               <div>
                 <div className="font-medium">{c.code} - {c.discountPercent}% {c.active ? '' : '(Inactive)'}</div>
                 <div className="text-sm text-gray-600">Applies to: {c.productId ? state.products.find(p => p.id === c.productId)?.name : 'All'}</div>
@@ -453,7 +456,7 @@ const Admin = () => {
               <div className="flex space-x-2">
                 <button onClick={async () => {
                   try {
-                    const res = await fetch(`/api/coupons/${c.code}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...c, active: !c.active }) });
+                    const res = await fetch(`${API_ENDPOINTS.COUPONS}/${c.code}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...c, active: !c.active }) });
                     if (!res.ok) throw new Error('Toggle failed');
                     const updated = await res.json();
                     dispatch({ type: 'UPDATE_COUPON', payload: updated });
@@ -463,7 +466,7 @@ const Admin = () => {
                 }} className="text-blue-600">Toggle</button>
                 <button onClick={async () => {
                   try {
-                    const res = await fetch(`/api/coupons/${c.code}`, { method: 'DELETE' });
+                    const res = await fetch(`${API_ENDPOINTS.COUPONS}/${c.code}`, { method: 'DELETE' });
                     if (!res.ok) throw new Error('Delete failed');
                     dispatch({ type: 'REMOVE_COUPON', payload: c.code });
                   } catch (e) {
@@ -637,8 +640,8 @@ const Admin = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-sapphire-luxury/20">
-                    {state.products.map((product) => (
-                      <tr key={product.id}>
+                    {state.products.map((product, i) => (
+                      <tr key={(product as any)._id || product.id || i}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <img
@@ -681,7 +684,8 @@ const Admin = () => {
                             <button
                               onClick={async () => {
                                 try {
-                                  const res = await fetch(`/api/products/${product._id || product.id}`, { method: 'DELETE' });
+                                  const productAny = product as any;
+                                  const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${productAny._id || product.id}`, { method: 'DELETE' });
                                   if (!res.ok) throw new Error('Delete failed');
                                   dispatch({ type: 'REMOVE_PRODUCT', payload: product.id });
                                 } catch (e) {

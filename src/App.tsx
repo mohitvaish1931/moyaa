@@ -18,7 +18,7 @@ import Admin from './pages/Admin';
 function App() {
   return (
     <AppProvider>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ScrollToTop />
         <div className="min-h-screen bg-gradient-to-b from-luxury-dark via-luxury-secondary to-luxury-tertiary">
           <Header />

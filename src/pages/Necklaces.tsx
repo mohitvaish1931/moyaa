@@ -1,66 +1,12 @@
 import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 
 const Necklaces = () => {
   const { state, dispatch } = useAppContext();
 
-  const necklaces = [
-    {
-      id: 1,
-      name: 'CLASSIC SNAKE NECKLACE',
-      price: 1299,
-      originalPrice: 1599,
-      image: 'https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'necklaces'
-    },
-    {
-      id: 2,
-      name: 'ELEGANT CHAIN NECKLACE',
-      price: 999,
-      originalPrice: 1299,
-      image: 'https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'necklaces'
-    },
-    {
-      id: 3,
-      name: 'PEARL DROP NECKLACE',
-      price: 1499,
-      originalPrice: 1899,
-      image: 'https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'necklaces'
-    },
-    {
-      id: 4,
-      name: 'GOLDEN PENDANT NECKLACE',
-      price: 1199,
-      originalPrice: 1499,
-      image: 'https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'necklaces'
-    },
-    {
-      id: 5,
-      name: 'VINTAGE CHARM NECKLACE',
-      price: 899,
-      originalPrice: 1199,
-      image: 'https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'necklaces'
-    },
-    {
-      id: 6,
-      name: 'STATEMENT COLLAR NECKLACE',
-      price: 1599,
-      originalPrice: 1999,
-      image: 'https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'necklaces'
-    }
-  ];
+  const necklaces = state.products.filter(p => p.category?.toLowerCase() === 'necklaces' || p.category?.toLowerCase() === 'necklace');
 
   const toggleWishlist = (product: any) => {
     const isInWishlist = state.wishlist.find(item => item.id === product.id);
@@ -94,7 +40,7 @@ const Necklaces = () => {
             const isInWishlist = state.wishlist.find(item => item.id === product.id);
             
             return (
-              <div key={product.id} className="group cursor-pointer">
+              <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id} className="group cursor-pointer">
                 {/* Product Image */}
                 <div className="relative overflow-hidden rounded-lg bg-gray-50 border border-gold-primary/20 aspect-square mb-4\">
                   {/* Sale Badge */}
@@ -143,7 +89,7 @@ const Necklaces = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

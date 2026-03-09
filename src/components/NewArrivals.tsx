@@ -7,53 +7,7 @@ import AnnouncementBanner from './AnnouncementBanner';
 const NewArrivals = () => {
   const { state, dispatch } = useAppContext();
 
-  const products = [
-    {
-      id: 1,
-      name: 'CHERISH EARRING',
-      price: 799,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 2,
-      name: 'SERENITY KADA',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 3,
-      name: 'DUO LOVE EARRING',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 4,
-      name: 'ETERNA DUO KADA',
-      price: 899,
-      originalPrice: 999,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 5,
-      name: 'ECHO DROP EARRING',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    }
-  ];
+  const products = state.products.slice(0, 5);
 
   const toggleWishlist = (product: any) => {
     const isInWishlist = state.wishlist.find(item => item.id === product.id);
@@ -96,7 +50,7 @@ const NewArrivals = () => {
               const isInWishlist = state.wishlist.find(item => item.id === product.id);
               
               return (
-                <div key={product.id} className="group cursor-pointer">
+                <div key={(product as any)._id || product.id} className="group cursor-pointer">
                   <Link to={`/product/${product.id}`}>
                     {/* Product card */}
                     <div className="relative overflow-hidden rounded-xl glass-card-emerald border border-emerald-luxury/40 aspect-square mb-6 hover:border-gold-primary/60 transition-all duration-300 shadow-glow-emerald hover:shadow-glow">

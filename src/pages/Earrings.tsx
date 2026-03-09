@@ -1,67 +1,12 @@
 import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 
 const Earrings = () => {
   const { state, dispatch } = useAppContext();
 
-  const earrings = [
-    {
-      id: 1,
-      name: 'AURORA EDGE EARRING',
-      price: 599,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      soldOut: true,
-      category: 'earrings'
-    },
-    {
-      id: 2,
-      name: 'BOLD BLOOM EARRING',
-      price: 599,
-      originalPrice: 1100,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 3,
-      name: 'CHERISH EARRING',
-      price: 799,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 4,
-      name: 'ECHO DROP EARRING',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 5,
-      name: 'FOXY HEART EARRING',
-      price: 649,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 6,
-      name: 'DUO LOVE EARRING',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    }
-  ];
+  const earrings = state.products.filter(p => p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring');
 
   const toggleWishlist = (product: any) => {
     const isInWishlist = state.wishlist.find(item => item.id === product.id);
@@ -95,7 +40,7 @@ const Earrings = () => {
             const isInWishlist = state.wishlist.find(item => item.id === product.id);
             
             return (
-              <div key={product.id} className="group cursor-pointer">
+              <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id} className="group cursor-pointer">
                 {/* Product Image */}
                 <div className="relative overflow-hidden rounded-lg bg-gray-50 border border-gold-primary/20 aspect-square mb-4">
                   {/* Sale Badge */}
@@ -152,7 +97,7 @@ const Earrings = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

@@ -8,9 +8,16 @@ export interface Product {
   price: number;
   originalPrice?: number;
   image: string;
+  images?: string[];
   sale?: boolean;
   soldOut?: boolean;
   category: string;
+  description?: string;
+  features?: string[];
+  materials?: string[];
+  dimensions?: string;
+  weight?: string;
+  careInstructions?: string[];
 }
 
 export interface Video {
@@ -265,6 +272,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             const coups = await coupRes.json();
             if (mounted) dispatch({ type: 'SET_COUPONS', payload: coups });
           }
+
+          // Restore user from localStorage even if backend is healthy
+          try {
+            const rawUser = localStorage.getItem('rr_user');
+            if (rawUser && mounted) dispatch({ type: 'SET_USER', payload: JSON.parse(rawUser) });
+          } catch (e) {}
+
           return;
         }
       } catch (e) {
@@ -288,7 +302,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
     hydrate();
     return () => { mounted = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   return (

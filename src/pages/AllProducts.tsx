@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Heart, ChevronDown, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 
 const AllProducts = () => {
@@ -14,81 +15,7 @@ const AllProducts = () => {
   const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
 
-  const products = [
-    {
-      id: 1,
-      name: 'AURORA EDGE EARRING',
-      price: 599,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      soldOut: true,
-      category: 'earrings'
-    },
-    {
-      id: 2,
-      name: 'BOLD BLOOM EARRING',
-      price: 599,
-      originalPrice: 1100,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 3,
-      name: 'CHERISH EARRING',
-      price: 799,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 4,
-      name: 'CLASSIC CHAIN BRACELET',
-      price: 999,
-      originalPrice: 1299,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 5,
-      name: 'ECHO DROP EARRING',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 6,
-      name: 'ETERNA DUO KADA',
-      price: 899,
-      originalPrice: 999,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    },
-    {
-      id: 7,
-      name: 'FOXY HEART EARRING',
-      price: 649,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'earrings'
-    },
-    {
-      id: 8,
-      name: 'NOVA KADA',
-      price: 999,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400',
-      sale: true,
-      category: 'bracelets'
-    }
-  ];
+  const products = state.products;
 
   const collections = [
     { name: 'Home', count: 0 },
@@ -222,11 +149,11 @@ const AllProducts = () => {
           {/* Products Grid with luxury styling */}
           <div className="w-3/4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {products.map((product) => {
+              {products.map((product, index) => {
                 const isInWishlist = state.wishlist.find(item => item.id === product.id);
                 
                 return (
-                  <div key={product.id} className="group cursor-pointer">
+                  <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id || index} className="group cursor-pointer">
                     <div className="relative overflow-hidden rounded-lg bg-gray-50 aspect-square mb-4 border border-gold-primary/20 shadow-md hover:shadow-lg transition-all">
                       {product.sale && (
                         <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-gold-soft text-luxury-dark px-3 py-1 text-sm font-medium rounded z-10 shadow-md">
@@ -276,7 +203,7 @@ const AllProducts = () => {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

@@ -118,7 +118,7 @@ const ShowcaseVideos: React.FC = () => {
           {items.map((item) => (
             <Link
               to="/products"
-              key={item.id}
+              key={(item as any)._id || item.id}
               className="min-w-[260px] sm:min-w-[320px] md:min-w-[360px] lg:min-w-[420px] snap-start glass-card-ruby border border-ruby-luxury/30 rounded-2xl overflow-hidden relative shadow-glow-ruby hover:shadow-glow transition-all duration-300"
             >
               {item.type === 'video' ? (

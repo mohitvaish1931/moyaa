@@ -18,25 +18,40 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
-  const items = await Video.find().sort({ createdAt: -1 });
-  res.json(items);
+  try {
+    const items = await Video.find().sort({ createdAt: -1 });
+    res.json(items);
+  } catch (err) {
+    console.error('GET /api/videos error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Accept multipart form with optional file field 'file' or JSON body { title, url }
 router.post('/', upload.single('file'), async (req, res) => {
-  const body = { ...(req.body || {}) };
-  if (req.file) {
-    body.url = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-    body.title = body.title || req.file.originalname;
+  try {
+    const body = { ...(req.body || {}) };
+    if (req.file) {
+      body.url = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      body.title = body.title || req.file.originalname;
+    }
+    const v = new Video(body);
+    await v.save();
+    res.status(201).json(v);
+  } catch (err) {
+    console.error('POST /api/videos error:', err);
+    res.status(500).json({ error: err.message });
   }
-  const v = new Video(body);
-  await v.save();
-  res.status(201).json(v);
 });
 
 router.delete('/:id', async (req, res) => {
-  await Video.findByIdAndDelete(req.params.id);
-  res.json({ ok: true });
+  try {
+    await Video.findByIdAndDelete(req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('DELETE /api/videos/:id error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 export default router;
