@@ -154,7 +154,7 @@ const Hero = () => {
                 <h3 className="text-platinum luxury-serif text-sm mb-2 group-hover:text-gold-primary transition-colors">
                   EARRINGS
                 </h3>
-                <p className="text-platinum text-lg font-semibold">From $299</p>
+                <p className="text-platinum text-lg font-semibold">From ₹299</p>
               </div>
             </div>
             <p className="text-platinum/80 text-xs leading-relaxed">
@@ -179,7 +179,7 @@ const Hero = () => {
                 <h3 className="text-platinum luxury-serif text-sm mb-2 group-hover:text-gold-primary transition-colors">
                   NECKLACES
                 </h3>
-                <p className="text-platinum text-lg font-semibold">From $399</p>
+                <p className="text-platinum text-lg font-semibold">From ₹399</p>
               </div>
             </div>
             <p className="text-platinum/80 text-xs leading-relaxed">
@@ -204,7 +204,7 @@ const Hero = () => {
                 <h3 className="text-platinum luxury-serif text-sm mb-2 group-hover:text-gold-primary transition-colors">
                   BRACELETS
                 </h3>
-                <p className="text-platinum text-lg font-semibold">From $199</p>
+                <p className="text-platinum text-lg font-semibold">From ₹199</p>
               </div>
             </div>
             <p className="text-platinum/80 text-xs leading-relaxed">
