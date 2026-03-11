@@ -157,7 +157,7 @@ const Hero = () => {
                 <p className="text-platinum text-lg font-semibold">From $299</p>
               </div>
             </div>
-            <p className="text-text-on-dark/80 text-xs leading-relaxed">
+            <p className="text-platinum/80 text-xs leading-relaxed">
               Delicate elegance crafted to perfection
             </p>
           </Link>
@@ -182,7 +182,7 @@ const Hero = () => {
                 <p className="text-platinum text-lg font-semibold">From $399</p>
               </div>
             </div>
-            <p className="text-text-on-dark/80 text-xs leading-relaxed">
+            <p className="text-platinum/80 text-xs leading-relaxed">
               Statement pieces that define elegance
             </p>
           </Link>
@@ -207,7 +207,7 @@ const Hero = () => {
                 <p className="text-platinum text-lg font-semibold">From $199</p>
               </div>
             </div>
-            <p className="text-text-on-dark/80 text-xs leading-relaxed">
+            <p className="text-platinum/80 text-xs leading-relaxed">
               Wrist adornments of refined taste
             </p>
           </Link>
