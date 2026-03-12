@@ -228,25 +228,21 @@ const AppContext = createContext<{
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
-  // Persist admin-managed state to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('rr_products', JSON.stringify(state.products));
-      localStorage.setItem('rr_videos', JSON.stringify(state.videos));
-      localStorage.setItem('rr_banners', JSON.stringify(state.banners));
-      localStorage.setItem('rr_coupons', JSON.stringify(state.coupons));
-      if (state.user) localStorage.setItem('rr_user', JSON.stringify(state.user));
-      else localStorage.removeItem('rr_user');
-    } catch (e) {
-      // ignore
-    }
-  }, [state.products, state.videos, state.banners, state.coupons, state.user]);
-
-  // Hydrate from localStorage on mount
+  // Hydrate from localStorage on mount (MUST RUN FIRST)
   useEffect(() => {
     let mounted = true;
     const hydrate = async () => {
-      // try backend first
+      // Try to restore user from localStorage immediately first
+      try {
+        const rawUser = localStorage.getItem('rr_user');
+        if (rawUser && mounted) {
+          dispatch({ type: 'SET_USER', payload: JSON.parse(rawUser) });
+        }
+      } catch (e) {
+        // ignore
+      }
+
+      // try backend for other data
       try {
         const health = await fetch(API_ENDPOINTS.HEALTH);
         if (health.ok) {
@@ -272,19 +268,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             const coups = await coupRes.json();
             if (mounted) dispatch({ type: 'SET_COUPONS', payload: coups });
           }
-
-          // Restore user from localStorage even if backend is healthy
-          try {
-            const rawUser = localStorage.getItem('rr_user');
-            if (rawUser && mounted) dispatch({ type: 'SET_USER', payload: JSON.parse(rawUser) });
-          } catch (e) {}
-
           return;
         }
       } catch (e) {
         // backend not available, fall back to localStorage
       }
 
+      // Fallback to localStorage for all data
       try {
         const rawProducts = localStorage.getItem('rr_products');
         if (rawProducts && mounted) dispatch({ type: 'SET_PRODUCTS', payload: JSON.parse(rawProducts) });
@@ -294,16 +284,29 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         if (rawBanners && mounted) dispatch({ type: 'SET_BANNERS', payload: JSON.parse(rawBanners) });
         const rawCoupons = localStorage.getItem('rr_coupons');
         if (rawCoupons && mounted) dispatch({ type: 'SET_COUPONS', payload: JSON.parse(rawCoupons) });
-        const rawUser = localStorage.getItem('rr_user');
-        if (rawUser && mounted) dispatch({ type: 'SET_USER', payload: JSON.parse(rawUser) });
       } catch (e) {
         // ignore
       }
     };
     hydrate();
     return () => { mounted = false; };
-     
   }, []);
+
+  // Persist data to localStorage ONLY AFTER user is hydrated
+  useEffect(() => {
+    try {
+      localStorage.setItem('rr_products', JSON.stringify(state.products));
+      localStorage.setItem('rr_videos', JSON.stringify(state.videos));
+      localStorage.setItem('rr_banners', JSON.stringify(state.banners));
+      localStorage.setItem('rr_coupons', JSON.stringify(state.coupons));
+      // Only save user if it exists, otherwise leave what's in localStorage
+      if (state.user) {
+        localStorage.setItem('rr_user', JSON.stringify(state.user));
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [state.products, state.videos, state.banners, state.coupons, state.user]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
