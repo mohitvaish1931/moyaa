@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Allow: /products
+Allow: /earrings
+Allow: /bracelets
+Allow: /necklaces
+Allow: /contact
+Allow: /track-order
+
+# Slow down crawlers to be nice
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://moraaluxury.com/sitemap.xml

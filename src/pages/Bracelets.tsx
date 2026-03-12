@@ -2,9 +2,18 @@ import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { useSEO } from '../utils/useSEO';
 
 const Bracelets = () => {
   const { state, dispatch } = useAppContext();
+
+  useSEO({
+    title: 'Premium Bracelets Collection - MORAA REFLECTION Luxury Jewelry',
+    description: 'Discover our stunning collection of premium bracelets. Elegant designs crafted with finest materials for timeless sophistication.',
+    keywords: 'bracelets, luxury bracelets, premium bracelets, designer bracelets, jewelry bracelets, gold bracelets, diamond bracelets',
+    url: 'https://moraajewles.com/bracelets',
+    type: 'product.group'
+  });
 
   const bracelets = state.products.filter(p => p.category?.toLowerCase() === 'bracelets' || p.category?.toLowerCase() === 'bracelet');
 

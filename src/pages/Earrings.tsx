@@ -2,9 +2,18 @@ import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { useSEO } from '../utils/useSEO';
 
 const Earrings = () => {
   const { state, dispatch } = useAppContext();
+
+  useSEO({
+    title: 'Premium Earrings Collection - MORAA REFLECTION Luxury Jewelry',
+    description: 'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles, find the perfect earrings to elevate your style.',
+    keywords: 'earrings, luxury earrings, premium earrings, designer earrings, jewelry earrings, gold earrings, diamond earrings',
+    url: 'https://moraajewles.com/earrings',
+    type: 'product.group'
+  });
 
   const earrings = state.products.filter(p => p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring');
 

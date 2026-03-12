@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { useSEO } from '../utils/useSEO';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -10,6 +11,18 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
 
   const product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
+
+  // Update SEO after product is loaded
+  if (product) {
+    useSEO({
+      title: `${product.name} - Premium ${product.category} | MORAA REFLECTION`,
+      description: product.description || `Buy ${product.name} from MORAA REFLECTION. Premium ${product.category} with finest craftsmanship. Original price: ${product.originalPrice ? `₹${product.originalPrice}` : 'Contact for price'}`,
+      keywords: `${product.name}, ${product.category}, luxury jewelry, premium jewelry, buy ${product.category.toLowerCase()}`,
+      image: (product.images && product.images.length > 0) ? product.images[0] : product.image || 'https://moraajewles.com/logo.png',
+      url: `https://moraajewles.com/product/${id}`,
+      type: 'product'
+    });
+  }
 
   if (!product) {
     return (

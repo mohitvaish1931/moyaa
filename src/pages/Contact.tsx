@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { useSEO } from '../utils/useSEO';
 
 const Contact = () => {
+  useSEO({
+    title: 'Contact Us - MORAA REFLECTION Premium Jewelry',
+    description: 'Get in touch with MORAA REFLECTION. We\'re here to help with your jewelry inquiries, orders, and customer service.',
+    keywords: 'contact us, customer service, jewelry support, MORAA REFLECTION contact',
+    url: 'https://moraajewles.com/contact',
+    type: 'website'
+  });
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -58,7 +67,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gold-primary mb-1">Email Us</h3>
-                  <p className="text-platinum/70">moyaajewel@gmail.com</p>
+                  <p className="text-platinum/70">moraajewel@gmail.com</p>
                 </div>
               </div>
 

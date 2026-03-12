@@ -10,8 +10,13 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-1">
             <div className="mb-8">
+              <img 
+                src="/logo.png" 
+                alt="MORAA Logo" 
+                className="h-16 w-auto mb-4 object-contain"
+              />
               <div className="text-2xl luxury-serif text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold tracking-widest mb-2">
-                ✨ MOYAA ✨
+                ✨ MORAA ✨
               </div>
               <p className="text-platinum/70 text-sm leading-relaxed">
                 Luxury jewelry for the modern connoisseur. Timeless elegance, modern craftsmanship.
@@ -92,7 +97,7 @@ const Footer = () => {
               <Mail className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
               <div>
                 <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">EMAIL</p>
-                <p className="text-platinum text-sm">moyaajewel@gmail.com</p>
+                <p className="text-platinum text-sm">moraajewel@gmail.com</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -156,7 +161,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-gold-primary/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-platinum/50 text-xs">
-            © 2024 Moyaa Jewelry. All rights reserved.
+            © 2024 Moraa Jewelry. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <a href="#" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Privacy</a>

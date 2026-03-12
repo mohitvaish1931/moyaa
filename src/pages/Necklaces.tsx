@@ -2,9 +2,18 @@ import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { useSEO } from '../utils/useSEO';
 
 const Necklaces = () => {
   const { state, dispatch } = useAppContext();
+
+  useSEO({
+    title: 'Premium Necklaces Collection - MORAA REFLECTION Luxury Jewelry',
+    description: 'Browse our exquisite collection of premium necklaces. Find elegant designs with timeless appeal and finest craftsmanship.',
+    keywords: 'necklaces, luxury necklaces, premium necklaces, designer necklaces, jewelry necklaces, gold necklaces, diamond necklaces',
+    url: 'https://moraajewles.com/necklaces',
+    type: 'product.group'
+  });
 
   const necklaces = state.products.filter(p => p.category?.toLowerCase() === 'necklaces' || p.category?.toLowerCase() === 'necklace');
 
