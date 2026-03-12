@@ -20,7 +20,7 @@ function App() {
     <AppProvider>
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ScrollToTop />
-        <div className="min-h-screen bg-gradient-to-b from-luxury-dark via-luxury-secondary to-luxury-tertiary">
+        <div className="min-h-screen bg-gradient-to-b from-luxury-dark via-luxury-secondary to-luxury-tertiary overflow-x-hidden">
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />

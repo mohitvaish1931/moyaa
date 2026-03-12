@@ -44,7 +44,7 @@ const Header = () => {
   return (
     <>
       {/* Premium announcement banner with gradient */}
-      <div className="bg-gradient-to-r from-gold-primary/30 via-ruby-luxury/20 to-gold-primary/30 text-text-primary text-center py-4 px-4 text-xs tracking-widest luxury-serif border-b border-gold-primary/40 shadow-[0_0_30px_rgba(255,215,0,0.2)] overflow-hidden max-w-screen">
+      <div className="bg-gradient-to-r from-gold-primary/30 via-ruby-luxury/20 to-gold-primary/30 text-text-primary text-center py-3 sm:py-4 px-3 sm:px-4 text-xs tracking-widest luxury-serif border-b border-gold-primary/40 shadow-[0_0_30px_rgba(255,215,0,0.2)] overflow-hidden w-full">
         <span className="block sm:inline">✨ ELEVATE YOUR LUXURY • FINEST CRAFTSMANSHIP • TIMELESS ELEGANCE ✨</span>
         <Link
           to="/products"
@@ -55,7 +55,7 @@ const Header = () => {
       </div>
 
       {/* Floating luxury navigation with premium styling */}
-      <header className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-[calc(100vw-1rem)] sm:w-auto max-w-[calc(100vw-2rem)] sm:max-w-none ${scrollY > 100 ? 'top-2' : 'top-4'
+      <header className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-[calc(100%-1rem)] sm:w-auto max-w-[calc(100%-2rem)] sm:max-w-none ${scrollY > 100 ? 'top-2' : 'top-4'
         }`}>
         <nav className="glass-card px-3 sm:px-5 lg:px-6 py-2.5 sm:py-3 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/70 backdrop-blur-2xl">
           <div className="flex items-center justify-between lg:justify-start lg:gap-6">
