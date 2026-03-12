@@ -8,7 +8,6 @@ import SearchModal from './SearchModal';
 
 const Header = () => {
   const { state, dispatch } = useAppContext();
-  const [isShopByOpen, setIsShopByOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -56,29 +55,20 @@ const Header = () => {
       </div>
 
       {/* Floating luxury navigation with premium styling */}
-      <header className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-[calc(100vw-1.5rem)] sm:w-auto max-w-[calc(100vw-1.5rem)] sm:max-w-none ${scrollY > 100 ? 'top-4' : 'top-8'
+      <header className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-[calc(100vw-1rem)] sm:w-auto max-w-[calc(100vw-2rem)] sm:max-w-none ${scrollY > 100 ? 'top-2' : 'top-4'
         }`}>
-        <nav className="glass-card px-3 sm:px-6 py-1.5 sm:py-2 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/60 backdrop-blur-2xl">
-          <div className="flex items-center gap-2 sm:gap-4 lg:gap-8">
+        <nav className="glass-card px-3 sm:px-5 lg:px-6 py-2.5 sm:py-3 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/70 backdrop-blur-2xl">
+          <div className="flex items-center justify-between lg:justify-start lg:gap-6">
             {/* Logo with luxury styling */}
             <Link
               to="/"
-              className="flex items-center gap-2 pr-2 sm:pr-4 border-r border-gold-primary/30 hover:text-gold-primary transition-all duration-300 group flex-shrink-0"
+              className="flex items-center pr-3 sm:pr-4 lg:pr-5 border-r border-gold-primary/30 hover:text-gold-primary transition-all duration-300 group flex-shrink-0"
             >
-              <img src="/logo.png" alt="Logo" className="h-[2.5rem] sm:h-[3.5rem] lg:h-[4.5rem] w-auto object-contain max-w-[100px] sm:max-w-[180px] lg:max-w-[240px]" />
+              <img src="/logo.png" alt="Logo" className="h-8 sm:h-10 lg:h-14 w-auto object-contain max-w-[80px] sm:max-w-[120px] lg:max-w-[200px]" />
             </Link>
 
-            {/* Hamburger menu button */}
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="text-platinum hover:text-gold-primary transition-all duration-300 relative"
-              title="Menu"
-            >
-              {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-
-            {/* Navigation links with premium hover */}
-            <div className="hidden lg:flex items-center gap-8">
+            {/* Navigation links with premium hover - Desktop only */}
+            <div className="hidden lg:flex items-center gap-6">
               <Link
                 to="/"
                 className="text-platinum text-xs luxury-serif tracking-widest hover:text-gold-primary transition-all duration-300 relative group"
@@ -143,79 +133,38 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Shop by dropdown for mobile */}
-            <div className="lg:hidden relative">
-              <button
-                onClick={() => setIsShopByOpen(!isShopByOpen)}
-                className="flex items-center gap-1 text-platinum text-xs luxury-serif tracking-widest hover:text-gold-primary transition-all duration-300"
-              >
-                <span>SHOP</span>
-                <ChevronDown className="h-3 w-3" />
-              </button>
-
-              {isShopByOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 sm:w-40 glass-card-emerald shadow-glow-emerald rounded-lg p-2 border border-emerald-luxury/40 z-50">
-                  <Link
-                    to="/products"
-                    className="block px-4 py-3 text-xs text-platinum hover:text-golden hover:bg-emerald-luxury/20 rounded transition-all duration-300"
-                    onClick={() => setIsShopByOpen(false)}
-                  >
-                    All Products
-                  </Link>
-                  <Link
-                    to="/earrings"
-                    className="block px-4 py-3 text-xs text-platinum hover:text-golden hover:bg-emerald-luxury/20 rounded transition-all duration-300"
-                    onClick={() => setIsShopByOpen(false)}
-                  >
-                    Earrings
-                  </Link>
-                  <Link
-                    to="/bracelets"
-                    className="block px-4 py-3 text-xs text-platinum hover:text-golden hover:bg-emerald-luxury/20 rounded transition-all duration-300"
-                    onClick={() => setIsShopByOpen(false)}
-                  >
-                    Bracelets
-                  </Link>
-                  <Link
-                    to="/necklaces"
-                    className="block px-4 py-3 text-xs text-platinum hover:text-golden hover:bg-emerald-luxury/20 rounded transition-all duration-300"
-                    onClick={() => setIsShopByOpen(false)}
-                  >
-                    Necklaces
-                  </Link>
-                </div>
-              )}
-            </div>
+            {/* Spacer for desktop */}
+            <div className="hidden lg:block flex-1" />
 
             {/* User actions with jewel tone accents */}
-            <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 pl-2 sm:pl-4 border-l border-gold-primary/30">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 lg:gap-5 pl-3 sm:pl-4 lg:pl-5 border-l border-gold-primary/30">
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow"
+                className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow p-1 sm:p-1.5 rounded-lg hover:bg-gold-primary/10"
                 title="Search"
               >
-                <Search className="h-4 w-4" />
+                <Search className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
 
               <button
                 onClick={handleUserClick}
-                className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow relative"
+                className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow relative p-1 sm:p-1.5 rounded-lg hover:bg-gold-primary/10"
                 title={state.user ? `Signed in as ${state.user.name}` : 'Sign in'}
               >
-                <User className="h-4 w-4" />
+                <User className="h-4 w-4 sm:h-5 sm:w-5" />
                 {state.user && (
-                  <div className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-emerald-luxury rounded-full animate-pulse" />
+                  <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-emerald-luxury rounded-full animate-pulse" />
                 )}
               </button>
 
               <button
                 onClick={() => setIsWishlistOpen(true)}
-                className="text-platinum hover:text-ruby-luxury transition-all duration-300 hover-ruby-glow relative"
+                className="text-platinum hover:text-ruby-luxury transition-all duration-300 hover-ruby-glow relative p-1 sm:p-1.5 rounded-lg hover:bg-ruby-luxury/10"
                 title="Wishlist"
               >
-                <Heart className="h-4 w-4" />
+                <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
                 {state.wishlist.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-ruby-luxury text-platinum text-xs rounded-full h-4 w-4 flex items-center justify-center font-semibold">
+                  <span className="absolute -top-1.5 -right-1.5 bg-ruby-luxury text-platinum text-xs rounded-full h-4 w-4 flex items-center justify-center font-semibold text-[10px]">
                     {state.wishlist.length}
                   </span>
                 )}
@@ -223,12 +172,12 @@ const Header = () => {
 
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow relative"
+                className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow relative p-1 sm:p-1.5 rounded-lg hover:bg-gold-primary/10"
                 title="Shopping Bag"
               >
-                <ShoppingBag className="h-4 w-4" />
+                <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
                 {state.cart.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-gold-primary text-luxury-dark text-xs rounded-full h-4 w-4 flex items-center justify-center font-semibold shadow-glow">
+                  <span className="absolute -top-1.5 -right-1.5 bg-gold-primary text-luxury-dark text-xs rounded-full h-4 w-4 flex items-center justify-center font-semibold shadow-glow text-[10px]">
                     {state.cart.length}
                   </span>
                 )}
@@ -237,11 +186,20 @@ const Header = () => {
               {state.user && state.user.email === 'admin@moraa.com' && (
                 <Link
                   to="/admin"
-                  className="text-gold-primary hover:text-sapphire-luxury font-semibold text-xs transition-all duration-300 hover-sapphire-glow"
+                  className="text-gold-primary hover:text-sapphire-luxury font-semibold text-xs transition-all duration-300 hover-sapphire-glow hidden md:block"
                 >
                   ADMIN
                 </Link>
               )}
+
+              {/* Hamburger menu button - Mobile/Tablet */}
+              <button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="lg:hidden text-platinum hover:text-gold-primary transition-all duration-300 relative p-1 sm:p-1.5 rounded-lg hover:bg-gold-primary/10 ml-1 sm:ml-2"
+                title="Menu"
+              >
+                {isSidebarOpen ? <X className="h-4 w-4 sm:h-5 sm:w-5" /> : <Menu className="h-4 w-4 sm:h-5 sm:w-5" />}
+              </button>
             </div>
           </div>
         </nav>
