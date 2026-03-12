@@ -13,9 +13,11 @@ router.post('/register', async (req, res) => {
     // Hash the password
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
-    const user = new User({ email, passwordHash, name: name || 'User', isAdmin: false });
+    // Create username from email (first part before @)
+    const username = email.split('@')[0];
+    const user = new User({ email, passwordHash, name: name || 'User', username, isAdmin: false });
     await user.save();
-    res.json({ user: { id: user._id, email: user.email, name: user.name, isAdmin: user.isAdmin } });
+    res.json({ user: { id: user._id, email: user.email, name: user.name, username: user.username, isAdmin: user.isAdmin } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -30,7 +32,7 @@ router.post('/login', async (req, res) => {
     // Use bcrypt to compare passwords
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) return res.status(400).json({ error: 'Invalid credentials' });
-    res.json({ user: { id: user._id, email: user.email, name: user.name, isAdmin: user.isAdmin } });
+    res.json({ user: { id: user._id, email: user.email, name: user.name, username: user.username, isAdmin: user.isAdmin } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
