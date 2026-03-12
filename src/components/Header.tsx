@@ -45,7 +45,7 @@ const Header = () => {
   return (
     <>
       {/* Premium announcement banner with gradient */}
-      <div className="bg-gradient-to-r from-gold-primary/30 via-ruby-luxury/20 to-gold-primary/30 text-text-primary text-center py-4 text-xs tracking-widest luxury-serif border-b border-gold-primary/40 shadow-[0_0_30px_rgba(255,215,0,0.2)]">
+      <div className="bg-gradient-to-r from-gold-primary/30 via-ruby-luxury/20 to-gold-primary/30 text-text-primary text-center py-4 px-4 text-xs tracking-widest luxury-serif border-b border-gold-primary/40 shadow-[0_0_30px_rgba(255,215,0,0.2)] overflow-hidden max-w-screen">
         <span className="block sm:inline">✨ ELEVATE YOUR LUXURY • FINEST CRAFTSMANSHIP • TIMELESS ELEGANCE ✨</span>
         <Link
           to="/products"
@@ -56,16 +56,16 @@ const Header = () => {
       </div>
 
       {/* Floating luxury navigation with premium styling */}
-      <header className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${scrollY > 100 ? 'top-4' : 'top-8'
+      <header className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-[calc(100vw-1.5rem)] sm:w-auto max-w-[calc(100vw-1.5rem)] sm:max-w-none ${scrollY > 100 ? 'top-4' : 'top-8'
         }`}>
-        <nav className="glass-card px-6 py-1.5 sm:py-2 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/60 backdrop-blur-2xl">
-          <div className="flex items-center gap-8">
+        <nav className="glass-card px-3 sm:px-6 py-1.5 sm:py-2 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/60 backdrop-blur-2xl overflow-hidden">
+          <div className="flex items-center gap-2 sm:gap-4 lg:gap-8">
             {/* Logo with luxury styling */}
             <Link
               to="/"
-              className="flex items-center gap-2 pr-4 border-r border-gold-primary/30 hover:text-gold-primary transition-all duration-300 group"
+              className="flex items-center gap-2 pr-2 sm:pr-4 border-r border-gold-primary/30 hover:text-gold-primary transition-all duration-300 group flex-shrink-0"
             >
-              <img src="/logo.png" alt="Logo" className="h-[3.5rem] sm:h-[4.5rem] w-auto object-contain max-w-[180px] sm:max-w-[240px]" />
+              <img src="/logo.png" alt="Logo" className="h-[2.5rem] sm:h-[3.5rem] lg:h-[4.5rem] w-auto object-contain max-w-[100px] sm:max-w-[180px] lg:max-w-[240px]" />
             </Link>
 
             {/* Hamburger menu button */}
@@ -179,7 +179,7 @@ const Header = () => {
             </div>
 
             {/* User actions with jewel tone accents */}
-            <div className="flex items-center gap-6 pl-4 border-l border-gold-primary/30">
+            <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 pl-2 sm:pl-4 border-l border-gold-primary/30">
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow"
