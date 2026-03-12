@@ -27,6 +27,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/featured', async (req, res) => {
+  try {
+    const items = await Video.find({ featured: true }).sort({ order: 1 });
+    res.json(items);
+  } catch (err) {
+    console.error('GET /api/videos/featured error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Accept multipart form with optional file field 'file' or JSON body { title, url }
 router.post('/', upload.single('file'), async (req, res) => {
   try {
@@ -40,6 +50,21 @@ router.post('/', upload.single('file'), async (req, res) => {
     res.status(201).json(v);
   } catch (err) {
     console.error('POST /api/videos error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.put('/:id', upload.single('file'), async (req, res) => {
+  try {
+    const body = { ...(req.body || {}) };
+    if (req.file) {
+      body.url = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    }
+    const updated = await Video.findByIdAndUpdate(req.params.id, body, { new: true });
+    if (!updated) return res.status(404).json({ error: 'Not found' });
+    res.json(updated);
+  } catch (err) {
+    console.error('PUT /api/videos/:id error:', err);
     res.status(500).json({ error: err.message });
   }
 });

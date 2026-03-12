@@ -46,6 +46,14 @@ router.post('/', upload.array('image'), async (req, res) => {
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
     }
+    // Parse videos if sent as JSON string
+    if (body.videos && typeof body.videos === 'string') {
+      try {
+        body.videos = JSON.parse(body.videos);
+      } catch (e) {
+        body.videos = [body.videos];
+      }
+    }
     const p = new Product(body);
     await p.save();
     res.status(201).json(p);
@@ -62,6 +70,14 @@ router.put('/:id', upload.array('image'), async (req, res) => {
       const imageUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
+    }
+    // Parse videos if sent as JSON string
+    if (body.videos && typeof body.videos === 'string') {
+      try {
+        body.videos = JSON.parse(body.videos);
+      } catch (e) {
+        body.videos = [body.videos];
+      }
     }
     const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });

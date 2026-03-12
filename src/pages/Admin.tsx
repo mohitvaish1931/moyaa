@@ -35,6 +35,16 @@ const Admin = () => {
           e.preventDefault();
           const form = e.target as HTMLFormElement;
           const fd = new FormData(form);
+          
+          // Collect video URLs
+          const video1 = (form.querySelector('input[name="video1"]') as HTMLInputElement)?.value || '';
+          const video2 = (form.querySelector('input[name="video2"]') as HTMLInputElement)?.value || '';
+          const videos = [video1, video2].filter(v => v.trim());
+          
+          if (videos.length > 0) {
+            fd.append('videos', JSON.stringify(videos));
+          }
+          
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
             if (!res.ok) throw new Error('Create failed');
@@ -45,7 +55,7 @@ const Admin = () => {
             const fdobj: any = {};
             fd.forEach((v, k) => { fdobj[k] = v; });
             const newId = Math.max(0, ...state.products.map(p => p.id)) + 1;
-            const newProduct = { id: newId, name: fdobj.name || 'New Product', category: fdobj.category || 'earrings', price: Number(fdobj.price) || 0, originalPrice: fdobj.originalPrice ? Number(fdobj.originalPrice) : undefined, image: 'https://via.placeholder.com/400', description: fdobj.description || '' } as any;
+            const newProduct = { id: newId, name: fdobj.name || 'New Product', category: fdobj.category || 'earrings', price: Number(fdobj.price) || 0, originalPrice: fdobj.originalPrice ? Number(fdobj.originalPrice) : undefined, image: 'https://via.placeholder.com/400', description: fdobj.description || '', videos: videos.length > 0 ? videos : [] } as any;
             dispatch({ type: 'ADD_PRODUCT', payload: newProduct });
           }
           setShowAddProduct(false);
@@ -120,6 +130,23 @@ const Admin = () => {
                 </div>
               </div>
             )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 URLs - MP4, YouTube, Vimeo)</label>
+            <div className="space-y-2">
+              <input
+                name="video1"
+                type="text"
+                placeholder="Video 1 URL (e.g., https://... or YouTube/Vimeo embed URL)"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              />
+              <input
+                name="video2"
+                type="text"
+                placeholder="Video 2 URL (optional)"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              />
+            </div>
           </div>
           <div className="flex space-x-4">
             <button
@@ -239,8 +266,13 @@ const Admin = () => {
         const fd = new FormData();
         // include fields from form state
         Object.keys(form).forEach(k => {
-          if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image') fd.append(k, form[k]);
+          if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos') fd.append(k, form[k]);
         });
+        
+        // Handle videos
+        if (form.videos && form.videos.length > 0) {
+          fd.append('videos', JSON.stringify(form.videos));
+        }
         
         // Handle image upload if new images were selected
         const fileInput = (e.target as HTMLFormElement).querySelector('input[type="file"]') as HTMLInputElement;
@@ -347,6 +379,33 @@ const Admin = () => {
                   </div>
                 </div>
               )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 URLs)</label>
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  placeholder="Video 1 URL"
+                  value={(form.videos && form.videos[0]) || ''}
+                  onChange={e => {
+                    const newVideos = [...(form.videos || [])];
+                    newVideos[0] = e.target.value;
+                    setForm({ ...form, videos: newVideos });
+                  }}
+                  className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Video 2 URL (optional)"
+                  value={(form.videos && form.videos[1]) || ''}
+                  onChange={e => {
+                    const newVideos = [...(form.videos || [])];
+                    newVideos[1] = e.target.value;
+                    setForm({ ...form, videos: newVideos.filter(v => v) });
+                  }}
+                  className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                />
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <label className="flex items-center space-x-2 text-platinum cursor-pointer">

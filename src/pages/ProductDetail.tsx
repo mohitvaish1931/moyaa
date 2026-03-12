@@ -292,6 +292,38 @@ const ProductDetail = () => {
                 </ul>
               </div>
             </div>
+
+            {/* Product Videos */}
+            {product.videos && product.videos.length > 0 && (
+              <div className="border-t border-gray-200 pt-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Product Videos</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {product.videos.map((video: string, idx: number) => {
+                    const isEmbedUrl = video.includes('youtube.com') || video.includes('youtu.be') || video.includes('vimeo.com');
+                    return (
+                      <div key={idx} className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden border border-gold-primary/20 shadow-md">
+                        {isEmbedUrl ? (
+                          <iframe
+                            src={video}
+                            className="w-full h-full"
+                            allowFullScreen
+                            allow="autoplay; fullscreen; picture-in-picture"
+                            title={`Product Video ${idx + 1}`}
+                          />
+                        ) : (
+                          <video
+                            src={video}
+                            className="w-full h-full object-cover"
+                            controls
+                            controlsList="nodownload"
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
