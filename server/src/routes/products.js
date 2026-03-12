@@ -13,7 +13,10 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${Math.random().toString(36).substr(2,6)}${ext}`);
   }
 });
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for videos
+});
 
 const router = express.Router();
 
@@ -38,22 +41,40 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', upload.array('image'), async (req, res) => {
+router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos_file', maxCount: 2 }]), async (req, res) => {
   try {
     const body = { ...req.body };
-    if (req.files && req.files.length > 0) {
-      const imageUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+    
+    // Handle image uploads
+    if (req.files && req.files.image && req.files.image.length > 0) {
+      const imageUrls = req.files.image.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
     }
-    // Parse videos if sent as JSON string
+    
+    // Handle video uploads and URLs
+    let videos = [];
+    if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
+      const videoUrls = req.files.videos_file.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+      videos = videoUrls;
+    }
+    
+    // Parse videos if sent as JSON string (from URLs)
     if (body.videos && typeof body.videos === 'string') {
       try {
-        body.videos = JSON.parse(body.videos);
+        const parsedVideos = JSON.parse(body.videos);
+        // Filter out placeholder file references, merge with uploaded videos
+        const urlVideos = parsedVideos.filter((v) => !v.startsWith('__file_'));
+        videos = [...urlVideos, ...videos];
       } catch (e) {
         body.videos = [body.videos];
       }
     }
+    
+    if (videos.length > 0) {
+      body.videos = videos;
+    }
+    
     const p = new Product(body);
     await p.save();
     res.status(201).json(p);
@@ -63,22 +84,40 @@ router.post('/', upload.array('image'), async (req, res) => {
   }
 });
 
-router.put('/:id', upload.array('image'), async (req, res) => {
+router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos_file', maxCount: 2 }]), async (req, res) => {
   try {
     const body = { ...req.body };
-    if (req.files && req.files.length > 0) {
-      const imageUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+    
+    // Handle image uploads
+    if (req.files && req.files.image && req.files.image.length > 0) {
+      const imageUrls = req.files.image.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
     }
-    // Parse videos if sent as JSON string
+    
+    // Handle video uploads and URLs
+    let videos = [];
+    if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
+      const videoUrls = req.files.videos_file.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+      videos = videoUrls;
+    }
+    
+    // Parse videos if sent as JSON string (from URLs)
     if (body.videos && typeof body.videos === 'string') {
       try {
-        body.videos = JSON.parse(body.videos);
+        const parsedVideos = JSON.parse(body.videos);
+        // Filter out placeholder file references, merge with uploaded videos
+        const urlVideos = parsedVideos.filter((v) => !v.startsWith('__file_'));
+        videos = [...urlVideos, ...videos];
       } catch (e) {
         body.videos = [body.videos];
       }
     }
+    
+    if (videos.length > 0) {
+      body.videos = videos;
+    }
+    
     const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });
     res.json(updated);

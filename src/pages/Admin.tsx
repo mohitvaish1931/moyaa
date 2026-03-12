@@ -21,11 +21,18 @@ const Admin = () => {
 
   const ProductForm = () => {
     const [previewImages, setPreviewImages] = useState<string[]>([]);
+    const [videoFiles, setVideoFiles] = useState<File[]>([]);
+    const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
       const previews = files.map(file => URL.createObjectURL(file));
       setPreviewImages(previews);
+    };
+
+    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      setVideoFiles(files);
     };
 
     return (
@@ -36,13 +43,16 @@ const Admin = () => {
           const form = e.target as HTMLFormElement;
           const fd = new FormData(form);
           
-          // Collect video URLs
-          const video1 = (form.querySelector('input[name="video1"]') as HTMLInputElement)?.value || '';
-          const video2 = (form.querySelector('input[name="video2"]') as HTMLInputElement)?.value || '';
-          const videos = [video1, video2].filter(v => v.trim());
+          // Handle video files
+          videoFiles.forEach((file) => {
+            fd.append('videos_file', file);
+          });
           
-          if (videos.length > 0) {
-            fd.append('videos', JSON.stringify(videos));
+          // Collect video URLs (only non-empty ones)
+          const validUrls = videoUrls.filter(url => url.trim());
+          if (validUrls.length > 0 || videoFiles.length > 0) {
+            const finalVideos = [...validUrls, ...videoFiles.map((_, i) => `__file_${i}__`)];
+            fd.append('videos', JSON.stringify(finalVideos));
           }
           
           try {
@@ -55,11 +65,13 @@ const Admin = () => {
             const fdobj: any = {};
             fd.forEach((v, k) => { fdobj[k] = v; });
             const newId = Math.max(0, ...state.products.map(p => p.id)) + 1;
-            const newProduct = { id: newId, name: fdobj.name || 'New Product', category: fdobj.category || 'earrings', price: Number(fdobj.price) || 0, originalPrice: fdobj.originalPrice ? Number(fdobj.originalPrice) : undefined, image: 'https://via.placeholder.com/400', description: fdobj.description || '', videos: videos.length > 0 ? videos : [] } as any;
+            const newProduct = { id: newId, name: fdobj.name || 'New Product', category: fdobj.category || 'earrings', price: Number(fdobj.price) || 0, originalPrice: fdobj.originalPrice ? Number(fdobj.originalPrice) : undefined, image: 'https://via.placeholder.com/400', description: fdobj.description || '', videos: [...validUrls] } as any;
             dispatch({ type: 'ADD_PRODUCT', payload: newProduct });
           }
           setShowAddProduct(false);
           setPreviewImages([]);
+          setVideoFiles([]);
+          setVideoUrls(['', '']);
         }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -132,18 +144,51 @@ const Admin = () => {
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 URLs - MP4, YouTube, Vimeo)</label>
-            <div className="space-y-2">
+            <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 - Upload or URLs)</label>
+            <p className="text-xs text-platinum/60 mb-3">You can upload video files (MP4, WebM) OR paste URLs (YouTube, Vimeo, or direct video links)</p>
+            
+            {/* Video File Upload */}
+            <div className="mb-4">
+              <label className="block text-sm text-platinum/80 mb-2">Upload Video Files</label>
               <input
-                name="video1"
+                type="file"
+                multiple
+                accept="video/*"
+                onChange={handleVideoChange}
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              />
+              {videoFiles.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  {videoFiles.map((file, idx) => (
+                    <p key={idx} className="text-xs text-gold-primary">✓ {file.name}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Video URLs */}
+            <div className="space-y-2">
+              <label className="block text-sm text-platinum/80">Or Add Video URLs</label>
+              <input
                 type="text"
-                placeholder="Video 1 URL (e.g., https://... or YouTube/Vimeo embed URL)"
+                placeholder="Video 1 URL (YouTube, Vimeo, or MP4 link)"
+                value={videoUrls[0]}
+                onChange={(e) => {
+                  const newUrls = [...videoUrls];
+                  newUrls[0] = e.target.value;
+                  setVideoUrls(newUrls);
+                }}
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
               />
               <input
-                name="video2"
                 type="text"
                 placeholder="Video 2 URL (optional)"
+                value={videoUrls[1]}
+                onChange={(e) => {
+                  const newUrls = [...videoUrls];
+                  newUrls[1] = e.target.value;
+                  setVideoUrls(newUrls);
+                }}
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
               />
             </div>
@@ -157,7 +202,7 @@ const Admin = () => {
             </button>
             <button
               type="button"
-              onClick={() => { setShowAddProduct(false); setPreviewImages([]); }}
+              onClick={() => { setShowAddProduct(false); setPreviewImages([]); setVideoFiles([]); setVideoUrls(['', '']); }}
               className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
             >
               Cancel
@@ -246,10 +291,14 @@ const Admin = () => {
   const EditProductModal: React.FC = () => {
     const [form, setForm] = useState<any>(editProduct || {});
     const [previewImages, setPreviewImages] = useState<string[]>([]);
+    const [videoFiles, setVideoFiles] = useState<File[]>([]);
+    const [videoUrls, setVideoUrls] = useState<string[]>([]);
 
     React.useEffect(() => {
       setForm(editProduct || {});
       setPreviewImages([]);
+      setVideoFiles([]);
+      setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
     }, [editProduct]);
 
     if (!showEditModal || !form) return null;
@@ -258,6 +307,11 @@ const Admin = () => {
       const files = Array.from(e.target.files || []);
       const previews = files.map(file => URL.createObjectURL(file));
       setPreviewImages(previews);
+    };
+
+    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      setVideoFiles(files);
     };
 
     const submit = async (e: React.FormEvent) => {
@@ -269,9 +323,21 @@ const Admin = () => {
           if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos') fd.append(k, form[k]);
         });
         
-        // Handle videos
-        if (form.videos && form.videos.length > 0) {
-          fd.append('videos', JSON.stringify(form.videos));
+        // Handle video files
+        videoFiles.forEach((file) => {
+          fd.append('videos_file', file);
+        });
+        
+        // Handle videos (URLs and file placeholders)
+        let finalVideos = [];
+        if (videoUrls && videoUrls.length > 0) {
+          finalVideos = videoUrls.filter(url => url && url.trim());
+        }
+        if (videoFiles.length > 0) {
+          finalVideos = [...finalVideos, ...videoFiles.map((_, i) => `__file_${i}__`)];
+        }
+        if (finalVideos.length > 0) {
+          fd.append('videos', JSON.stringify(finalVideos));
         }
         
         // Handle image upload if new images were selected
@@ -381,27 +447,62 @@ const Admin = () => {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 URLs)</label>
+              <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 - Upload or URLs)</label>
+              <p className="text-xs text-platinum/60 mb-3">Upload video files OR paste URLs</p>
+              
+              {/* Current Videos */}
+              {(form.videos && form.videos.length > 0) && (
+                <div className="mb-4">
+                  <p className="text-sm text-platinum/80 mb-2">Current Videos:</p>
+                  <div className="space-y-1">
+                    {form.videos.map((vid: string, idx: number) => (
+                      <p key={idx} className="text-xs text-gold-primary">✓ {vid.substring(0, 50)}...</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Video File Upload */}
+              <div className="mb-4">
+                <label className="block text-sm text-platinum/80 mb-2">Upload New Video Files</label>
+                <input
+                  type="file"
+                  multiple
+                  accept="video/*"
+                  onChange={handleVideoChange}
+                  className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                />
+                {videoFiles.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {videoFiles.map((file, idx) => (
+                      <p key={idx} className="text-xs text-gold-primary">✓ {file.name}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Video URLs */}
               <div className="space-y-2">
+                <label className="block text-sm text-platinum/80">Or Add Video URLs</label>
                 <input
                   type="text"
                   placeholder="Video 1 URL"
-                  value={(form.videos && form.videos[0]) || ''}
+                  value={videoUrls[0] || ''}
                   onChange={e => {
-                    const newVideos = [...(form.videos || [])];
-                    newVideos[0] = e.target.value;
-                    setForm({ ...form, videos: newVideos });
+                    const newUrls = [...videoUrls];
+                    newUrls[0] = e.target.value;
+                    setVideoUrls(newUrls);
                   }}
                   className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
                 />
                 <input
                   type="text"
                   placeholder="Video 2 URL (optional)"
-                  value={(form.videos && form.videos[1]) || ''}
+                  value={videoUrls[1] || ''}
                   onChange={e => {
-                    const newVideos = [...(form.videos || [])];
-                    newVideos[1] = e.target.value;
-                    setForm({ ...form, videos: newVideos.filter(v => v) });
+                    const newUrls = [...videoUrls];
+                    newUrls[1] = e.target.value;
+                    setVideoUrls(newUrls);
                   }}
                   className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
                 />
@@ -421,7 +522,7 @@ const Admin = () => {
             <div className="flex justify-end space-x-2">
               <button
                 type="button"
-                onClick={() => { setShowEditModal(false); setEditProduct(null); setPreviewImages([]); }}
+                onClick={() => { setShowEditModal(false); setEditProduct(null); setPreviewImages([]); setVideoFiles([]); setVideoUrls(['', '']); }}
                 className="px-4 py-2 bg-luxury-secondary text-platinum rounded border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
               >
                 Cancel
