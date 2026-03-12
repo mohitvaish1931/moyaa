@@ -14,6 +14,7 @@ import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
 import ProductDetail from './pages/ProductDetail';
 import Admin from './pages/Admin';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/necklaces" element={<Necklaces />} />
             <Route path="/track-order" element={<TrackOrder />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<Admin />} />
           </Routes>
           <Footer />

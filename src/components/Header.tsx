@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, Heart, ShoppingBag, ChevronDown, Menu, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import Cart from './Cart';
@@ -8,6 +8,7 @@ import SearchModal from './SearchModal';
 
 const Header = () => {
   const { state, dispatch } = useAppContext();
+  const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -22,10 +23,7 @@ const Header = () => {
 
   const handleUserClick = () => {
     if (state.user) {
-      const shouldLogout = window.confirm('Do you want to sign out?');
-      if (shouldLogout) {
-        dispatch({ type: 'LOGOUT' });
-      }
+      navigate('/profile');
     } else {
       dispatch({ type: 'TOGGLE_SIGNIN', payload: true });
     }
