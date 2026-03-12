@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://moraajewels.com'],
+  origin: ['http://localhost:5173', 'https://moraajewles.com'],
   credentials: true
 }));
 app.use(express.json());
