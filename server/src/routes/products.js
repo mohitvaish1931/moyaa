@@ -110,9 +110,10 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     console.log('Product saved:', p);
     res.status(201).json(p);
   } catch (err) {
-    console.error('POST /api/products error:', err.message);
-    console.error('Error details:', err);
-    res.status(500).json({ error: err.message });
+    console.error('POST /api/products error - Full error:', err);
+    console.error('Error message:', err.message);
+    console.error('Error stack:', err.stack);
+    res.status(500).json({ error: err.message, details: err.toString() });
   }
 });
 
