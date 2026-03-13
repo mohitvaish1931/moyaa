@@ -1,18 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useSEO } from '../utils/useSEO';
 import { generateProductSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
 import { getImageUrl, handleImageError, handleVideoError } from '../utils/mediaHelper';
+import { API_ENDPOINTS } from '../utils/api';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { state, dispatch } = useAppContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [apiProduct, setApiProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
+  // First try to find in state
+  let product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
+
+  // If not in state and we have an API product, use that
+  if (!product && apiProduct) {
+    product = apiProduct;
+  }
+
+  // Fetch product from API if not found in state
+  useEffect(() => {
+    if (!product && id) {
+      const fetchProduct = async () => {
+        try {
+          const response = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setApiProduct(data);
+          }
+        } catch (err) {
+          console.error('Failed to fetch product:', err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProduct();
+    } else {
+      setLoading(false);
+    }
+  }, [id, product]);
 
   // Update SEO after product is loaded
   if (product) {
@@ -48,6 +79,17 @@ const ProductDetail = () => {
         '@graph': [productSchema, breadcrumbSchema]
       }
     });
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gold-primary"></div>
+          <p className="mt-4 text-gray-600">Loading product...</p>
+        </div>
+      </div>
+    );
   }
 
   if (!product) {
