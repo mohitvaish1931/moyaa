@@ -23,10 +23,10 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const items = await Product.find().sort({ createdAt: -1 });
-    res.json(items);
+    res.json(items || []);
   } catch (err) {
-    console.error('GET /api/products error:', err);
-    res.status(500).json({ error: err.message });
+    console.error('GET /api/products error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch products: ' + err.message });
   }
 });
 
@@ -44,10 +44,11 @@ router.get('/:id', async (req, res) => {
 router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos_file', maxCount: 2 }]), async (req, res) => {
   try {
     const body = { ...req.body };
+    const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
     
     // Handle image uploads
     if (req.files && req.files.image && req.files.image.length > 0) {
-      const imageUrls = req.files.image.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+      const imageUrls = req.files.image.map(file => `${backendUrl}/uploads/${file.filename}`);
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
     }
@@ -55,7 +56,7 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     // Handle video uploads and URLs
     let videos = [];
     if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
-      const videoUrls = req.files.videos_file.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+      const videoUrls = req.files.videos_file.map(file => `${backendUrl}/uploads/${file.filename}`);
       videos = videoUrls;
     }
     
