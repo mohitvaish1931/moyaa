@@ -5,19 +5,19 @@ const ShopByCategory = () => {
   const categories = [
     {
       name: 'EARRINGS',
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/earrings.png',
       link: '/earrings',
       description: 'Delicate elegance for every moment'
     },
     {
       name: 'BRACELETS',
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/bracalate.png',
       link: '/bracelets',
       description: 'Wrist adornments of refined taste'
     },
     {
       name: 'NECKLACES',
-      image: 'https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/nacklace.jpeg',
       link: '/necklaces',
       description: 'Statement pieces that define elegance'
     }
@@ -30,7 +30,7 @@ const ShopByCategory = () => {
         <div className="text-center mb-20">
           <div className="inline-block mb-6">
             <div className="text-gold-primary text-sm tracking-widest font-light luxury-serif">
-              ✨ CURATED COLLECTIONS ✨
+              CURATED COLLECTIONS
             </div>
           </div>
           <h2 className="luxury-serif text-5xl md:text-6xl text-platinum mb-6 leading-tight">

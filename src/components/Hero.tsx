@@ -77,24 +77,22 @@ const Hero = () => {
       ))}
 
       {/* Main hero content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-center">
-        {/* Left text block */}
-        <div className="flex flex-col justify-center space-y-8">
-          <div>
-            <div className="inline-block mb-6">
-              <div className="text-platinum text-sm tracking-widest font-light">
-                ✨ LUXURY COLLECTION
-              </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Text section */}
+        <div className="mb-16 text-center lg:text-left max-w-2xl">
+          <div className="inline-block mb-6">
+            <div className="text-platinum text-sm tracking-widest font-light">
+              LUXURY COLLECTION
             </div>
-            <h1 className="luxury-serif text-6xl md:text-7xl text-platinum leading-tight mb-6">
-              THE
-              <br />
-              <span className="text-platinum text-7xl md:text-8xl">GLIMMER</span>
-            </h1>
-            <p className="text-platinum/80 text-lg leading-relaxed max-w-md mb-8">
-              Artfully designed jewelry with timeless elegance and uncompromising craftsmanship. Each piece tells a story of luxury and refinement.
-            </p>
           </div>
+          <h1 className="luxury-serif text-6xl md:text-7xl text-platinum leading-tight mb-6">
+            THE
+            <br />
+            <span className="text-platinum text-7xl md:text-8xl">GLIMMER</span>
+          </h1>
+          <p className="text-platinum/80 text-lg leading-relaxed max-w-md mb-8">
+            Explore our most finest collection of artfully designed jewelry with timeless elegance and uncompromising craftsmanship. Each piece tells a story of luxury and refinement.
+          </p>
 
           <Link
             to="/products"
@@ -105,111 +103,94 @@ const Hero = () => {
           </Link>
         </div>
 
-        {/* Center spotlight product */}
-        <div className="flex justify-center lg:justify-center">
-          <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center max-w-full">
-            {/* Outer glow (dark chocolate + teal depth) */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-b from-dark-chocolate/40 via-deep-teal/10 to-transparent blur-3xl" />
-
-            {/* Concentric rings */}
-            <div className="absolute inset-0 rounded-full border border-gold-primary/30" />
-            <div className="absolute inset-12 rounded-full border border-gold-primary/20" />
-            <div className="absolute inset-24 rounded-full border border-gold-primary/10" />
-
-            {/* Spotlight product image container */}
-            <div className="relative z-10 w-56 h-56 sm:w-72 sm:h-72 rounded-full overflow-hidden border-2 border-gold-primary/40 shadow-glow bg-luxury-dark/40 backdrop-blur-sm flex items-center justify-center animate-float">
-              <img
-                src="https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Featured Necklace"
-                className="w-full h-full object-cover"
-              />
-
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-
-              {/* Badge */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-dark-chocolate/70 backdrop-blur-md border border-gold-primary/50 rounded-full px-6 py-3 z-20">
-                <p className="text-platinum text-sm luxury-serif">Featured Piece</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right product cards */}
-        <div className="space-y-8 flex flex-col">
-          {/* Card 1 */}
+        {/* Three collection showcase photos */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mt-16">
+          {/* Collection 1 - Earrings */}
           <Link
             to="/earrings"
-            className="glass-card p-6 border-l-4 border-wine-deep/80 hover:border-wine-deep/100 transition-all duration-300 group"
+            className="group relative overflow-hidden rounded-2xl aspect-square border-2 border-gold-primary/30 hover:border-gold-primary/60 transition-all duration-500"
           >
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                <img
-                  src="/earrings.png"
-                  alt="Earrings"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-platinum luxury-serif text-sm mb-2 group-hover:text-gold-primary transition-colors">
-                  EARRINGS
-                </h3>
-                <p className="text-platinum text-lg font-semibold">From ₹299</p>
-              </div>
+            <img
+              src="/earrings.png"
+              alt="Earrings Collection"
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            
+            {/* Content overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+              <h3 className="text-platinum luxury-serif text-2xl mb-2">
+                EARRINGS
+              </h3>
+              <p className="text-platinum/90 text-sm mb-3">
+                Delicate elegance crafted to perfection
+              </p>
+              <p className="text-gold-primary font-semibold text-sm">
+                From ₹299
+              </p>
             </div>
-            <p className="text-platinum/80 text-xs leading-relaxed">
-              Delicate elegance crafted to perfection
-            </p>
           </Link>
 
-          {/* Card 2 */}
+          {/* Collection 2 - Necklaces (Featured) */}
           <Link
             to="/necklaces"
-            className="glass-card p-6 border-l-4 border-rose-maroon/80 hover:border-rose-maroon/100 transition-all duration-300 group"
+            className="group relative overflow-hidden rounded-2xl aspect-square border-2 border-gold-primary/60 hover:border-gold-primary/80 transition-all duration-500 md:scale-105 md:col-span-1"
           >
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                <img
-                  src="/nacklace.jpeg"
-                  alt="Necklaces"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-platinum luxury-serif text-sm mb-2 group-hover:text-gold-primary transition-colors">
-                  NECKLACES
-                </h3>
-                <p className="text-platinum text-lg font-semibold">From ₹399</p>
-              </div>
+            <img
+              src="/nacklace.jpeg"
+              alt="Necklaces Collection"
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            
+            {/* Featured badge */}
+            <div className="absolute top-4 right-4 bg-gold-primary/90 backdrop-blur-md rounded-full px-4 py-2 z-10">
+              <p className="text-dark-chocolate luxury-serif text-xs font-semibold tracking-wider">
+                FEATURED
+              </p>
             </div>
-            <p className="text-platinum/80 text-xs leading-relaxed">
-              Statement pieces that define elegance
-            </p>
+
+            {/* Content overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+              <h3 className="text-platinum luxury-serif text-2xl mb-2">
+                NECKLACES
+              </h3>
+              <p className="text-platinum/90 text-sm mb-3">
+                Statement pieces that define elegance
+              </p>
+              <p className="text-gold-primary font-semibold text-sm">
+                From ₹399
+              </p>
+            </div>
           </Link>
 
-          {/* Card 3 */}
+          {/* Collection 3 - Bracelets */}
           <Link
             to="/bracelets"
-            className="glass-card p-6 border-l-4 border-deep-teal/80 hover:border-deep-teal/100 transition-all duration-300 group"
+            className="group relative overflow-hidden rounded-2xl aspect-square border-2 border-gold-primary/30 hover:border-gold-primary/60 transition-all duration-500"
           >
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                <img
-                  src="/bracalate.png"
-                  alt="Bracelets"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-platinum luxury-serif text-sm mb-2 group-hover:text-gold-primary transition-colors">
-                  BRACELETS
-                </h3>
-                <p className="text-platinum text-lg font-semibold">From ₹199</p>
-              </div>
+            <img
+              src="/bracalate.png"
+              alt="Bracelets Collection"
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            
+            {/* Content overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+              <h3 className="text-platinum luxury-serif text-2xl mb-2">
+                BRACELETS
+              </h3>
+              <p className="text-platinum/90 text-sm mb-3">
+                Wrist adornments of refined taste
+              </p>
+              <p className="text-gold-primary font-semibold text-sm">
+                From ₹199
+              </p>
             </div>
-            <p className="text-platinum/80 text-xs leading-relaxed">
-              Wrist adornments of refined taste
-            </p>
           </Link>
         </div>
       </div>
