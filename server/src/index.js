@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'https://moraajewles.com', 'https://moyaa.onrender.com'],
+  origin: ['http://localhost:5173', 'http://localhost:3000', 'https://moraajewles.com', 'https://www.moraajewles.com', 'https://moyaa.onrender.com'],
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
@@ -30,6 +30,8 @@ import bannersRouter from './routes/banners.js';
 import couponsRouter from './routes/coupons.js';
 import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
+import inventoryRouter from './routes/inventory.js';
+import reviewsRouter from './routes/reviews.js';
 import User from './models/User.js';
 import bcrypt from 'bcryptjs';
 
@@ -39,6 +41,8 @@ app.use('/api/banners', bannersRouter);
 app.use('/api/coupons', couponsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/inventory', inventoryRouter);
+app.use('/api/reviews', reviewsRouter);
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));

@@ -177,9 +177,9 @@ const AllProducts = () => {
                           Sale
                         </div>
                       )}
-                      {product.soldOut && (
+                      {(product.soldOut || product.stock === 0) && (
                         <div className="absolute top-4 right-12 bg-primary-wine text-white px-3 py-1 text-sm font-medium rounded z-10 shadow-md">
-                          Sold Out
+                          {product.stock === 0 ? 'Out of Stock' : 'Sold Out'}
                         </div>
                       )}
                       <button 
@@ -195,7 +195,7 @@ const AllProducts = () => {
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      {!product.soldOut && (
+                      {!product.soldOut && product.stock > 0 && (
                         <button
                           onClick={() => addToCart(product)}
                           className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg font-medium hover:shadow-glow opacity-0 group-hover:opacity-100 flex items-center space-x-2 transition-all duration-300"
@@ -209,6 +209,16 @@ const AllProducts = () => {
                       <h3 className="text-sm font-medium text-gray-900 mb-2 luxury-serif">
                         {product.name}
                       </h3>
+                      
+                      {/* Stock Status */}
+                      <div className="mb-2">
+                        {product.stock > 0 ? (
+                          <p className="text-xs text-emerald-luxury font-medium">✓ In Stock ({product.stock})</p>
+                        ) : (
+                          <p className="text-xs text-primary-wine font-medium">Out of Stock</p>
+                        )}
+                      </div>
+
                       <div className="flex items-center justify-center space-x-2">
                         <span className="text-lg font-bold text-gold-primary">
                           Rs. {product.price.toLocaleString()}.00
@@ -219,6 +229,11 @@ const AllProducts = () => {
                           </span>
                         )}
                       </div>
+
+                      {/* Rating if available */}
+                      {product.averageRating > 0 && (
+                        <p className="text-xs text-gold-primary mt-1">⭐ {product.averageRating} ({product.reviewCount} reviews)</p>
+                      )}
                     </div>
                   </Link>
                 );

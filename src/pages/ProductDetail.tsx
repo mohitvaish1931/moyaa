@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useSEO } from '../utils/useSEO';
 import { generateProductSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
 import { getImageUrl, handleImageError, handleVideoError } from '../utils/mediaHelper';
 import { API_ENDPOINTS } from '../utils/api';
+import ProductReviews from '../components/ProductReviews';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -218,11 +219,29 @@ const ProductDetail = () => {
               <div className="flex items-center space-x-2 mb-4">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-gold-primary text-gold-primary" />
+                    <Star key={i} className={`h-4 w-4 ${i < Math.round(product.averageRating || 0) ? 'fill-gold-primary text-gold-primary' : 'text-gray-300'}`} />
                   ))}
                 </div>
-                <span className="text-sm text-gray-600">(24 reviews)</span>
+                <span className="text-sm text-gray-600">
+                  {product.averageRating ? `${product.averageRating}` : 'No ratings'} ({product.reviewCount || 0} review{product.reviewCount !== 1 ? 's' : ''})
+                </span>
               </div>
+              
+              {/* Stock Status */}
+              <div className="mb-4 flex items-center space-x-2">
+                {product.stock > 0 ? (
+                  <>
+                    <CheckCircle className="h-5 w-5 text-emerald-luxury" />
+                    <span className="text-sm text-emerald-luxury font-medium">In Stock ({product.stock} available)</span>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle className="h-5 w-5 text-primary-wine" />
+                    <span className="text-sm text-primary-wine font-medium">Out of Stock</span>
+                  </>
+                )}
+              </div>
+
               <div className="flex items-center space-x-4 mb-6">
                 <span className="text-3xl font-bold text-gold-primary">
                   Rs. {product.price.toLocaleString()}.00
@@ -409,8 +428,10 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-          </div>
         </div>
+
+        {/* Customer Reviews Section */}
+        {id && <ProductReviews productId={id} />}
       </div>
     </div>
   );
