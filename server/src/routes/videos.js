@@ -40,9 +40,10 @@ router.get('/featured', async (req, res) => {
 // Accept multipart form with optional file field 'file' or JSON body { title, url }
 router.post('/', upload.single('file'), async (req, res) => {
   try {
+    const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
     const body = { ...(req.body || {}) };
     if (req.file) {
-      body.url = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      body.url = `${backendUrl}/uploads/${req.file.filename}`;
       body.title = body.title || req.file.originalname;
     }
     const v = new Video(body);
@@ -56,9 +57,10 @@ router.post('/', upload.single('file'), async (req, res) => {
 
 router.put('/:id', upload.single('file'), async (req, res) => {
   try {
+    const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
     const body = { ...(req.body || {}) };
     if (req.file) {
-      body.url = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      body.url = `${backendUrl}/uploads/${req.file.filename}`;
     }
     const updated = await Video.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });

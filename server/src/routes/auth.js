@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
     const passwordHash = await bcrypt.hash(password, salt);
     const user = new User({ email: email.toLowerCase(), passwordHash, name: name || 'User', isAdmin: false });
     await user.save();
-    res.json({ user: { id: user._id, email: user.email, name: user.name, isAdmin: user.isAdmin } });
+    res.json({ user: { id: user.id, email: user.email, name: user.name, isAdmin: user.isAdmin } });
   } catch (err) {
     console.error('[REGISTER ERROR]', err);
     res.status(500).json({ error: err.message });
@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
     // Use bcrypt to compare passwords
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) return res.status(400).json({ error: 'Invalid credentials' });
-    res.json({ user: { id: user._id, email: user.email, name: user.name, isAdmin: user.isAdmin } });
+    res.json({ user: { id: user.id, email: user.email, name: user.name, isAdmin: user.isAdmin } });
   } catch (err) {
     console.error('[LOGIN ERROR]', err);
     res.status(500).json({ error: err.message });

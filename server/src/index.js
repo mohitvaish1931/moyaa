@@ -12,10 +12,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://moraajewles.com'],
+  origin: ['http://localhost:5173', 'http://localhost:3000', 'https://moraajewles.com', 'https://moyaa.onrender.com'],
   credentials: true
 }));
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Basic CSP header to mirror the meta tag in index.html. Adjust for production tighter rules.
 app.use((req, res, next) => {

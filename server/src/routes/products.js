@@ -46,14 +46,27 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     const body = { ...req.body };
     const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
     
-    // Remove fields that shouldn't be in the database
-    delete body.videos;
+    console.log('POST /api/products - Body:', JSON.stringify(body, null, 2));
+    
+    // Validate required fields
+    if (!body.name || !body.price) {
+      return res.status(400).json({ error: 'Name and price are required' });
+    }
+    
+    // Convert string numbers to actual numbers
+    if (typeof body.price === 'string') {
+      body.price = parseFloat(body.price);
+    }
+    if (body.originalPrice && typeof body.originalPrice === 'string') {
+      body.originalPrice = parseFloat(body.originalPrice);
+    }
     
     // Handle image uploads
     if (req.files && req.files.image && req.files.image.length > 0) {
       const imageUrls = req.files.image.map(file => `${backendUrl}/uploads/${file.filename}`);
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
+      console.log('Images uploaded:', imageUrls);
     }
     
     // Handle video uploads and URLs
@@ -63,6 +76,7 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
       const videoUrls = req.files.videos_file.map(file => `${backendUrl}/uploads/${file.filename}`);
       videos = [...videos, ...videoUrls];
+      console.log('Videos uploaded:', videoUrls);
     }
     
     // Parse and add video URLs from request body
@@ -76,10 +90,11 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
         }
         
         // Filter out placeholder file references
-        const urlVideos = parsedVideos.filter((v) => !v.startsWith('__file_'));
+        const urlVideos = parsedVideos.filter((v) => v && !v.startsWith('__file_'));
         videos = [...videos, ...urlVideos];
+        console.log('Video URLs parsed:', urlVideos);
       } catch (e) {
-        console.warn('Error parsing videos:', e);
+        console.warn('Error parsing videos:', e.message);
       }
     }
     
@@ -90,9 +105,11 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     
     const p = new Product(body);
     await p.save();
+    console.log('Product saved:', p);
     res.status(201).json(p);
   } catch (err) {
-    console.error('POST /api/products error:', err);
+    console.error('POST /api/products error:', err.message);
+    console.error('Error details:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -102,9 +119,18 @@ router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'vide
     const body = { ...req.body };
     const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
     
+    console.log('PUT /api/products/:id - ID:', req.params.id);
+    
     // Remove fields that shouldn't be updated directly
-    delete body.videos;
     delete body._id;
+    
+    // Convert string numbers to actual numbers
+    if (body.price && typeof body.price === 'string') {
+      body.price = parseFloat(body.price);
+    }
+    if (body.originalPrice && typeof body.originalPrice === 'string') {
+      body.originalPrice = parseFloat(body.originalPrice);
+    }
     
     // Handle image uploads
     if (req.files && req.files.image && req.files.image.length > 0) {
@@ -133,10 +159,10 @@ router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'vide
         }
         
         // Filter out placeholder file references
-        const urlVideos = parsedVideos.filter((v) => !v.startsWith('__file_'));
+        const urlVideos = parsedVideos.filter((v) => v && !v.startsWith('__file_'));
         videos = [...videos, ...urlVideos];
       } catch (e) {
-        console.warn('Error parsing videos:', e);
+        console.warn('Error parsing videos:', e.message);
       }
     }
     
@@ -146,10 +172,11 @@ router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'vide
     }
     
     const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
-    if (!updated) return res.status(404).json({ error: 'Not found' });
+    if (!updated) return res.status(404).json({ error: 'Product not found' });
+    console.log('Product updated:', updated);
     res.json(updated);
   } catch (err) {
-    console.error('PUT /api/products/:id error:', err);
+    console.error('PUT /api/products/:id error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });

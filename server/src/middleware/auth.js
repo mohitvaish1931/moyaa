@@ -10,7 +10,7 @@ export const requireAuth = async (req, res, next) => {
     const decoded = jwt.verify(token, secret);
     const user = await User.findById(decoded.id).select('-passwordHash');
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
-    req.user = { id: user._id, email: user.email, isAdmin: user.isAdmin, name: user.name };
+    req.user = { id: user.id, email: user.email, isAdmin: user.isAdmin, name: user.name };
     next();
   } catch (e) {
     return res.status(401).json({ error: 'Unauthorized' });
