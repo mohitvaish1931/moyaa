@@ -56,36 +56,33 @@ console.log('Connecting to MongoDB:', mongoUri.replace(/\/\/.*:.*@/, '//***:***@
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => {
+}).then(async () => {
   console.log('✅ Connected to MongoDB successfully');
+  
+  // Seed an admin user if environment variables provided and no admin exists
+  try {
+    if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+      const existing = await User.findOne({ email: process.env.ADMIN_EMAIL });
+      if (!existing) {
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD, salt);
+        await User.create({
+          email: process.env.ADMIN_EMAIL,
+          passwordHash,
+          name: 'Admin',
+          isAdmin: true,
+        });
+        console.log('Admin user created from env variables');
+      }
+    }
+  } catch (e) {
+    console.warn('Admin seeding error', e);
+  }
+  
+  // Start server after DB connection
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }).catch((err) => {
   console.error('❌ MongoDB connection failed:', err.message);
   console.error('Make sure MONGO_URI is set to your MongoDB Atlas connection string');
-  process.exit(1);
-});
-// Seed an admin user if environment variables provided and no admin exists
-(async () => {
-  try {
-      if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
-        const existing = await User.findOne({ email: process.env.ADMIN_EMAIL });
-        if (!existing) {
-          const salt = await bcrypt.genSalt(10);
-          const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD, salt);
-          await User.create({
-            email: process.env.ADMIN_EMAIL,
-            passwordHash,
-            name: 'Admin',
-            isAdmin: true,
-          });
-          console.log('Admin user created from env variables');
-        }
-      }
-    } catch (e) {
-      console.warn('Admin seeding error', e);
-    }
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })();
-}).catch((err) => {
-  console.error('MongoDB connection error', err);
   process.exit(1);
 });
