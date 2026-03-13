@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { Search, Package, Truck, CheckCircle } from 'lucide-react';
+import { useSEO } from '../utils/useSEO';
 
 const TrackOrder = () => {
+  useSEO({
+    title: 'Track Your Order - MORAA REFLECTION Jewelry Delivery Status',
+    description: 'Track your MORAA REFLECTION jewelry order in real-time. Get live updates on your shipment status, delivery date and package location.',
+    keywords: 'track order, order tracking, jewelry delivery, shipment status, order status',
+    url: 'https://moraajewles.com/track-order',
+    type: 'website'
+  });
+
   const [orderNumber, setOrderNumber] = useState('');
   const [email, setEmail] = useState('');
 

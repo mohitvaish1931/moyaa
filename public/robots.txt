@@ -13,4 +13,4 @@ Allow: /track-order
 Crawl-delay: 1
 
 # Sitemaps
-Sitemap: https://moraaluxury.com/sitemap.xml
+Sitemap: https://moraajewles.com/sitemap.xml

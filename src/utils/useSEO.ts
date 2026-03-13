@@ -7,6 +7,8 @@ interface SEOProps {
   url?: string;
   type?: string;
   keywords?: string;
+  author?: string;
+  structuredData?: Record<string, any>;
 }
 
 export const useSEO = (props: SEOProps) => {
@@ -32,6 +34,17 @@ export const useSEO = (props: SEOProps) => {
     }
     if (metaKeywords && props.keywords) {
       metaKeywords.setAttribute('content', props.keywords);
+    }
+    
+    // Update author
+    if (props.author) {
+      let metaAuthor = document.querySelector('meta[name="author"]');
+      if (!metaAuthor) {
+        metaAuthor = document.createElement('meta');
+        metaAuthor.setAttribute('name', 'author');
+        document.head.appendChild(metaAuthor);
+      }
+      metaAuthor.setAttribute('content', props.author);
     }
     
     // Update Open Graph meta tags
@@ -65,6 +78,7 @@ export const useSEO = (props: SEOProps) => {
     updateTwitterTag('twitter:title', props.title);
     updateTwitterTag('twitter:description', props.description);
     if (props.image) updateTwitterTag('twitter:image', props.image);
+    updateTwitterTag('twitter:card', 'summary_large_image');
     
     // Update canonical URL
     const canonicalUrl = props.url || window.location.href;
@@ -76,7 +90,19 @@ export const useSEO = (props: SEOProps) => {
     }
     canonical.setAttribute('href', canonicalUrl);
     
+    // Update JSON-LD structured data
+    if (props.structuredData) {
+      let script = document.querySelector('script[data-type="application/ld+json"][data-page="true"]');
+      if (!script) {
+        script = document.createElement('script');
+        script.setAttribute('type', 'application/ld+json');
+        script.setAttribute('data-page', 'true');
+        document.head.appendChild(script);
+      }
+      script.textContent = JSON.stringify(props.structuredData);
+    }
+    
     // Scroll to top on component mount
     window.scrollTo(0, 0);
-  }, [props.title, props.description, props.image, props.url, props.type, props.keywords]);
+  }, [props.title, props.description, props.image, props.url, props.type, props.keywords, props.author, props.structuredData]);
 };

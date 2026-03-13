@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useSEO } from '../utils/useSEO';
+import { generateProductSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
+import { getImageUrl, handleImageError, handleVideoError } from '../utils/mediaHelper';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,13 +16,37 @@ const ProductDetail = () => {
 
   // Update SEO after product is loaded
   if (product) {
+    const productImage = (product.images && product.images.length > 0) ? product.images[0] : product.image || 'https://moraajewles.com/logo.png';
+    const productSchema = generateProductSchema({
+      name: product.name,
+      description: product.description || `Premium ${product.category} from MORAA REFLECTION`,
+      image: product.images || [productImage],
+      price: product.price || product.originalPrice || 0,
+      priceCurrency: 'INR',
+      availability: product.soldOut ? 'OutOfStock' : 'InStock',
+      category: product.category,
+      url: `https://moraajewles.com/product/${id}`,
+      brand: 'MORAA REFLECTION'
+    });
+
+    const breadcrumbSchema = generateBreadcrumbSchema([
+      { name: 'Home', url: 'https://moraajewles.com' },
+      { name: 'Products', url: 'https://moraajewles.com/products' },
+      { name: product.category, url: `https://moraajewles.com/${product.category.toLowerCase()}` },
+      { name: product.name, url: `https://moraajewles.com/product/${id}` }
+    ]);
+
     useSEO({
       title: `${product.name} - Premium ${product.category} | MORAA REFLECTION`,
       description: product.description || `Buy ${product.name} from MORAA REFLECTION. Premium ${product.category} with finest craftsmanship. Original price: ${product.originalPrice ? `₹${product.originalPrice}` : 'Contact for price'}`,
       keywords: `${product.name}, ${product.category}, luxury jewelry, premium jewelry, buy ${product.category.toLowerCase()}`,
-      image: (product.images && product.images.length > 0) ? product.images[0] : product.image || 'https://moraajewles.com/logo.png',
+      image: productImage,
       url: `https://moraajewles.com/product/${id}`,
-      type: 'product'
+      type: 'product',
+      structuredData: {
+        '@context': 'https://schema.org',
+        '@graph': [productSchema, breadcrumbSchema]
+      }
     });
   }
 
@@ -39,7 +65,6 @@ const ProductDetail = () => {
 
   const isInWishlist = state.wishlist.find(item => item.id === product.id || (item as any)._id === (product as any)._id);
   const images = (product.images && product.images.length > 0) ? product.images : (product.image ? [product.image] : ['https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=600']);
-  const productId = (product as any)._id || product.id;
 
   const toggleWishlist = () => {
     if (isInWishlist) {
@@ -85,9 +110,10 @@ const ProductDetail = () => {
             {/* Main Image */}
             <div className="relative aspect-square bg-gray-100 border border-gold-primary/20 rounded-lg overflow-hidden shadow-md">
               <img
-                src={images[currentImageIndex]}
+                src={getImageUrl(images[currentImageIndex])}
                 alt={product.name}
                 className="w-full h-full object-cover"
+                onError={handleImageError}
               />
               {images.length > 1 && (
                 <>
@@ -131,9 +157,10 @@ const ProductDetail = () => {
                     }`}
                   >
                     <img
-                      src={image}
+                      src={getImageUrl(image)}
                       alt={`${product.name} ${index + 1}`}
                       className="w-full h-full object-cover"
+                      onError={handleImageError}
                     />
                   </button>
                 ))}
@@ -307,12 +334,13 @@ const ProductDetail = () => {
             </div>
 
             {/* Product Videos */}
-            {product.videos && product.videos.length > 0 && (
+            {(product as any).videos && (product as any).videos.length > 0 && (
               <div className="border-t border-gray-200 pt-6">
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Product Videos</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {product.videos.map((video: string, idx: number) => {
-                    const isEmbedUrl = video.includes('youtube.com') || video.includes('youtu.be') || video.includes('vimeo.com');
+                  {(product as any).videos.map((video: string, idx: number) => {
+                    if (!video) return null;
+                    const isEmbedUrl = video.includes('youtube.com') || video.includes('youtu.be') || video.includes('vimeo.com') || video.includes('player.vimeo');
                     return (
                       <div key={idx} className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden border border-gold-primary/20 shadow-md">
                         {isEmbedUrl ? (
@@ -325,10 +353,12 @@ const ProductDetail = () => {
                           />
                         ) : (
                           <video
-                            src={video}
+                            src={getImageUrl(video)}
                             className="w-full h-full object-cover"
                             controls
                             controlsList="nodownload"
+                            onError={handleVideoError}
+                            poster="https://via.placeholder.com/400?text=Video"
                           />
                         )}
                       </div>

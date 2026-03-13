@@ -20,14 +20,19 @@ const Admin = () => {
   const recentOrders: any[] = [];
 
   const ProductForm = () => {
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
     const [videoFiles, setVideoFiles] = useState<File[]>([]);
     const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
+      setImageFiles(files);
       const previews = files.map(file => URL.createObjectURL(file));
       setPreviewImages(previews);
+      setError('');
     };
 
     const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,10 +43,26 @@ const Admin = () => {
     return (
       <div className="glass-card-sapphire border border-sapphire-luxury/40 p-6 rounded-lg shadow-glow-sapphire">
         <h3 className="text-lg font-bold text-platinum mb-4">Add New Product</h3>
+        {error && (
+          <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+            {error}
+          </div>
+        )}
         <form className="space-y-4" onSubmit={async (e) => {
           e.preventDefault();
+          setIsLoading(true);
+          setError('');
+          
           const form = e.target as HTMLFormElement;
           const fd = new FormData(form);
+          
+          // Remove default image field from FormData
+          fd.delete('image');
+          
+          // Explicitly append image files from state
+          imageFiles.forEach((file) => {
+            fd.append('image', file);
+          });
           
           // Handle video files
           videoFiles.forEach((file) => {
@@ -60,15 +81,16 @@ const Admin = () => {
             if (!res.ok) throw new Error('Create failed');
             const created = await res.json();
             dispatch({ type: 'ADD_PRODUCT', payload: created });
+            alert('✅ Product added successfully!');
           } catch (err) {
-            // fallback to local add
-            const fdobj: any = {};
-            fd.forEach((v, k) => { fdobj[k] = v; });
-            const newId = Math.max(0, ...state.products.map(p => p.id)) + 1;
-            const newProduct = { id: newId, name: fdobj.name || 'New Product', category: fdobj.category || 'earrings', price: Number(fdobj.price) || 0, originalPrice: fdobj.originalPrice ? Number(fdobj.originalPrice) : undefined, image: 'https://via.placeholder.com/400', description: fdobj.description || '', videos: [...validUrls] } as any;
-            dispatch({ type: 'ADD_PRODUCT', payload: newProduct });
+            console.error('API error:', err);
+            alert('❌ Error adding product: Backend server not responding. Make sure your MongoDB is running on Render.');
+            setError('Failed to add product. Please check your backend connection.');
+          } finally {
+            setIsLoading(false);
           }
           setShowAddProduct(false);
+          setImageFiles([]);
           setPreviewImages([]);
           setVideoFiles([]);
           setVideoUrls(['', '']);
@@ -196,14 +218,23 @@ const Admin = () => {
           <div className="flex space-x-4">
             <button
               type="submit"
-              className="btn-premium-gold text-luxury-dark px-6 py-2 rounded-lg hover:shadow-glow-gold transition-all"
+              disabled={isLoading}
+              className="btn-premium-gold text-luxury-dark px-6 py-2 rounded-lg hover:shadow-glow-gold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Add Product
+              {isLoading ? '⏳ Adding...' : 'Add Product'}
             </button>
             <button
               type="button"
-              onClick={() => { setShowAddProduct(false); setPreviewImages([]); setVideoFiles([]); setVideoUrls(['', '']); }}
-              className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
+              disabled={isLoading}
+              onClick={() => { 
+                setShowAddProduct(false); 
+                setImageFiles([]);
+                setPreviewImages([]); 
+                setVideoFiles([]); 
+                setVideoUrls(['', '']); 
+                setError('');
+              }}
+              className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>

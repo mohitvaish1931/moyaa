@@ -3,16 +3,23 @@ import { Heart, ChevronDown, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { useSEO } from '../utils/useSEO';
+import { generateBreadcrumbSchema } from '../utils/schemaGenerator';
 
 const AllProducts = () => {
   const { state, dispatch } = useAppContext();
   
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: 'https://moraajewles.com' },
+    { name: 'Products', url: 'https://moraajewles.com/products' }
+  ]);
+
   useSEO({
     title: 'All Products - MORAA REFLECTION Premium Jewelry Collection',
     description: 'Browse our complete collection of premium luxury jewelry. Find the perfect earrings, necklaces, bracelets and more from MORAA REFLECTION.',
     keywords: 'all products, jewelry collection, earrings, necklaces, bracelets, luxury jewelry, premium accessories',
     url: 'https://moraajewles.com/products',
-    type: 'product.group'
+    type: 'product.group',
+    structuredData: breadcrumbSchema
   });
   
   const [selectedFilters, setSelectedFilters] = useState({

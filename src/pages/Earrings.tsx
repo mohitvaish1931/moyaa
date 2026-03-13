@@ -1,21 +1,49 @@
-import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { useSEO } from '../utils/useSEO';
+import { generateAggregateOfferSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
+import { getImageUrl, handleImageError } from '../utils/mediaHelper';
 
 const Earrings = () => {
   const { state, dispatch } = useAppContext();
+
+  const earrings = state.products.filter(p => p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring');
+
+  // Calculate price range for aggregate offer schema
+  const prices = earrings.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+  const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+
+  // Generate schemas
+  const aggregateSchema = generateAggregateOfferSchema(
+    'Premium Earrings Collection - MORAA REFLECTION',
+    'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles.',
+    'https://moraajewles.com/logo.png',
+    minPrice,
+    maxPrice,
+    earrings.length,
+    'INR',
+    'https://moraajewles.com/earrings'
+  );
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: 'https://moraajewles.com' },
+    { name: 'Products', url: 'https://moraajewles.com/products' },
+    { name: 'Earrings', url: 'https://moraajewles.com/earrings' }
+  ]);
 
   useSEO({
     title: 'Premium Earrings Collection - MORAA REFLECTION Luxury Jewelry',
     description: 'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles, find the perfect earrings to elevate your style.',
     keywords: 'earrings, luxury earrings, premium earrings, designer earrings, jewelry earrings, gold earrings, diamond earrings',
     url: 'https://moraajewles.com/earrings',
-    type: 'product.group'
+    type: 'product.group',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@graph': [aggregateSchema, breadcrumbSchema]
+    }
   });
-
-  const earrings = state.products.filter(p => p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring');
 
   const toggleWishlist = (product: any) => {
     const isInWishlist = state.wishlist.find(item => item.id === product.id);
@@ -75,9 +103,10 @@ const Earrings = () => {
                   </button>
                   {/* Product Image */}
                   <img
-                    src={product.image}
+                    src={getImageUrl(product.image)}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={handleImageError}
                   />
                   {/* Add to Cart Button */}
                   {!product.soldOut && (
