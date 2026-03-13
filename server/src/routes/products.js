@@ -46,6 +46,9 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     const body = { ...req.body };
     const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
     
+    // Remove fields that shouldn't be in the database
+    delete body.videos;
+    
     // Handle image uploads
     if (req.files && req.files.image && req.files.image.length > 0) {
       const imageUrls = req.files.image.map(file => `${backendUrl}/uploads/${file.filename}`);
@@ -55,23 +58,32 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     
     // Handle video uploads and URLs
     let videos = [];
+    
+    // Add uploaded video files
     if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
       const videoUrls = req.files.videos_file.map(file => `${backendUrl}/uploads/${file.filename}`);
-      videos = videoUrls;
+      videos = [...videos, ...videoUrls];
     }
     
-    // Parse videos if sent as JSON string (from URLs)
-    if (body.videos && typeof body.videos === 'string') {
+    // Parse and add video URLs from request body
+    if (req.body.videos) {
       try {
-        const parsedVideos = JSON.parse(body.videos);
-        // Filter out placeholder file references, merge with uploaded videos
+        let parsedVideos = [];
+        if (typeof req.body.videos === 'string') {
+          parsedVideos = JSON.parse(req.body.videos);
+        } else if (Array.isArray(req.body.videos)) {
+          parsedVideos = req.body.videos;
+        }
+        
+        // Filter out placeholder file references
         const urlVideos = parsedVideos.filter((v) => !v.startsWith('__file_'));
-        videos = [...urlVideos, ...videos];
+        videos = [...videos, ...urlVideos];
       } catch (e) {
-        body.videos = [body.videos];
+        console.warn('Error parsing videos:', e);
       }
     }
     
+    // Set videos if any exist
     if (videos.length > 0) {
       body.videos = videos;
     }
@@ -88,33 +100,47 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
 router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos_file', maxCount: 2 }]), async (req, res) => {
   try {
     const body = { ...req.body };
+    const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
+    
+    // Remove fields that shouldn't be updated directly
+    delete body.videos;
+    delete body._id;
     
     // Handle image uploads
     if (req.files && req.files.image && req.files.image.length > 0) {
-      const imageUrls = req.files.image.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+      const imageUrls = req.files.image.map(file => `${backendUrl}/uploads/${file.filename}`);
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
     }
     
     // Handle video uploads and URLs
     let videos = [];
+    
+    // Add uploaded video files
     if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
-      const videoUrls = req.files.videos_file.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
-      videos = videoUrls;
+      const videoUrls = req.files.videos_file.map(file => `${backendUrl}/uploads/${file.filename}`);
+      videos = [...videos, ...videoUrls];
     }
     
-    // Parse videos if sent as JSON string (from URLs)
-    if (body.videos && typeof body.videos === 'string') {
+    // Parse and add video URLs from request body
+    if (req.body.videos) {
       try {
-        const parsedVideos = JSON.parse(body.videos);
-        // Filter out placeholder file references, merge with uploaded videos
+        let parsedVideos = [];
+        if (typeof req.body.videos === 'string') {
+          parsedVideos = JSON.parse(req.body.videos);
+        } else if (Array.isArray(req.body.videos)) {
+          parsedVideos = req.body.videos;
+        }
+        
+        // Filter out placeholder file references
         const urlVideos = parsedVideos.filter((v) => !v.startsWith('__file_'));
-        videos = [...urlVideos, ...videos];
+        videos = [...videos, ...urlVideos];
       } catch (e) {
-        body.videos = [body.videos];
+        console.warn('Error parsing videos:', e);
       }
     }
     
+    // Set videos if any exist
     if (videos.length > 0) {
       body.videos = videos;
     }
