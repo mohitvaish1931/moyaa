@@ -79,6 +79,13 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
       }
     }
     
+    // Convert stock string to number
+    if (body.stock !== undefined) {
+      if (typeof body.stock === 'string') {
+        body.stock = parseInt(body.stock) || 0;
+      }
+    }
+    
     // Handle image uploads
     if (req.files && req.files.image && req.files.image.length > 0) {
       const imageUrls = req.files.image.map(file => `${backendUrl}/uploads/${file.filename}`);
@@ -155,6 +162,13 @@ router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'vide
     if (body.soldOut !== undefined) {
       if (typeof body.soldOut === 'string') {
         body.soldOut = body.soldOut === 'true';
+      }
+    }
+    
+    // Convert stock string to number
+    if (body.stock !== undefined) {
+      if (typeof body.stock === 'string') {
+        body.stock = parseInt(body.stock) || 0;
       }
     }
     

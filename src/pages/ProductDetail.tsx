@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw, CheckCircle, AlertCircle } from 'lucide-react';
+import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useSEO } from '../utils/useSEO';
 import { generateProductSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
@@ -227,21 +227,6 @@ const ProductDetail = () => {
                 </span>
               </div>
               
-              {/* Stock Status */}
-              <div className="mb-4 flex items-center space-x-2">
-                {product.stock > 0 ? (
-                  <>
-                    <CheckCircle className="h-5 w-5 text-emerald-luxury" />
-                    <span className="text-sm text-emerald-luxury font-medium">In Stock ({product.stock} available)</span>
-                  </>
-                ) : (
-                  <>
-                    <AlertCircle className="h-5 w-5 text-primary-wine" />
-                    <span className="text-sm text-primary-wine font-medium">Out of Stock</span>
-                  </>
-                )}
-              </div>
-
               <div className="flex items-center space-x-4 mb-6">
                 <span className="text-3xl font-bold text-gold-primary">
                   Rs. {product.price.toLocaleString()}.00
@@ -322,15 +307,10 @@ const ProductDetail = () => {
               <div className="flex space-x-4">
                 <button
                   onClick={addToCart}
-                  disabled={product.soldOut}
-                  className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-all ${
-                    product.soldOut
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-300'
-                      : 'btn-premium-gold text-luxury-dark hover:shadow-glow-gold'
-                  }`}
+                  className="flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-all btn-premium-gold text-luxury-dark hover:shadow-glow-gold"
                 >
                   <ShoppingBag className="h-5 w-5" />
-                  <span>{product.soldOut ? 'Sold Out' : 'Add to Cart'}</span>
+                  <span>Add to Cart</span>
                 </button>
                 <button
                   onClick={toggleWishlist}

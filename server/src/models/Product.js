@@ -8,7 +8,7 @@ const ProductSchema = new mongoose.Schema({
   images: [String],
   videos: [String],
   sale: Boolean,
-  soldOut: Boolean,
+  soldOut: { type: Boolean, default: false },
   category: String,
   description: String,
   features: [String],
@@ -16,7 +16,7 @@ const ProductSchema = new mongoose.Schema({
   dimensions: String,
   weight: String,
   careInstructions: [String],
-  stock: { type: Number, default: 0, min: 0 },
+  stock: { type: Number, default: 999, min: 0 },
   sku: { type: String, unique: true, sparse: true },
   averageRating: { type: Number, default: 0, min: 0, max: 5 },
   reviewCount: { type: Number, default: 0, min: 0 }

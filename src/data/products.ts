@@ -6,7 +6,6 @@ export interface Product {
   image: string;
   images?: string[];
   sale?: boolean;
-  soldOut?: boolean;
   category: string;
   description: string;
   features: string[];

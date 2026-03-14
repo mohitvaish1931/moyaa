@@ -15,7 +15,6 @@ const EditProduct = () => {
     price: 0,
     originalPrice: '',
     description: '',
-    soldOut: false,
     images: [],
     videos: []
   });
@@ -33,16 +32,6 @@ const EditProduct = () => {
     const product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
     if (product) {
       const productAny = product as any;
-      // Convert soldOut to boolean - handle both boolean and string values
-      let soldOutValue = false;
-      if (productAny.soldOut !== undefined && productAny.soldOut !== null) {
-        if (typeof productAny.soldOut === 'string') {
-          soldOutValue = productAny.soldOut === 'true';
-        } else {
-          soldOutValue = !!productAny.soldOut;
-        }
-      }
-      
       setForm({
         id: product.id || productAny._id,
         name: product.name || '',
@@ -50,12 +39,10 @@ const EditProduct = () => {
         price: product.price || 0,
         originalPrice: product.originalPrice || '',
         description: product.description || '',
-        soldOut: soldOutValue,
         images: product.images || [],
         videos: productAny.videos || []
       });
       setVideoUrls((productAny.videos && productAny.videos.length > 0) ? productAny.videos : ['', '']);
-      console.log('Loaded product:', { name: product.name, soldOut: soldOutValue, original: productAny.soldOut });
     }
   }, [id, state.products]);
 
@@ -82,7 +69,7 @@ const EditProduct = () => {
       
       // Add form fields
       Object.keys(form).forEach(k => {
-        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos') {
+        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'soldOut' && k !== 'stock') {
           fd.append(k, form[k]);
         }
       });
@@ -135,8 +122,7 @@ const EditProduct = () => {
         category: form.category,
         price: Number(form.price) || 0,
         originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
-        description: form.description || '',
-        soldOut: !!form.soldOut,
+        description: form.description || ''
       };
       dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
       setSuccess('✅ Product updated locally!');
@@ -339,44 +325,6 @@ const EditProduct = () => {
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
               />
             </div>
-          </div>
-
-          {/* Availability */}
-          <div>
-            <h3 className="text-lg font-bold text-platinum mb-4">Availability</h3>
-            <div className="flex items-center space-x-6">
-              <label className="flex items-center space-x-3 cursor-pointer">
-                <input
-                  type="radio"
-                  name="availability"
-                  checked={!form.soldOut}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      console.log('Toggled to In Stock');
-                      setForm({ ...form, soldOut: false });
-                    }
-                  }}
-                  className="w-5 h-5 accent-emerald-luxury cursor-pointer"
-                />
-                <span className="text-lg text-emerald-luxury font-semibold">✓ In Stock</span>
-              </label>
-              <label className="flex items-center space-x-3 cursor-pointer">
-                <input
-                  type="radio"
-                  name="availability"
-                  checked={!!form.soldOut}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      console.log('Toggled to Out of Stock');
-                      setForm({ ...form, soldOut: true });
-                    }
-                  }}
-                  className="w-5 h-5 accent-ruby-luxury cursor-pointer"
-                />
-                <span className="text-lg text-ruby-luxury font-semibold">✗ Out of Stock</span>
-              </label>
-            </div>
-            <p className="text-xs text-platinum/50 mt-2">Current state: {form.soldOut ? 'Out of Stock' : 'In Stock'}</p>
           </div>
 
           {/* Buttons */}

@@ -28,7 +28,6 @@ const Admin = () => {
     const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [soldOut, setSoldOut] = useState(false);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
@@ -79,9 +78,6 @@ const Admin = () => {
             fd.append('videos', JSON.stringify(finalVideos));
           }
           
-          // Explicitly add soldOut value
-          fd.append('soldOut', soldOut ? 'true' : 'false');
-          
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
             if (!res.ok) {
@@ -110,7 +106,7 @@ const Admin = () => {
           setPreviewImages([]);
           setVideoFiles([]);
           setVideoUrls(['', '']);
-          setSoldOut(false);
+          setError('');
         }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -237,33 +233,6 @@ const Admin = () => {
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
               />
             </div>
-          </div>
-          <div className="flex items-center space-x-6">
-            <fieldset className="text-platinum">
-              <legend className="text-sm font-medium mb-2 block">Availability</legend>
-              <div className="flex items-center space-x-4">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="availability"
-                    checked={!soldOut}
-                    onChange={() => setSoldOut(false)}
-                    className="w-4 h-4 accent-emerald-luxury"
-                  />
-                  <span className="text-emerald-luxury font-semibold">✓ In Stock</span>
-                </label>
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="availability"
-                    checked={soldOut}
-                    onChange={() => setSoldOut(true)}
-                    className="w-4 h-4 accent-ruby-luxury"
-                  />
-                  <span className="text-ruby-luxury font-semibold">✗ Out of Stock</span>
-                </label>
-              </div>
-            </fieldset>
           </div>
           <div className="flex space-x-4">
             <button
@@ -982,12 +951,6 @@ const Admin = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gold-primary font-medium">
                           ₹{product.price.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${product.soldOut ? 'bg-gradient-to-r from-ruby-luxury to-amethyst-luxury text-platinum' : 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum'
-                            }`}>
-                            {product.soldOut ? 'Sold Out' : 'In Stock'}
-                          </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">

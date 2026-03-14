@@ -29,7 +29,6 @@ const AllProducts = () => {
   });
 
   const [isCollectionOpen, setIsCollectionOpen] = useState(false);
-  const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
 
   const products = state.products;
@@ -96,30 +95,6 @@ const AllProducts = () => {
               )}
             </div>
 
-            {/* Availability Filter */}
-            <div className="border-b border-gold-primary/30 pb-6">
-              <button
-                onClick={() => setIsAvailabilityOpen(!isAvailabilityOpen)}
-                className="flex items-center justify-between w-full text-left"
-              >
-                <h4 className="text-sm font-medium text-gray-900 luxury-serif">AVAILABILITY</h4>
-                <ChevronDown className={`h-4 w-4 text-gold-primary transform transition-transform ${isAvailabilityOpen ? 'rotate-180' : ''}`} />
-              </button>
-              
-              {isAvailabilityOpen && (
-                <div className="mt-4 space-y-3">
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-3 accent-gold-primary" />
-                    <span className="text-sm text-gray-700">In stock (18)</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-3 accent-gold-primary" />
-                    <span className="text-sm text-gray-700">Out of stock (1)</span>
-                  </label>
-                </div>
-              )}
-            </div>
-
             {/* Price Filter */}
             <div className="pb-6">
               <button
@@ -177,11 +152,6 @@ const AllProducts = () => {
                           Sale
                         </div>
                       )}
-                      {(product.soldOut || product.stock === 0) && (
-                        <div className="absolute top-4 right-12 bg-primary-wine text-white px-3 py-1 text-sm font-medium rounded z-10 shadow-md">
-                          {product.stock === 0 ? 'Out of Stock' : 'Sold Out'}
-                        </div>
-                      )}
                       <button 
                         onClick={() => toggleWishlist(product)}
                         className="absolute top-4 right-4 p-2 bg-white/80 rounded-full shadow-md hover:shadow-lg transition-all z-10 border border-gold-primary/30"
@@ -195,29 +165,13 @@ const AllProducts = () => {
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      {!product.soldOut && product.stock > 0 && (
-                        <button
-                          onClick={() => addToCart(product)}
-                          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg font-medium hover:shadow-glow opacity-0 group-hover:opacity-100 flex items-center space-x-2 transition-all duration-300"
-                        >
-                          <ShoppingBag className="h-4 w-4" />
-                          <span>Add to Cart</span>
-                        </button>
-                      )}
-                    </div>
-                    <div className="text-center">
-                      <h3 className="text-sm font-medium text-gray-900 mb-2 luxury-serif">
-                        {product.name}
-                      </h3>
-                      
-                      {/* Stock Status */}
-                      <div className="mb-2">
-                        {product.stock > 0 ? (
-                          <p className="text-xs text-emerald-luxury font-medium">✓ In Stock ({product.stock})</p>
-                        ) : (
-                          <p className="text-xs text-primary-wine font-medium">Out of Stock</p>
-                        )}
-                      </div>
+                      <button
+                        onClick={() => addToCart(product)}
+                        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg font-medium hover:shadow-glow opacity-0 group-hover:opacity-100 flex items-center space-x-2 transition-all duration-300"
+                      >
+                        <ShoppingBag className="h-4 w-4" />
+                        <span>Add to Cart</span>
+                      </button>
 
                       <div className="flex items-center justify-center space-x-2">
                         <span className="text-lg font-bold text-gold-primary">
