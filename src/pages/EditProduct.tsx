@@ -33,6 +33,16 @@ const EditProduct = () => {
     const product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
     if (product) {
       const productAny = product as any;
+      // Convert soldOut to boolean - handle both boolean and string values
+      let soldOutValue = false;
+      if (productAny.soldOut !== undefined && productAny.soldOut !== null) {
+        if (typeof productAny.soldOut === 'string') {
+          soldOutValue = productAny.soldOut === 'true';
+        } else {
+          soldOutValue = !!productAny.soldOut;
+        }
+      }
+      
       setForm({
         id: product.id || productAny._id,
         name: product.name || '',
@@ -40,11 +50,12 @@ const EditProduct = () => {
         price: product.price || 0,
         originalPrice: product.originalPrice || '',
         description: product.description || '',
-        soldOut: product.soldOut || false,
+        soldOut: soldOutValue,
         images: product.images || [],
         videos: productAny.videos || []
       });
       setVideoUrls((productAny.videos && productAny.videos.length > 0) ? productAny.videos : ['', '']);
+      console.log('Loaded product:', { name: product.name, soldOut: soldOutValue, original: productAny.soldOut });
     }
   }, [id, state.products]);
 
@@ -339,8 +350,13 @@ const EditProduct = () => {
                   type="radio"
                   name="availability"
                   checked={!form.soldOut}
-                  onChange={() => setForm({ ...form, soldOut: false })}
-                  className="w-5 h-5 accent-emerald-luxury"
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      console.log('Toggled to In Stock');
+                      setForm({ ...form, soldOut: false });
+                    }
+                  }}
+                  className="w-5 h-5 accent-emerald-luxury cursor-pointer"
                 />
                 <span className="text-lg text-emerald-luxury font-semibold">✓ In Stock</span>
               </label>
@@ -348,13 +364,19 @@ const EditProduct = () => {
                 <input
                   type="radio"
                   name="availability"
-                  checked={form.soldOut}
-                  onChange={() => setForm({ ...form, soldOut: true })}
-                  className="w-5 h-5 accent-ruby-luxury"
+                  checked={!!form.soldOut}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      console.log('Toggled to Out of Stock');
+                      setForm({ ...form, soldOut: true });
+                    }
+                  }}
+                  className="w-5 h-5 accent-ruby-luxury cursor-pointer"
                 />
                 <span className="text-lg text-ruby-luxury font-semibold">✗ Out of Stock</span>
               </label>
             </div>
+            <p className="text-xs text-platinum/50 mt-2">Current state: {form.soldOut ? 'Out of Stock' : 'In Stock'}</p>
           </div>
 
           {/* Buttons */}
