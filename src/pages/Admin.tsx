@@ -809,7 +809,6 @@ const Admin = () => {
                       <p className="text-sm font-medium text-platinum/70">{stat.name}</p>
                       <p className="text-2xl font-bold text-gold-primary">{stat.value}</p>
                     </div>
-                    <EditProductModal />
                   </div>
                 </div>
               ))}
@@ -1083,6 +1082,9 @@ const Admin = () => {
             </div>
           </div>
         )}
+
+        {/* Edit Product Modal - Rendered at top level */}
+        <EditProductModal />
       </div>
     </div>
   );

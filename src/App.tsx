@@ -15,6 +15,10 @@ import Contact from './pages/Contact';
 import ProductDetail from './pages/ProductDetail';
 import Admin from './pages/Admin';
 import Profile from './pages/Profile';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import RefundPolicy from './pages/RefundPolicy';
+import ShippingPolicy from './pages/ShippingPolicy';
+import JewelleryCareGuide from './pages/JewelleryCareGuide';
 
 function App() {
   return (
@@ -34,6 +38,10 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/jewellery-care-guide" element={<JewelleryCareGuide />} />
           </Routes>
           <Footer />
           <SignInModal />

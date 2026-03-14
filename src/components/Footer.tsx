@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
@@ -53,10 +54,11 @@ const Footer = () => {
             <h4 className="luxury-serif text-gold-primary text-sm tracking-widest mb-8">INFORMATION</h4>
             <ul className="space-y-4">
               <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">About Us</a></li>
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Privacy Policy</a></li>
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Shipping Policy</a></li>
+              <li><Link to="/privacy-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Privacy Policy</Link></li>
+              <li><Link to="/shipping-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Shipping Policy</Link></li>
+              <li><Link to="/refund-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Refund Policy</Link></li>
+              <li><Link to="/jewellery-care-guide" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Jewellery Care</Link></li>
               <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Terms & Conditions</a></li>
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Returns & Exchanges</a></li>
             </ul>
           </div>
 
