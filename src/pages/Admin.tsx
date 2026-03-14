@@ -336,26 +336,45 @@ const Admin = () => {
   };
 
   const EditProductModal: React.FC = () => {
-    const [form, setForm] = useState<any>(editProduct || {});
+    // Use editProduct directly if available, otherwise use form state
+    const [form, setForm] = useState<any>({});
     const [previewImages, setPreviewImages] = useState<string[]>([]);
     const [videoFiles, setVideoFiles] = useState<File[]>([]);
-    const [videoUrls, setVideoUrls] = useState<string[]>([]);
+    const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
 
     React.useEffect(() => {
-      if (editProduct) {
-        console.log('EditProductModal: editProduct updated:', editProduct);
-        setForm(editProduct);
+      console.log('EditProductModal useEffect triggered. showEditModal:', showEditModal, 'editProduct:', editProduct?.name);
+      if (showEditModal && editProduct) {
+        console.log('Setting form data for product:', editProduct.name);
+        const formData = {
+          id: editProduct.id || editProduct._id,
+          name: editProduct.name || '',
+          category: editProduct.category || '',
+          price: editProduct.price || 0,
+          originalPrice: editProduct.originalPrice || '',
+          description: editProduct.description || '',
+          soldOut: editProduct.soldOut || false,
+          images: editProduct.images || [],
+          videos: editProduct.videos || []
+        };
+        setForm(formData);
         setPreviewImages([]);
         setVideoFiles([]);
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
       }
-    }, [editProduct]);
+    }, [showEditModal, editProduct]);
 
-    if (!showEditModal || !editProduct) {
-      console.log('EditProductModal: Not rendering - showEditModal:', showEditModal, 'editProduct:', editProduct);
+    if (!showEditModal) {
+      console.log('Modal not visible - showEditModal is false');
       return null;
     }
-    console.log('EditProductModal: Rendering modal for product');
+
+    if (!editProduct) {
+      console.log('Modal not visible - editProduct is null/undefined');
+      return null;
+    }
+
+    console.log('Rendering EditProductModal with product:', form?.name, 'form:', form);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
@@ -428,8 +447,9 @@ const Admin = () => {
     return (
       <div className="fixed inset-0 bg-luxury-dark/80 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto">
         <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg p-6 w-full max-w-2xl shadow-glow-sapphire my-8">
-          <h3 className="text-lg font-bold text-platinum mb-4">Edit Product</h3>
+          <h3 className="text-lg font-bold text-platinum mb-4">Edit Product - {editProduct?.name || 'Loading...'}</h3>
           <form onSubmit={submit} className="space-y-4">
+            <p className="text-xs text-platinum/50">Product ID: {editProduct?.id || editProduct?._id}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
