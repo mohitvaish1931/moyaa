@@ -35,7 +35,7 @@ const SignInModal = () => {
           return;
         }
         // Save user in context
-        dispatch({ type: 'SET_USER', payload: { id: data.user.id, email: data.user.email, name: data.user.name, role: data.user.role } });
+        dispatch({ type: 'SET_USER', payload: { id: data.user.id, email: data.user.email, name: data.user.name, isAdmin: data.user.isAdmin } });
         dispatch({ type: 'TOGGLE_SIGNIN', payload: false });
         setFormData({ name: '', email: '', password: '' });
       } catch (e) {

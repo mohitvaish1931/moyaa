@@ -34,7 +34,7 @@ const Header = () => {
     { label: 'COLLECTIONS', path: '/products' },
     { label: 'TRACK ORDER', path: '/track-order' },
     { label: 'CONTACT', path: '/contact' },
-    ...(state.user?.role === 'admin' ? [{ label: 'ADMIN', path: '/admin' }] : []),
+    ...(state.user?.isAdmin === true ? [{ label: 'ADMIN', path: '/admin' }] : []),
   ];
 
   return (
