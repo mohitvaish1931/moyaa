@@ -44,9 +44,9 @@ const Admin = () => {
     };
 
     return (
-      <div className="glass-card-sapphire border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+      <div className="bg-white border border-gold-primary/20 p-8 rounded-2xl shadow-lg">
 
-        <h3 className="text-lg font-bold text-platinum mb-4">Add New Product</h3>
+        <h3 className="text-lg font-bold text-text-primary mb-4">Add New Product</h3>
         {error && (
           <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
             {error}
@@ -116,19 +116,19 @@ const Admin = () => {
         }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="product-name" className="block text-sm font-medium text-platinum mb-2">Product Name</label>
+              <label htmlFor="product-name" className="block text-sm font-medium text-text-primary mb-2">Product Name</label>
               <input
                 id="product-name"
                 name="name"
                 type="text"
                 autoComplete="off"
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
                 placeholder="Enter product name"
               />
             </div>
             <div>
-              <label htmlFor="product-category" className="block text-sm font-medium text-platinum mb-2">Category</label>
-              <select id="product-category" name="category" className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
+              <label htmlFor="product-category" className="block text-sm font-medium text-text-primary mb-2">Category</label>
+              <select id="product-category" name="category" className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
                 <option value="">Select category</option>
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
@@ -138,50 +138,50 @@ const Admin = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="product-price" className="block text-sm font-medium text-platinum mb-2">Price (₹)</label>
+              <label htmlFor="product-price" className="block text-sm font-medium text-text-primary mb-2">Price (₹)</label>
               <input
                 id="product-price"
                 name="price"
                 type="number"
                 autoComplete="off"
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
                 placeholder="0"
               />
             </div>
             <div>
-              <label htmlFor="product-original-price" className="block text-sm font-medium text-platinum mb-2">Original Price (₹)</label>
+              <label htmlFor="product-original-price" className="block text-sm font-medium text-text-primary mb-2">Original Price (₹)</label>
               <input
                 id="product-original-price"
                 name="originalPrice"
                 type="number"
                 autoComplete="off"
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
                 placeholder="0"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Description</label>
+            <label className="block text-sm font-medium text-text-primary mb-2">Description</label>
             <textarea
               name="description"
               rows={4}
-              className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
               placeholder="Enter product description"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Product Images (Multiple)</label>
+            <label className="block text-sm font-medium text-text-primary mb-2">Product Images (Multiple)</label>
             <input
               name="image"
               type="file"
               multiple
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
             />
             {previewImages.length > 0 && (
               <div className="mt-4">
-                <p className="text-sm text-platinum/70 mb-2">Selected images ({previewImages.length}):</p>
+                <p className="text-sm text-text-primary/70 mb-2">Selected images ({previewImages.length}):</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   {previewImages.map((preview, idx) => (
                     <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-sapphire-luxury/40" />
@@ -191,18 +191,18 @@ const Admin = () => {
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 - Upload or URLs)</label>
-            <p className="text-xs text-platinum/60 mb-3">You can upload video files (MP4, WebM) OR paste URLs (YouTube, Vimeo, or direct video links)</p>
+            <label className="block text-sm font-medium text-text-primary mb-2">Product Videos (Max 2 - Upload or URLs)</label>
+            <p className="text-xs text-text-primary/60 mb-3">You can upload video files (MP4, WebM) OR paste URLs (YouTube, Vimeo, or direct video links)</p>
             
             {/* Video File Upload */}
             <div className="mb-4">
-              <label className="block text-sm text-platinum/80 mb-2">Upload Video Files</label>
+              <label className="block text-sm text-text-primary/80 mb-2">Upload Video Files</label>
               <input
                 type="file"
                 multiple
                 accept="video/*"
                 onChange={handleVideoChange}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
               />
               {videoFiles.length > 0 && (
                 <div className="mt-2 space-y-1">
@@ -215,7 +215,7 @@ const Admin = () => {
 
             {/* Video URLs */}
             <div className="space-y-2">
-              <label className="block text-sm text-platinum/80">Or Add Video URLs</label>
+              <label className="block text-sm text-text-primary/80">Or Add Video URLs</label>
               <input
                 type="text"
                 placeholder="Video 1 URL (YouTube, Vimeo, or MP4 link)"
@@ -225,7 +225,7 @@ const Admin = () => {
                   newUrls[0] = e.target.value;
                   setVideoUrls(newUrls);
                 }}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
               />
               <input
                 type="text"
@@ -236,12 +236,12 @@ const Admin = () => {
                   newUrls[1] = e.target.value;
                   setVideoUrls(newUrls);
                 }}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
               />
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <label className="flex items-center space-x-2 text-platinum cursor-pointer">
+            <label className="flex items-center space-x-2 text-text-primary cursor-pointer">
               <input
                 type="checkbox"
                 checked={soldOut}
@@ -271,7 +271,7 @@ const Admin = () => {
                 setSoldOut(false);
                 setError('');
               }}
-              className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-teal-luxury/30 hover:shadow-glow-emerald transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-white text-text-primary px-6 py-2 rounded-lg border border-teal-luxury/30 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
 
             >
               Cancel
@@ -310,13 +310,13 @@ const Admin = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
-            className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+            className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
           />
           <input
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="Video URL"
-            className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+            className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
           />
           <button
             onClick={addVideo}
@@ -327,10 +327,10 @@ const Admin = () => {
         </div>
         <div className="space-y-2">
           {state.videos.map((v, i) => (
-            <div key={(v as any)._id || v.id || i} className="flex justify-between items-center p-2 bg-luxury-secondary border border-teal-luxury/20 rounded">
+            <div key={(v as any)._id || v.id || i} className="flex justify-between items-center p-2 bg-white border border-teal-luxury/20 rounded">
               <div>
-                <div className="font-medium text-platinum">{v.title}</div>
-                <div className="text-sm text-platinum/60 truncate max-w-md">{v.url}</div>
+                <div className="font-medium text-text-primary">{v.title}</div>
+                <div className="text-sm text-text-primary/60 truncate max-w-md">{v.url}</div>
               </div>
               <div className="flex space-x-2">
                 <a href={v.url} target="_blank" rel="noreferrer" className="text-gold-primary hover:text-gold-soft transition-colors">Open</a>
@@ -457,20 +457,20 @@ const Admin = () => {
 
     return (
       <div className="fixed inset-0 bg-luxury-dark/80 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto">
-        <div className="glass-card-teal border border-teal-luxury/40 rounded-lg p-6 w-full max-w-2xl shadow-glow-emerald my-8">
+        <div className="bg-white border border-gold-primary/20 rounded-2xl shadow-xl">
 
-          <h3 className="text-lg font-bold text-platinum mb-4">Edit Product - {localForm?.name || 'Loading...'}</h3>
+          <h3 className="text-lg font-bold text-text-primary mb-4">Edit Product - {localForm?.name || 'Loading...'}</h3>
           <form onSubmit={submit} className="space-y-4">
-            <p className="text-xs text-platinum/50">Product ID: {localForm?.id || localForm?._id}</p>
+            <p className="text-xs text-text-primary/50">Product ID: {localForm?.id || localForm?._id}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
-                className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                 value={localForm?.name || ''}
                 onChange={e => setLocalForm({ ...localForm, name: e.target.value })}
                 placeholder="Product name"
               />
               <select
-                className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                 value={localForm?.category || ''}
                 onChange={e => setLocalForm({ ...localForm, category: e.target.value })}
               >
@@ -481,27 +481,27 @@ const Admin = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
-                className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                 value={localForm?.price || 0}
                 onChange={e => setLocalForm({ ...localForm, price: e.target.value })}
                 placeholder="Price"
               />
               <input
-                className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                 value={localForm?.originalPrice || ''}
                 onChange={e => setLocalForm({ ...localForm, originalPrice: e.target.value })}
                 placeholder="Original price"
               />
             </div>
             <textarea
-              className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+              className="w-full p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
               rows={4}
               value={localForm?.description || ''}
               onChange={e => setLocalForm({ ...localForm, description: e.target.value })}
               placeholder="Description"
             />
             <div>
-              <label className="block text-sm font-medium text-platinum mb-2">Current Images</label>
+              <label className="block text-sm font-medium text-text-primary mb-2">Current Images</label>
               {(localForm?.images && localForm.images.length > 0) ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
                   {localForm.images.map((img: string, idx: number) => (
@@ -509,21 +509,21 @@ const Admin = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-platinum/50 mb-3">No images yet</p>
+                <p className="text-sm text-text-primary/50 mb-3">No images yet</p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-platinum mb-2">Update Images (Multiple)</label>
+              <label className="block text-sm font-medium text-text-primary mb-2">Update Images (Multiple)</label>
               <input
                 type="file"
                 multiple
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                className="w-full p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
               />
               {previewImages.length > 0 && (
                 <div className="mt-3">
-                  <p className="text-sm text-platinum/70 mb-2">New images ({previewImages.length}):</p>
+                  <p className="text-sm text-text-primary/70 mb-2">New images ({previewImages.length}):</p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     {previewImages.map((preview, idx) => (
                       <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-teal-luxury/40" />
@@ -533,13 +533,13 @@ const Admin = () => {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 - Upload or URLs)</label>
-              <p className="text-xs text-platinum/60 mb-3">Upload video files OR paste URLs</p>
+              <label className="block text-sm font-medium text-text-primary mb-2">Product Videos (Max 2 - Upload or URLs)</label>
+              <p className="text-xs text-text-primary/60 mb-3">Upload video files OR paste URLs</p>
               
               {/* Current Videos */}
               {(localForm?.videos && localForm.videos.length > 0) && (
                 <div className="mb-4">
-                  <p className="text-sm text-platinum/80 mb-2">Current Videos:</p>
+                  <p className="text-sm text-text-primary/80 mb-2">Current Videos:</p>
                   <div className="space-y-1">
                     {localForm.videos.map((vid: string, idx: number) => (
                       <p key={idx} className="text-xs text-gold-primary">✓ {vid.substring(0, 50)}...</p>
@@ -550,13 +550,13 @@ const Admin = () => {
               
               {/* Video File Upload */}
               <div className="mb-4">
-                <label className="block text-sm text-platinum/80 mb-2">Upload New Video Files</label>
+                <label className="block text-sm text-text-primary/80 mb-2">Upload New Video Files</label>
                 <input
                   type="file"
                   multiple
                   accept="video/*"
                   onChange={handleVideoChange}
-                  className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                  className="w-full p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                 />
                 {videoFiles.length > 0 && (
                   <div className="mt-2 space-y-1">
@@ -569,7 +569,7 @@ const Admin = () => {
 
               {/* Video URLs */}
               <div className="space-y-2">
-                <label className="block text-sm text-platinum/80">Or Add Video URLs</label>
+                <label className="block text-sm text-text-primary/80">Or Add Video URLs</label>
                 <input
                   type="text"
                   placeholder="Video 1 URL"
@@ -579,7 +579,7 @@ const Admin = () => {
                     newUrls[0] = e.target.value;
                     setVideoUrls(newUrls);
                   }}
-                  className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                  className="w-full p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                 />
                 <input
                   type="text"
@@ -590,12 +590,12 @@ const Admin = () => {
                     newUrls[1] = e.target.value;
                     setVideoUrls(newUrls);
                   }}
-                  className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                  className="w-full p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                 />
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <label className="flex items-center space-x-2 text-platinum cursor-pointer">
+              <label className="flex items-center space-x-2 text-text-primary cursor-pointer">
                 <input
                   type="checkbox"
                   checked={!!localForm?.soldOut}
@@ -609,7 +609,7 @@ const Admin = () => {
               <button
                 type="button"
                 onClick={() => { setShowEditModal(false); setEditProduct(null); setPreviewImages([]); setVideoFiles([]); setVideoUrls(['', '']); }}
-                className="px-4 py-2 bg-luxury-secondary text-platinum rounded border border-teal-luxury/30 hover:shadow-glow-emerald transition-all"
+                className="px-4 py-2 bg-white text-text-primary rounded border border-teal-luxury/30 hover:shadow-lg transition-all"
 
               >
                 Cancel
@@ -652,12 +652,12 @@ const Admin = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Banner text"
-            className="p-2 bg-luxury-secondary border border-primary-wine/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-primary-wine/60 outline-none col-span-3"
+            className="p-2 bg-white border border-primary-wine/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-primary-wine/60 outline-none col-span-3"
           />
           <select
             value={type}
             onChange={(e) => setType(e.target.value as any)}
-            className="p-2 bg-luxury-secondary border border-primary-wine/30 rounded text-platinum focus:ring-2 focus:ring-primary-wine/60 outline-none"
+            className="p-2 bg-white border border-primary-wine/30 rounded text-text-primary focus:ring-2 focus:ring-primary-wine/60 outline-none"
           >
             <option value="info">Info</option>
             <option value="hot">Hot</option>
@@ -675,10 +675,10 @@ const Admin = () => {
         </div>
         <div className="space-y-2">
           {state.banners.map((b, i) => (
-            <div key={(b as any)._id || b.id || i} className="flex justify-between items-center p-2 bg-luxury-secondary border border-ruby-luxury/20 rounded">
+            <div key={(b as any)._id || b.id || i} className="flex justify-between items-center p-2 bg-white border border-ruby-luxury/20 rounded">
               <div>
-                <div className="font-medium text-platinum">{b.text}</div>
-                <div className="text-sm text-platinum/60">{b.type}</div>
+                <div className="font-medium text-text-primary">{b.text}</div>
+                <div className="text-sm text-text-primary/60">{b.type}</div>
               </div>
               <div className="flex space-x-2">
                 <button
@@ -759,7 +759,7 @@ const Admin = () => {
           </select>
           <input type="date" value={expiresAt || ''} onChange={e => setExpiresAt(e.target.value || null)} className="p-2 border rounded" />
           <input type="number" value={usageLimit as any} onChange={e => setUsageLimit(e.target.value === '' ? '' : Number(e.target.value))} placeholder="Usage limit" className="p-2 border rounded" />
-          <button onClick={generateCode} className="bg-brand text-platinum px-4 rounded col-span-2">Generate Coupon</button>
+          <button onClick={generateCode} className="bg-brand text-text-primary px-4 rounded col-span-2">Generate Coupon</button>
         </div>
         <div className="space-y-2">
           {state.coupons.map((c, i) => (
@@ -798,17 +798,17 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-luxury-dark">
+    <div className="min-h-screen bg-[#FDFBF9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold">Admin Dashboard</h1>
-          <p className="text-platinum/70">Manage your MORAA REFLECTION store</p>
+          <h1 className="text-3xl font-bold text-text-primary">Admin Dashboard</h1>
+          <p className="text-text-secondary">Manage your MORAA REFLECTION store</p>
         </div>
 
         {/* Navigation Tabs */}
         <div className="mb-8">
-          <nav className="flex space-x-8 border-b border-sapphire-luxury/20 pb-4">
+          <nav className="flex space-x-8 border-b border-gold-primary/10 pb-4">
             {[
               { id: 'dashboard', name: 'Dashboard' },
               { id: 'products', name: 'Products' },
@@ -819,12 +819,12 @@ const Admin = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-2 px-1 font-medium text-sm transition-all ${activeTab === tab.id
-                    ? 'border-b-2 border-gold-primary text-gold-primary'
-                    : 'text-platinum/60 hover:text-gold-primary'
+                className={`py-2 px-1 font-bold text-xs tracking-widest transition-all ${activeTab === tab.id
+                    ? 'border-b-2 border-primary-red text-primary-red'
+                    : 'text-text-muted hover:text-primary-red'
                   }`}
               >
-                {tab.name}
+                {tab.name.toUpperCase()}
               </button>
             ))}
           </nav>
@@ -836,19 +836,14 @@ const Admin = () => {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {stats.map((stat) => (
-                <div key={stat.name} className="glass-card-emerald border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
-
+                <div key={stat.name} className="bg-white border border-gold-primary/20 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
                   <div className="flex items-center">
-                    <div className={`bg-gradient-to-r ${stat.name === 'Total Products' ? 'from-emerald-luxury to-sapphire-luxury' :
-                        stat.name === 'Total Orders' ? 'from-gold-primary to-rose-gold' :
-                          stat.name === 'Total Customers' ? 'from-ruby-luxury to-amethyst-luxury' :
-                            'from-sapphire-luxury to-emerald-luxury'
-                      } p-3 rounded-lg shadow-glow`}>
-                      <stat.icon className="h-6 w-6 text-platinum" />
+                    <div className={`p-3 rounded-xl bg-primary-red/5 text-primary-red`}>
+                      <stat.icon className="h-6 w-6" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-platinum/70">{stat.name}</p>
-                      <p className="text-2xl font-bold text-gold-primary">{stat.value}</p>
+                      <p className="text-[10px] font-bold tracking-widest text-text-muted uppercase">{stat.name}</p>
+                      <p className="text-2xl font-black text-text-primary">{stat.value}</p>
                     </div>
                   </div>
                 </div>
@@ -856,52 +851,51 @@ const Admin = () => {
             </div>
 
             {/* Recent Orders */}
-            <div className="glass-card-sapphire border border-teal-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
-
-              <div className="px-6 py-4 border-b border-sapphire-luxury/20 bg-luxury-secondary">
-                <h3 className="text-lg font-medium text-platinum">Recent Orders</h3>
+            <div className="bg-white border border-gold-primary/20 rounded-2xl shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-gold-primary/10 bg-luxury-dark/10">
+                <h3 className="text-sm font-black text-text-primary tracking-widest uppercase">Recent Orders</h3>
               </div>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-sapphire-luxury/20">
-                  <thead className="bg-luxury-secondary border-b border-sapphire-luxury/20">
+                <table className="min-w-full divide-y divide-gold-primary/10">
+                  <thead className="bg-luxury-dark/5">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Order ID
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Customer
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Product
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Amount
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Status
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-sapphire-luxury/20">
+                  <tbody className="divide-y divide-gold-primary/10 bg-white">
                     {recentOrders.map((order) => (
                       <tr key={order.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-platinum">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-text-primary">
                           {order.id}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-platinum/70">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                           {order.customer}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-platinum/70">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                           {order.product}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-platinum/70">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                           {order.amount}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
-                              order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
-                                order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
-                                  'bg-luxury-secondary text-platinum/70'
+                          <span className={`inline-flex px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full ${order.status === 'Completed' ? 'bg-green-100 text-green-700' :
+                              order.status === 'Processing' ? 'bg-orange-100 text-orange-700' :
+                                order.status === 'Shipped' ? 'bg-blue-100 text-blue-700' :
+                                  'bg-gray-100 text-gray-700'
                             }`}>
                             {order.status}
                           </span>
@@ -931,25 +925,25 @@ const Admin = () => {
 
             {showAddProduct && <ProductForm />}
 
-            <div className="glass-card-sapphire border border-teal-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
+            <div className="bg-white border border-gold-primary/20 rounded-2xl overflow-hidden">
 
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-sapphire-luxury/20">
-                  <thead className="bg-luxury-secondary border-b border-sapphire-luxury/20">
+                  <thead className="bg-white border-b border-gold-primary/10">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                         Product
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                         Category
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                         Price
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -965,11 +959,11 @@ const Admin = () => {
                               alt={product.name}
                             />
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-platinum">{product.name}</div>
+                              <div className="text-sm font-medium text-text-primary">{product.name}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-platinum/70 capitalize">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70 capitalize">
                           {product.category}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gold-primary font-medium">
@@ -1024,21 +1018,21 @@ const Admin = () => {
         {activeTab === 'content' && (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="glass-card-emerald border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+              <div className="glass-card-emerald border border-teal-luxury/40 p-6 rounded-lg shadow-lg">
 
-                <h3 className="text-lg font-medium text-platinum mb-4">Video Showcase</h3>
+                <h3 className="text-lg font-medium text-text-primary mb-4">Video Showcase</h3>
                 <VideoManager />
               </div>
-              <div className="glass-card-ruby border border-primary-wine/40 p-6 rounded-lg shadow-glow-ruby">
+              <div className="bg-white border border-gold-primary/20 rounded-2xl shadow-lg">
 
-                <h3 className="text-lg font-medium text-platinum mb-4">Banners & Tags</h3>
+                <h3 className="text-lg font-medium text-text-primary mb-4">Banners & Tags</h3>
                 <BannerManager />
               </div>
             </div>
 
-            <div className="glass-card-sapphire border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+            <div className="glass-card-sapphire border border-teal-luxury/40 p-6 rounded-lg shadow-lg">
 
-              <h3 className="text-lg font-medium text-platinum mb-4">Coupons</h3>
+              <h3 className="text-lg font-medium text-text-primary mb-4">Coupons</h3>
               <CouponManager />
             </div>
           </div>
@@ -1046,31 +1040,31 @@ const Admin = () => {
 
         {/* Orders Tab */}
         {activeTab === 'orders' && (
-          <div className="glass-card-sapphire border border-teal-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
+          <div className="bg-white border border-gold-primary/20 rounded-2xl overflow-hidden">
 
-            <div className="px-6 py-4 border-b border-sapphire-luxury/20 bg-luxury-secondary">
-              <h3 className="text-lg font-medium text-platinum">All Orders</h3>
+            <div className="px-6 py-4 border-b border-gold-primary/10 bg-white">
+              <h3 className="text-lg font-medium text-text-primary">All Orders</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-sapphire-luxury/20">
-                <thead className="bg-luxury-secondary border-b border-sapphire-luxury/20">
+                <thead className="bg-white border-b border-gold-primary/10">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                       Order ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                       Customer
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                       Product
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                       Amount
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-platinum/70 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -1078,23 +1072,23 @@ const Admin = () => {
                 <tbody className="divide-y divide-sapphire-luxury/20">
                   {recentOrders.map((order) => (
                     <tr key={order.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-platinum">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
                         {order.id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-platinum/70">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
                         {order.customer}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-platinum/70">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
                         {order.product}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-platinum/70">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
                         {order.amount}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-text-primary' :
                             order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
-                              order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
-                                'bg-luxury-secondary text-platinum/70'
+                              order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-text-primary' :
+                                'bg-white text-text-primary/70'
                           }`}>
                           {order.status}
                         </span>
@@ -1119,13 +1113,13 @@ const Admin = () => {
 
         {/* Customers Tab */}
         {activeTab === 'customers' && (
-          <div className="glass-card-emerald border border-teal-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
+          <div className="bg-white border border-gold-primary/20 rounded-2xl overflow-hidden">
 
-            <div className="px-6 py-4 border-b border-emerald-luxury/20 bg-luxury-secondary">
-              <h3 className="text-lg font-medium text-platinum">Customer Management</h3>
+            <div className="px-6 py-4 border-b border-emerald-luxury/20 bg-white">
+              <h3 className="text-lg font-medium text-text-primary">Customer Management</h3>
             </div>
             <div className="p-6">
-              <p className="text-platinum/70">Customer management features coming soon...</p>
+              <p className="text-text-primary/70">Customer management features coming soon...</p>
             </div>
           </div>
         )}
