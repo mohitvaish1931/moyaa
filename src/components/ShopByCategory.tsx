@@ -5,13 +5,13 @@ const ShopByCategory = () => {
   const categories = [
     {
       name: 'EARRINGS',
-      image: '/earrings.png',
+      image: '/earrings.jpeg',
       link: '/earrings',
       description: 'Delicate elegance for every moment'
     },
     {
       name: 'BRACELETS',
-      image: '/bracalate.png',
+      image: '/bracelate.jpeg',
       link: '/bracelets',
       description: 'Wrist adornments of refined taste'
     },
