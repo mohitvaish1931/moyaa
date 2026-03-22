@@ -17,25 +17,25 @@ const ShopByCategory = () => {
     },
     {
       name: 'NECKLACES',
-      image: '/nacklace.jpeg',
+      image: '/necklace.jpeg',
       link: '/necklaces',
       description: 'Statement pieces that define elegance'
     },
     {
       name: 'RINGS',
-      image: 'https://images.pexels.com/photos/265758/pexels-photo-265758.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/rings.jpeg',
       link: '/rings',
       description: 'Timeless symbols of elegance'
     },
     {
       name: 'HAND CHAINS',
-      image: 'https://images.pexels.com/photos/1035655/pexels-photo-1035655.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/handchain.jpeg',
       link: '/hand-chains',
       description: 'Sophisticated chains for your hands'
     },
     {
       name: 'SETS',
-      image: 'https://images.pexels.com/photos/2850438/pexels-photo-2850438.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/set.jpeg',
       link: '/sets',
       description: 'Complete luxury jewelry sets'
     }
