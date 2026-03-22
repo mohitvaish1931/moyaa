@@ -28,7 +28,7 @@ const ShopByCategory = () => {
       description: 'Timeless symbols of elegance'
     },
     {
-      name: 'HAND CHAIN',
+      name: 'HAND CHAINS',
       image: 'https://images.pexels.com/photos/1035655/pexels-photo-1035655.jpeg?auto=compress&cs=tinysrgb&w=600',
       link: '/hand-chains',
       description: 'Sophisticated chains for your hands'
