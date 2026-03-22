@@ -38,7 +38,7 @@ const NewArrivals = () => {
             <h2 className="luxury-serif text-5xl md:text-6xl text-text-primary mb-6">
               NEW ARRIVALS
             </h2>
-            <p className="text-primary-red max-w-2xl mx-auto text-lg font-black italic luxury-serif leading-relaxed drop-shadow-sm">
+            <p className="text-primary-red max-w-2xl mx-auto text-xl font-bold italic luxury-serif leading-relaxed drop-shadow-sm">
               Experience the passion of deep Rubies and the elegance of Antique Gold.
             </p>
           </div>

@@ -42,7 +42,7 @@ const Contact = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-black text-text-primary mb-6 luxury-serif uppercase tracking-widest drop-shadow-sm">CONTACT US</h1>
 
-          <p className="text-xl text-text-primary leading-relaxed">
+          <p className="text-xl text-primary-red leading-relaxed font-bold italic luxury-serif">
             We'd love to hear from you. Get in touch with our team for any questions,
             custom orders, or jewelry consultations.
           </p>

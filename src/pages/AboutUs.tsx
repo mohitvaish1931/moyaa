@@ -18,7 +18,7 @@ const AboutUs = () => {
           <h1 className="luxury-serif text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold mb-6">
             Our Story
           </h1>
-          <p className="text-text-secondary text-lg italic luxury-serif">
+          <p className="text-primary-red text-xl italic font-bold luxury-serif">
             "Timeless elegance, modern craftsmanship."
           </p>
         </div>
@@ -86,7 +86,7 @@ const AboutUs = () => {
             </div>
             <div className="flex-1">
               <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">A Note from the Founder</h2>
-              <p className="italic text-text-secondary leading-relaxed mb-4 text-lg">
+              <p className="italic text-primary-red leading-relaxed mb-4 text-xl font-bold">
                 "Jewelry is more than just an accessory; it's a reflection of one's journey and achievements. At MORAA JEWELS, we are honored to be a part of your smallest joys and biggest milestones."
               </p>
               <p className="font-bold text-text-primary uppercase tracking-widest text-sm">— Trivani, Creative Director</p>

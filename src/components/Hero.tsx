@@ -36,7 +36,7 @@ const Hero = () => {
           <h1 className="text-5xl md:text-8xl font-black text-text-primary mb-6 tracking-tight luxury-serif">
             MORAA <span className="text-gold-primary italic font-light drop-shadow-sm">JEWELS</span>
           </h1>
-          <p className="text-primary-red text-lg md:text-xl max-w-2xl mx-auto font-black italic luxury-serif leading-relaxed drop-shadow-sm">
+          <p className="text-primary-red text-xl md:text-2xl max-w-2xl mx-auto font-bold italic luxury-serif leading-relaxed drop-shadow-sm">
             Where every piece tells a story of elegance and passion.
           </p>
         </div>
