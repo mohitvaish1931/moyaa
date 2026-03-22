@@ -114,61 +114,61 @@ const Admin = () => {
           setVideoUrls(['', '']);
           setError('');
         }}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label htmlFor="product-name" className="block text-sm font-medium text-text-primary mb-2">Product Name</label>
+              <label htmlFor="product-name" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Product Name</label>
               <input
                 id="product-name"
                 name="name"
                 type="text"
                 autoComplete="off"
-                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="Enter product name"
               />
             </div>
             <div>
-              <label htmlFor="product-category" className="block text-sm font-medium text-text-primary mb-2">Category</label>
-              <select id="product-category" name="category" className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
+              <label htmlFor="product-category" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Category</label>
+              <select id="product-category" name="category" className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none">
                 <option value="">Select category</option>
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
                 <option value="necklaces">Necklaces</option>
                 <option value="rings">Rings</option>
-                <option value="sets">Sets</option>
+                <option value="sets">Jewelry Sets</option>
                 <option value="hand-chains">Hand Chains</option>
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label htmlFor="product-price" className="block text-sm font-medium text-text-primary mb-2">Price (₹)</label>
+              <label htmlFor="product-price" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Price (₹)</label>
               <input
                 id="product-price"
                 name="price"
                 type="number"
                 autoComplete="off"
-                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="0"
               />
             </div>
             <div>
-              <label htmlFor="product-original-price" className="block text-sm font-medium text-text-primary mb-2">Original Price (₹)</label>
+              <label htmlFor="product-original-price" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Original Price (₹)</label>
               <input
                 id="product-original-price"
                 name="originalPrice"
                 type="number"
                 autoComplete="off"
-                className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="0"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-text-primary mb-2">Description</label>
+            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Description</label>
             <textarea
               name="description"
               rows={4}
-              className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-lg text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
               placeholder="Enter product description"
             />
           </div>
@@ -459,53 +459,70 @@ const Admin = () => {
     };
 
     return (
-      <div className="fixed inset-0 bg-luxury-dark/80 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto">
-        <div className="bg-white border border-gold-primary/20 rounded-2xl shadow-xl">
-
-          <h3 className="text-lg font-bold text-text-primary mb-4">Edit Product - {localForm?.name || 'Loading...'}</h3>
-          <form onSubmit={submit} className="space-y-4">
-            <p className="text-xs text-text-primary/50">Product ID: {localForm?.id || localForm?._id}</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-                value={localForm?.name || ''}
-                onChange={e => setLocalForm({ ...localForm, name: e.target.value })}
-                placeholder="Product name"
-              />
-              <select
-                className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-                value={localForm?.category || ''}
-                onChange={e => setLocalForm({ ...localForm, category: e.target.value })}
-              >
-                <option value="earrings">Earrings</option>
-                <option value="bracelets">Bracelets</option>
-                <option value="necklaces">Necklaces</option>
-                <option value="rings">Rings</option>
-                <option value="sets">Sets</option>
-                <option value="hand-chains">Hand Chains</option>
-              </select>
+      <div className="fixed inset-0 bg-luxury-dark/90 backdrop-blur-md flex items-center justify-center z-[100] overflow-y-auto py-10">
+        <div className="bg-white border border-gold-primary/20 rounded-3xl shadow-2xl max-w-4xl w-full mx-4 p-8 md:p-12">
+          <div className="mb-8">
+            <h3 className="text-3xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-1">Edit Product</h3>
+            <p className="text-[10px] font-bold text-primary-red tracking-[0.3em] uppercase">ID: {localForm?.id || localForm?._id}</p>
+          </div>
+          <form onSubmit={submit} className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Product Name</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.name || ''}
+                  onChange={e => setLocalForm({ ...localForm, name: e.target.value })}
+                  placeholder="Product name"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Category</label>
+                <select
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.category || ''}
+                  onChange={e => setLocalForm({ ...localForm, category: e.target.value })}
+                >
+                  <option value="">Select category</option>
+                  <option value="earrings">Earrings</option>
+                  <option value="bracelets">Bracelets</option>
+                  <option value="necklaces">Necklaces</option>
+                  <option value="rings">Rings</option>
+                  <option value="sets">Jewelry Sets</option>
+                  <option value="hand-chains">Hand Chains</option>
+                </select>
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-                value={localForm?.price || 0}
-                onChange={e => setLocalForm({ ...localForm, price: e.target.value })}
-                placeholder="Price"
-              />
-              <input
-                className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-                value={localForm?.originalPrice || ''}
-                onChange={e => setLocalForm({ ...localForm, originalPrice: e.target.value })}
-                placeholder="Original price"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Current Price (₹)</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.price || 0}
+                  onChange={e => setLocalForm({ ...localForm, price: e.target.value })}
+                  placeholder="Price"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Original Price (₹)</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.originalPrice || ''}
+                  onChange={e => setLocalForm({ ...localForm, originalPrice: e.target.value })}
+                  placeholder="Original price"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Description</label>
+              <textarea
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                rows={4}
+                value={localForm?.description || ''}
+                onChange={e => setLocalForm({ ...localForm, description: e.target.value })}
+                placeholder="Description"
               />
             </div>
-            <textarea
-              className="w-full p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-              rows={4}
-              value={localForm?.description || ''}
-              onChange={e => setLocalForm({ ...localForm, description: e.target.value })}
-              placeholder="Description"
-            />
             <div>
               <label className="block text-sm font-medium text-text-primary mb-2">Current Images</label>
               {(localForm?.images && localForm.images.length > 0) ? (
@@ -804,17 +821,16 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF9]">
+    <div className="min-h-screen bg-luxury-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-text-primary">Admin Dashboard</h1>
-          <p className="text-text-secondary">Manage your MORAA REFLECTION store</p>
+        <div className="mb-12">
+          <h1 className="text-4xl font-black text-text-primary luxury-serif tracking-widest uppercase">Admin Dashboard</h1>
+          <div className="w-20 h-1 bg-primary-red mt-4 mb-2"></div>
+          <p className="text-text-secondary font-medium italic">Manage your MORAA REFLECTION store</p>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="mb-8">
-          <nav className="flex space-x-8 border-b border-gold-primary/10 pb-4">
+        <div className="mb-12">
+          <nav className="flex space-x-12 border-b border-gold-primary/20 pb-4">
             {[
               { id: 'dashboard', name: 'Dashboard' },
               { id: 'products', name: 'Products' },
@@ -825,8 +841,8 @@ const Admin = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-2 px-1 font-bold text-xs tracking-widest transition-all ${activeTab === tab.id
-                    ? 'border-b-2 border-primary-red text-primary-red'
+                className={`py-2 px-1 font-black text-[10px] tracking-[0.3em] transition-all relative ${activeTab === tab.id
+                    ? 'text-primary-red after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary-red'
                     : 'text-text-muted hover:text-primary-red'
                   }`}
               >
@@ -840,16 +856,16 @@ const Admin = () => {
         {activeTab === 'dashboard' && (
           <div className="space-y-8">
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat) => (
-                <div key={stat.name} className="bg-white border border-gold-primary/20 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
+                <div key={stat.name} className="bg-white border border-gold-primary/20 p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all group">
                   <div className="flex items-center">
-                    <div className={`p-3 rounded-xl bg-primary-red/5 text-primary-red`}>
+                    <div className={`p-4 rounded-xl bg-gold-primary/10 text-gold-primary group-hover:bg-primary-red/10 group-hover:text-primary-red transition-all`}>
                       <stat.icon className="h-6 w-6" />
                     </div>
-                    <div className="ml-4">
-                      <p className="text-[10px] font-bold tracking-widest text-text-muted uppercase">{stat.name}</p>
-                      <p className="text-2xl font-black text-text-primary">{stat.value}</p>
+                    <div className="ml-5">
+                      <p className="text-[10px] font-black tracking-widest text-text-muted uppercase mb-1">{stat.name}</p>
+                      <p className="text-3xl font-black text-text-primary luxury-serif">{stat.value}</p>
                     </div>
                   </div>
                 </div>
@@ -857,13 +873,14 @@ const Admin = () => {
             </div>
 
             {/* Recent Orders */}
-            <div className="bg-white border border-gold-primary/20 rounded-2xl shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-gold-primary/10 bg-luxury-dark/10">
-                <h3 className="text-sm font-black text-text-primary tracking-widest uppercase">Recent Orders</h3>
+            <div className="bg-white border border-gold-primary/10 rounded-2xl shadow-sm overflow-hidden">
+              <div className="px-8 py-6 border-b border-gold-primary/10 flex items-center justify-between">
+                <h3 className="text-sm font-black text-text-primary tracking-[0.2em] uppercase">RECENT ORDERS</h3>
+                <button className="text-[10px] font-bold text-primary-red hover:underline tracking-widest uppercase">VIEW ALL</button>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gold-primary/10">
-                  <thead className="bg-luxury-dark/5">
+                  <thead className="bg-[#FDFBF9]">
                     <tr>
                       <th className="px-6 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Order ID
@@ -917,39 +934,41 @@ const Admin = () => {
 
         {/* Products Tab */}
         {activeTab === 'products' && (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold">Products</h2>
+          <div className="space-y-8">
+            <div className="flex justify-between items-center bg-white p-6 rounded-2xl border border-gold-primary/20 shadow-sm">
+              <div>
+                <h2 className="text-2xl font-black text-text-primary luxury-serif tracking-widest uppercase">Products</h2>
+                <p className="text-xs text-text-muted mt-1 uppercase tracking-widest">Inventory Management</p>
+              </div>
               <button
                 onClick={() => setShowAddProduct(true)}
-                className="btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg hover:shadow-glow-gold transition-all flex items-center space-x-2"
+                className="btn-premium-gold text-luxury-dark px-6 py-2.5 rounded-xl hover:shadow-glow-gold transition-all flex items-center space-x-2"
               >
                 <Plus className="h-4 w-4" />
-                <span>Add Product</span>
+                <span className="font-bold tracking-widest text-[10px]">ADD NEW PRODUCT</span>
               </button>
             </div>
 
             {showAddProduct && <ProductForm />}
 
-            <div className="bg-white border border-gold-primary/20 rounded-2xl overflow-hidden">
-
+            <div className="bg-white border border-gold-primary/10 rounded-2xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-sapphire-luxury/20">
-                  <thead className="bg-white border-b border-gold-primary/10">
+                <table className="min-w-full divide-y divide-gold-primary/5">
+                  <thead className="bg-[#FDFBF9]">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Product
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Category
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Price
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Status
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Actions
                       </th>
                     </tr>
@@ -1022,23 +1041,29 @@ const Admin = () => {
 
         {/* Content Tab */}
         {activeTab === 'content' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="glass-card-emerald border border-teal-luxury/40 p-6 rounded-lg shadow-lg">
-
-                <h3 className="text-lg font-medium text-text-primary mb-4">Video Showcase</h3>
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white border border-gold-primary/20 p-8 rounded-2xl shadow-sm">
+                <h3 className="text-sm font-black text-text-primary tracking-widest uppercase mb-6 flex items-center">
+                  <span className="w-8 h-px bg-gold-primary/30 mr-3"></span>
+                  Video Showcase
+                </h3>
                 <VideoManager />
               </div>
-              <div className="bg-white border border-gold-primary/20 rounded-2xl shadow-lg">
-
-                <h3 className="text-lg font-medium text-text-primary mb-4">Banners & Tags</h3>
+              <div className="bg-white border border-gold-primary/20 p-8 rounded-2xl shadow-sm">
+                <h3 className="text-sm font-black text-text-primary tracking-widest uppercase mb-6 flex items-center">
+                  <span className="w-8 h-px bg-gold-primary/30 mr-3"></span>
+                  Banners & Tags
+                </h3>
                 <BannerManager />
               </div>
             </div>
 
-            <div className="glass-card-sapphire border border-teal-luxury/40 p-6 rounded-lg shadow-lg">
-
-              <h3 className="text-lg font-medium text-text-primary mb-4">Coupons</h3>
+            <div className="bg-white border border-gold-primary/20 p-8 rounded-2xl shadow-sm">
+              <h3 className="text-sm font-black text-text-primary tracking-widest uppercase mb-6 flex items-center">
+                <span className="w-8 h-px bg-gold-primary/30 mr-3"></span>
+                Coupons
+              </h3>
               <CouponManager />
             </div>
           </div>
@@ -1046,16 +1071,15 @@ const Admin = () => {
 
         {/* Orders Tab */}
         {activeTab === 'orders' && (
-          <div className="bg-white border border-gold-primary/20 rounded-2xl overflow-hidden">
-
-            <div className="px-6 py-4 border-b border-gold-primary/10 bg-white">
-              <h3 className="text-lg font-medium text-text-primary">All Orders</h3>
+          <div className="bg-white border border-gold-primary/10 rounded-2xl overflow-hidden shadow-sm">
+            <div className="px-8 py-6 border-b border-gold-primary/10 bg-[#FDFBF9]">
+              <h3 className="text-sm font-black text-text-primary tracking-widest uppercase">All Orders</h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-sapphire-luxury/20">
-                <thead className="bg-white border-b border-gold-primary/10">
+              <table className="min-w-full divide-y divide-gold-primary/5">
+                <thead className="bg-white">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
+                    <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                       Order ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
@@ -1119,13 +1143,15 @@ const Admin = () => {
 
         {/* Customers Tab */}
         {activeTab === 'customers' && (
-          <div className="bg-white border border-gold-primary/20 rounded-2xl overflow-hidden">
-
-            <div className="px-6 py-4 border-b border-emerald-luxury/20 bg-white">
-              <h3 className="text-lg font-medium text-text-primary">Customer Management</h3>
+          <div className="bg-white border border-gold-primary/10 rounded-2xl overflow-hidden shadow-sm">
+            <div className="px-8 py-6 border-b border-gold-primary/10 bg-[#FDFBF9]">
+              <h3 className="text-sm font-black text-text-primary tracking-widest uppercase">Customer Management</h3>
             </div>
-            <div className="p-6">
-              <p className="text-text-primary/70">Customer management features coming soon...</p>
+            <div className="p-8">
+              <div className="bg-luxury-dark/5 p-12 rounded-2xl border-2 border-dashed border-gold-primary/20 text-center">
+                <Users className="h-12 w-12 text-gold-primary/30 mx-auto mb-4" />
+                <p className="text-text-secondary font-bold tracking-widest text-xs uppercase">Customer management features coming soon...</p>
+              </div>
             </div>
           </div>
         )}

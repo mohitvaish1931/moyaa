@@ -57,7 +57,7 @@ const AllProducts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-luxury-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Sidebar Filters */}
@@ -107,13 +107,13 @@ const AllProducts = () => {
               {isPriceOpen && (
                 <div className="mt-6 space-y-6">
                   <div className="flex items-center justify-between gap-4">
-                    <div className="flex-1 bg-gray-50 border border-gold-primary/20 rounded-lg p-2 flex items-center">
+                    <div className="flex-1 bg-white/50 border border-gold-primary/20 rounded-xl p-3 flex items-center">
                       <span className="text-xs text-text-muted mr-1">₹</span>
-                      <input type="number" placeholder="Min" className="bg-transparent w-full outline-none text-sm text-text-primary" />
+                      <input type="number" placeholder="Min" className="bg-transparent w-full outline-none text-sm text-text-primary font-bold" />
                     </div>
-                    <div className="flex-1 bg-gray-50 border border-gold-primary/20 rounded-lg p-2 flex items-center">
+                    <div className="flex-1 bg-white/50 border border-gold-primary/20 rounded-xl p-3 flex items-center">
                       <span className="text-xs text-text-muted mr-1">₹</span>
-                      <input type="number" placeholder="Max" className="bg-transparent w-full outline-none text-sm text-text-primary" />
+                      <input type="number" placeholder="Max" className="bg-transparent w-full outline-none text-sm text-text-primary font-bold" />
                     </div>
                   </div>
                   <input type="range" min="0" max="5000" className="w-full h-1 bg-gold-primary/20 rounded-lg appearance-none cursor-pointer accent-gold-primary" />

@@ -66,17 +66,17 @@ const Profile = () => {
   }
 
   return (
-    <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto bg-white min-h-screen">
+    <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-luxury-dark min-h-screen">
       {/* Profile Header */}
       <div className="mb-12">
-        <div className="bg-white border-b-2 border-neutral-200 pb-8">
+        <div className="bg-white/50 backdrop-blur-sm border border-gold-primary/10 p-8 rounded-2xl shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center">
-                <User className="w-7 h-7 text-neutral-600" />
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 bg-luxury-secondary/30 rounded-full flex items-center justify-center border border-gold-primary/20">
+                <User className="w-8 h-8 text-text-primary" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-neutral-900">
+                <h1 className="text-4xl font-black text-text-primary luxury-serif tracking-widest uppercase">
                   {state.user.name}
                 </h1>
                 <p className="text-neutral-500 text-sm mt-1">Member since {new Date().getFullYear()}</p>

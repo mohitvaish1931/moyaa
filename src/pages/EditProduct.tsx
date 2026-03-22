@@ -144,15 +144,16 @@ const EditProduct = () => {
         <div className="mb-8">
           <button
             onClick={() => navigate('/admin')}
-            className="flex items-center space-x-2 text-gold-primary hover:text-rose-gold transition-colors mb-4"
+            className="flex items-center space-x-2 text-gold-primary hover:text-primary-red transition-all mb-6 font-bold tracking-widest text-xs uppercase"
           >
-            <ChevronLeft className="h-5 w-5" />
-            <span>Back to Admin</span>
+            <ChevronLeft className="h-4 w-4" />
+            <span>BACK TO ADMIN</span>
           </button>
-          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold">
+          <h1 className="text-4xl font-black text-text-primary luxury-serif tracking-widest uppercase">
             Edit Product
           </h1>
-          <p className="text-platinum/70 mt-2">{form.name || 'Loading...'}</p>
+          <div className="w-16 h-1 bg-primary-red mt-4 mb-2"></div>
+          <p className="text-text-secondary font-medium italic">{form.name || 'Loading...'}</p>
         </div>
 
         {/* Messages */}
@@ -168,33 +169,39 @@ const EditProduct = () => {
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="glass-card-sapphire border border-teal-luxury/40 p-8 rounded-lg shadow-glow-primary-wine space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white border border-gold-primary/20 p-8 md:p-12 rounded-2xl shadow-sm space-y-8">
           
           {/* Basic Info */}
           <div>
-            <h3 className="text-lg font-bold text-platinum mb-4">Basic Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h3 className="text-sm font-black text-text-primary tracking-widest uppercase mb-6 flex items-center">
+              <span className="w-8 h-px bg-gold-primary/30 mr-3"></span>
+              Basic Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-platinum mb-2">Product Name</label>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Product Name</label>
                 <input
                   type="text"
                   value={form.name || ''}
                   onChange={e => setForm({ ...form, name: e.target.value })}
-                  className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-                  placeholder="Product name"
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  placeholder="Enter product name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-platinum mb-2">Category</label>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Category</label>
                 <select
                   value={form.category || ''}
                   onChange={e => setForm({ ...form, category: e.target.value })}
-                  className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
                 >
                   <option value="">Select category</option>
                   <option value="earrings">Earrings</option>
                   <option value="bracelets">Bracelets</option>
                   <option value="necklaces">Necklaces</option>
+                  <option value="rings">Rings</option>
+                  <option value="sets">Jewelry Sets</option>
+                  <option value="hand-chains">Hand Chains</option>
                 </select>
               </div>
             </div>
@@ -202,25 +209,28 @@ const EditProduct = () => {
 
           {/* Pricing */}
           <div>
-            <h3 className="text-lg font-bold text-platinum mb-4">Pricing</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h3 className="text-sm font-black text-text-primary tracking-widest uppercase mb-6 flex items-center">
+              <span className="w-8 h-px bg-gold-primary/30 mr-3"></span>
+              Pricing
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-platinum mb-2">Current Price (₹)</label>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Current Price (₹)</label>
                 <input
                   type="number"
                   value={form.price || 0}
                   onChange={e => setForm({ ...form, price: e.target.value })}
-                  className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
                   placeholder="0"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-platinum mb-2">Original Price (₹)</label>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Original Price (₹)</label>
                 <input
                   type="number"
                   value={form.originalPrice || ''}
                   onChange={e => setForm({ ...form, originalPrice: e.target.value })}
-                  className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
                   placeholder="0"
                 />
               </div>
@@ -229,43 +239,51 @@ const EditProduct = () => {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Description</label>
+            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Description</label>
             <textarea
               value={form.description || ''}
               onChange={e => setForm({ ...form, description: e.target.value })}
               rows={5}
-              className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-              placeholder="Product description"
+              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+              placeholder="Enter product description"
             />
           </div>
 
           {/* Images */}
           <div>
-            <h3 className="text-lg font-bold text-platinum mb-4">Images</h3>
+            <h3 className="text-sm font-black text-text-primary luxury-serif tracking-widest uppercase mb-6 flex items-center">
+              <span className="w-8 h-px bg-gold-primary/30 mr-3"></span>
+              Images
+            </h3>
             {form.images && form.images.length > 0 && (
-              <div className="mb-4">
-                <p className="text-sm text-platinum/70 mb-2">Current Images:</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="mb-6 bg-luxury-dark/5 p-4 rounded-xl border border-gold-primary/10">
+                <p className="text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">Current Images</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {form.images.map((img: string, idx: number) => (
-                    <img key={idx} src={img} alt={`Current ${idx + 1}`} className="w-24 h-24 object-cover rounded border border-teal-luxury/40" />
+                    <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-gold-primary/20 bg-white shadow-sm">
+                      <img src={img} alt={`Current ${idx + 1}`} className="w-full h-full object-cover" />
+                    </div>
                   ))}
                 </div>
               </div>
             )}
-            <label className="block text-sm font-medium text-platinum mb-2">Upload New Images (Multiple)</label>
+            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Upload New Images</label>
             <input
               type="file"
               multiple
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-gold-primary/20 file:text-gold-primary hover:file:bg-gold-primary/30"
             />
+          
             {previewImages.length > 0 && (
-              <div className="mt-3">
-                <p className="text-sm text-platinum/70 mb-2">New Images ({previewImages.length}):</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="mt-6">
+                <p className="text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">New Images Preview ({previewImages.length})</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {previewImages.map((preview, idx) => (
-                    <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-24 h-24 object-cover rounded border border-teal-luxury/40" />
+                    <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-gold-primary/20 bg-white shadow-sm">
+                      <img src={preview} alt={`Preview ${idx + 1}`} className="w-full h-full object-cover" />
+                    </div>
                   ))}
                 </div>
               </div>
@@ -274,89 +292,89 @@ const EditProduct = () => {
 
           {/* Videos */}
           <div>
-            <h3 className="text-lg font-bold text-platinum mb-4">Videos</h3>
+            <h3 className="text-sm font-black text-text-primary tracking-widest uppercase mb-6 flex items-center">
+              <span className="w-8 h-px bg-gold-primary/30 mr-3"></span>
+              Videos
+            </h3>
             {form.videos && form.videos.length > 0 && (
-              <div className="mb-4">
-                <p className="text-sm text-platinum/80 mb-2">Current Videos:</p>
-                <div className="space-y-1">
+              <div className="mb-6 bg-luxury-dark/5 p-4 rounded-xl border border-gold-primary/10">
+                <p className="text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">Current Videos</p>
+                <div className="space-y-2">
                   {form.videos.map((vid: string, idx: number) => (
-                    <p key={idx} className="text-xs text-gold-primary">✓ {vid.substring(0, 70)}...</p>
+                    <div key={idx} className="flex items-center space-x-2 text-gold-primary">
+                      <span className="text-xs">✦</span>
+                      <p className="text-[10px] font-medium truncate">{vid}</p>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-platinum mb-2">Upload Video Files</label>
-              <input
-                type="file"
-                multiple
-                accept="video/*"
-                onChange={handleVideoChange}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-              />
-              {videoFiles.length > 0 && (
-                <div className="mt-2 space-y-1">
-                  {videoFiles.map((file, idx) => (
-                    <p key={idx} className="text-xs text-gold-primary">✓ {file.name}</p>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-platinum mb-2">Or Add Video URLs</label>
-              <input
-                type="text"
-                placeholder="Video 1 URL (YouTube, Vimeo, or MP4 link)"
-                value={videoUrls[0] || ''}
-                onChange={(e) => {
-                  const newUrls = [...videoUrls];
-                  newUrls[0] = e.target.value;
-                  setVideoUrls(newUrls);
-                }}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-              />
-              <input
-                type="text"
-                placeholder="Video 2 URL (optional)"
-                value={videoUrls[1] || ''}
-                onChange={(e) => {
-                  const newUrls = [...videoUrls];
-                  newUrls[1] = e.target.value;
-                  setVideoUrls(newUrls);
-                }}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Upload Video Files</label>
+                <input
+                  type="file"
+                  multiple
+                  accept="video/*"
+                  onChange={handleVideoChange}
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-gold-primary/20 file:text-gold-primary hover:file:bg-gold-primary/30"
+                />
+              </div>
+              <div className="space-y-4">
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Or Add Video URLs</label>
+                <input
+                  type="text"
+                  placeholder="Video 1 URL"
+                  value={videoUrls[0] || ''}
+                  onChange={(e) => {
+                    const newUrls = [...videoUrls];
+                    newUrls[0] = e.target.value;
+                    setVideoUrls(newUrls);
+                  }}
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                />
+                <input
+                  type="text"
+                  placeholder="Video 2 URL (optional)"
+                  value={videoUrls[1] || ''}
+                  onChange={(e) => {
+                    const newUrls = [...videoUrls];
+                    newUrls[1] = e.target.value;
+                    setVideoUrls(newUrls);
+                  }}
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <label className="flex items-center space-x-2 text-platinum cursor-pointer">
+          <div className="flex items-center justify-between py-6 border-t border-gold-primary/10">
+            <label className="flex items-center space-x-3 text-text-primary cursor-pointer group">
               <input
                 type="checkbox"
                 checked={!!form.soldOut}
                 onChange={e => setForm({ ...form, soldOut: e.target.checked })}
-                className="rounded border-sapphire-luxury accent-gold-primary"
+                className="w-5 h-5 rounded border-gold-primary/30 text-primary-red focus:ring-primary-red/20 transition-all cursor-pointer"
               />
-              <span>Sold Out</span>
+              <span className="text-[10px] font-black tracking-widest uppercase group-hover:text-primary-red transition-colors">Mark as Sold Out</span>
             </label>
-          </div>
 
-          {/* Buttons */}
-          <div className="flex justify-end space-x-4 pt-6">
-            <button
-              type="button"
-              onClick={() => navigate('/admin')}
-              className="px-6 py-2 bg-luxury-secondary text-platinum rounded border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="px-6 py-2 btn-premium-gold text-luxury-dark rounded hover:shadow-glow-gold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? '⏳ Saving...' : 'Save Changes'}
-            </button>
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={() => navigate('/admin')}
+                className="px-8 py-3 bg-white text-text-primary rounded-xl border border-gold-primary/20 hover:bg-luxury-dark/5 transition-all text-[10px] font-black uppercase tracking-widest"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-8 py-3 btn-premium-gold text-luxury-dark rounded-xl hover:shadow-glow-gold transition-all disabled:opacity-50 disabled:cursor-not-allowed text-[10px] font-black uppercase tracking-widest"
+              >
+                {isLoading ? '⏳ Saving...' : 'Save Changes'}
+              </button>
+            </div>
           </div>
         </form>
       </div>

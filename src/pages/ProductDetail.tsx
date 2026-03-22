@@ -132,7 +132,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#FDFBF9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="mb-8">
@@ -151,7 +151,7 @@ const ProductDetail = () => {
           {/* Product Images */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="relative aspect-square bg-gray-100 border border-gold-primary/20 rounded-lg overflow-hidden shadow-md">
+            <div className="relative aspect-square bg-luxury-secondary/10 border border-gold-primary/20 rounded-2xl overflow-hidden shadow-sm">
               <img
                 src={getImageUrl(images[currentImageIndex])}
                 alt={product.name}
@@ -195,8 +195,8 @@ const ProductDetail = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                      currentImageIndex === index ? 'border-gold-primary shadow-md' : 'border-gray-200'
+                    className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
+                      currentImageIndex === index ? 'border-gold-primary shadow-sm' : 'border-gold-primary/10'
                     }`}
                   >
                     <img
@@ -265,17 +265,17 @@ const ProductDetail = () => {
 
             {/* Materials and Specifications */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 border border-gold-primary/20 p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-gray-900 mb-2">Materials</h4>
-                <ul className="text-sm text-gray-700 space-y-1">
+              <div className="bg-luxury-secondary/20 border border-gold-primary/20 p-5 rounded-2xl shadow-sm">
+                <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-3 uppercase">Materials</h4>
+                <ul className="text-sm text-text-secondary space-y-1.5 font-medium">
                   <li>• Base Metal: Stainless Steel</li>
                   <li>• Finish: 18k Gold PVD</li>
                   <li>• Stone: Round-Cut Crystals</li>
                 </ul>
               </div>
-              <div className="bg-gray-50 border border-gold-primary/20 p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-gray-900 mb-2">Specifications</h4>
-                <div className="text-sm text-gray-700 space-y-1">
+              <div className="bg-luxury-secondary/20 border border-gold-primary/20 p-5 rounded-2xl shadow-sm">
+                <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-3 uppercase">Specifications</h4>
+                <div className="text-sm text-text-secondary space-y-1.5 font-medium">
                   <p>🌊 Waterproof</p>
                   <p>🛡️ Anti-Tarnish</p>
                   <p>🌿 Hypoallergenic</p>
@@ -325,53 +325,50 @@ const ProductDetail = () => {
             </div>
 
             {/* Service Features */}
-            <div className="border-t border-gray-200 pt-6">
+            <div className="border-t border-gold-primary/10 pt-8">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Free Shipping */}
-                <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full">
-
-                    <Truck className="h-5 w-5 text-white" />
+                <div className="flex items-center space-x-3 bg-luxury-secondary/20 border border-gold-primary/10 p-4 rounded-xl">
+                  <div className="p-2 bg-gold-primary/10 rounded-full">
+                    <Truck className="h-5 w-5 text-gold-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Free Shipping</p>
-                    <p className="text-xs text-gray-600">On orders over ₹1000</p>
+                    <p className="text-xs font-bold text-text-primary tracking-widest">FREE SHIPPING</p>
+                    <p className="text-[10px] text-text-secondary uppercase font-medium">On orders over ₹1000</p>
                   </div>
                 </div>
                 {/* Secure Payment */}
-                <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full">
-
-                    <Shield className="h-5 w-5 text-white" />
+                <div className="flex items-center space-x-3 bg-luxury-secondary/20 border border-gold-primary/10 p-4 rounded-xl">
+                  <div className="p-2 bg-gold-primary/10 rounded-full">
+                    <Shield className="h-5 w-5 text-gold-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Secure Payment</p>
-                    <p className="text-xs text-gray-600">100% secure checkout</p>
+                    <p className="text-xs font-bold text-text-primary tracking-widest">SECURE PAYMENT</p>
+                    <p className="text-[10px] text-text-secondary uppercase font-medium">100% secure checkout</p>
                   </div>
                 </div>
                 {/* Easy Returns */}
-                <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-primary-wine to-gold-soft rounded-full">
-
-                    <RotateCcw className="h-5 w-5 text-white" />
+                <div className="flex items-center space-x-3 bg-luxury-secondary/20 border border-gold-primary/10 p-4 rounded-xl">
+                  <div className="p-2 bg-ruby-luxury/10 rounded-full">
+                    <RotateCcw className="h-5 w-5 text-primary-red" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Easy Returns</p>
-                    <p className="text-xs text-gray-600">30-day return policy</p>
+                    <p className="text-xs font-bold text-text-primary tracking-widest">EASY RETURNS</p>
+                    <p className="text-[10px] text-text-secondary uppercase font-medium">30-day return policy</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Care Instructions */}
-            <div className="border-t border-gray-200 pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Care Instructions</h3>
-              <div className="bg-gray-50 border border-gold-primary/20 p-4 rounded-lg">
-                <ul className="space-y-2">
+            <div className="border-t border-gold-primary/10 pt-8">
+              <h3 className="text-sm font-bold text-text-primary luxury-serif tracking-[0.2em] mb-4 uppercase">Care Instructions</h3>
+              <div className="bg-luxury-secondary/10 border border-gold-primary/10 p-6 rounded-2xl">
+                <ul className="space-y-3">
                   {['Waterproof and Sweatproof', 'Chlorine and Sea water safe', 'Store in a cool, dry place', 'Avoid harsh chemical contact'].map((instruction: string, index: number) => (
-                    <li key={index} className="flex items-start space-x-2">
-                      <span className="text-gold-primary mt-1">✓</span>
-                      <span className="text-gray-700 text-sm">{instruction}</span>
+                    <li key={index} className="flex items-start space-x-3">
+                      <span className="text-gold-primary mt-1 text-xs">✦</span>
+                      <span className="text-text-secondary text-sm font-medium">{instruction}</span>
                     </li>
                   ))}
                 </ul>
