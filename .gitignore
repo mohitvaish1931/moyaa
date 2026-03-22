@@ -46,3 +46,8 @@ Thumbs.db
 server/node_modules/
 server/uploads/*
 !server/uploads/.gitkeep
+
+server/
+api/
+models/
+.env

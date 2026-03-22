@@ -17,7 +17,7 @@ const Necklaces = () => {
 
   // Generate schemas
   const aggregateSchema = generateAggregateOfferSchema(
-    'Premium Necklaces Collection - MORAA REFLECTION',
+    'Premium Necklaces Collection - MORAA JEWELS',
     'Browse our exquisite collection of premium necklaces. Find elegant designs with timeless appeal and finest craftsmanship.',
     'https://moraajewles.com/logo.png',
     minPrice,
@@ -34,7 +34,7 @@ const Necklaces = () => {
   ]);
 
   useSEO({
-    title: 'Premium Necklaces Collection - MORAA REFLECTION Luxury Jewelry',
+    title: 'Premium Necklaces Collection - MORAA JEWELS Luxury Jewelry',
     description: 'Browse our exquisite collection of premium necklaces. Find elegant designs with timeless appeal and finest craftsmanship.',
     keywords: 'necklaces, luxury necklaces, premium necklaces, designer necklaces, jewelry necklaces, gold necklaces, diamond necklaces',
     url: 'https://moraajewles.com/necklaces',

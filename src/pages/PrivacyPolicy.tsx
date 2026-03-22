@@ -6,36 +6,36 @@ const PrivacyPolicy = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 text-center">
-          <h1 className="luxury-serif text-5xl md:text-6xl text-platinum mb-6">
+          <h1 className="luxury-serif text-5xl md:text-6xl text-text-primary mb-6">
             Privacy Policy
           </h1>
-          <p className="text-platinum/70 text-lg">
+          <p className="text-text-secondary text-lg luxury-serif italic">
             Your privacy is important to us. Learn how we protect your data.
           </p>
         </div>
 
         {/* Content */}
-        <div className="prose prose-invert max-w-none text-platinum/80 space-y-8">
+        <div className="prose max-w-none text-text-primary space-y-8 font-medium">
           {/* Who we are section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">Who We Are</h2>
-            <p>
-              MORAA by Trivani is a luxury jewelry brand committed to protecting your privacy. 
+          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
+            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider font-bold">Who We Are</h2>
+            <p className="text-text-secondary">
+              MORAA JEWELS is a luxury jewelry brand committed to protecting your privacy. 
               Our website address is available upon request.
             </p>
           </section>
 
           {/* Comments section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">Comments</h2>
-            <p className="mb-4">
+          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
+            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider font-bold">Comments</h2>
+            <p className="mb-4 text-text-secondary">
               When visitors leave comments on the site we collect the data shown in the comments form, 
               and also the visitor's IP address and browser user agent string to help spam detection.
             </p>
-            <p>
+            <p className="text-text-secondary">
               An anonymized string created from your email address (also called a hash) may be provided 
               to the Gravatar service to see if you are using it. The Gravatar service privacy policy is 
-              available at <a href="https://automattic.com/privacy/" className="text-gold-primary hover:text-gold-soft transition-colors">https://automattic.com/privacy/</a>. 
+              available at <a href="https://automattic.com/privacy/" className="text-primary-red hover:text-text-primary transition-colors underline">https://automattic.com/privacy/</a>. 
               After approval of your comment, your profile picture is visible to the public in the context 
               of your comment.
             </p>
@@ -135,15 +135,24 @@ const PrivacyPolicy = () => {
           </section>
 
           {/* Contact section */}
-          <section className="pt-8 border-t border-gold-primary/20">
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">Contact Us</h2>
-            <p>
+          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm relative overflow-hidden group">
+            <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider font-black">Contact Us</h2>
+            <p className="text-text-secondary font-medium leading-relaxed mb-8">
               If you have any questions about our privacy policy or how we handle your data, please contact us at:
             </p>
-            <div className="mt-6 space-y-3 text-platinum/70">
-              <p><span className="text-gold-primary font-semibold">Email:</span> moraajewel@gmail.com</p>
-              <p><span className="text-gold-primary font-semibold">Phone:</span> +91 78779 37350</p>
-              <p><span className="text-gold-primary font-semibold">Address:</span> Pahadiya chowk, Jaipur 302002</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-text-primary font-bold tracking-widest uppercase text-[10px]">
+               <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
+                  <p className="text-primary-red mb-1">EMAIL</p>
+                  <p className="text-sm">moraajewel@gmail.com</p>
+               </div>
+               <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
+                  <p className="text-primary-red mb-1">PHONE</p>
+                  <p className="text-sm">+91 78779 37350</p>
+               </div>
+               <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
+                  <p className="text-primary-red mb-1">ADDRESS</p>
+                  <p className="text-sm">Pahadiya chowk, Jaipur 302002</p>
+               </div>
             </div>
           </section>
         </div>

@@ -1,176 +1,141 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Mail, Phone, MapPin } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-luxury-dark pt-24 pb-8 border-t border-gold-primary/40 shadow-[inset_0_1px_0_rgba(255,215,0,0.1)]">
+    <footer className="bg-luxury-dark border-t-2 border-primary-red/20 py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-          {/* Brand Section */}
-          <div className="col-span-1">
-            <div className="mb-8">
-              <img 
-                src="/logo.png" 
-                alt="MORAA Logo" 
-                className="h-24 w-auto mb-6 object-contain"
-              />
-              <p className="text-platinum/70 text-sm leading-relaxed">
-                Luxury jewelry for the modern connoisseur. Timeless elegance, modern craftsmanship.
-              </p>
-            </div>
-
-            <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-3">
-                <span className="text-emerald-luxury text-lg">✓</span>
-                <span className="text-platinum/70 text-sm">Certified Authentic</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-sapphire-luxury text-lg">✓</span>
-                <span className="text-platinum/70 text-sm">Lifetime Warranty</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-ruby-luxury text-lg">✓</span>
-                <span className="text-platinum/70 text-sm">White-Glove Service</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Collections */}
-          <div className="col-span-1">
-            <h4 className="luxury-serif text-gold-primary text-sm tracking-widest mb-8">COLLECTIONS</h4>
-            <ul className="space-y-4">
-              <li><Link to="/earrings" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Earrings</Link></li>
-              <li><Link to="/necklaces" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Necklaces</Link></li>
-              <li><Link to="/bracelets" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Bracelets</Link></li>
-              <li><Link to="/products" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">New Arrivals</Link></li>
-              <li><Link to="/products" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Limited Edition</Link></li>
-            </ul>
-          </div>
-
-
-          {/* Information */}
-          <div className="col-span-1">
-            <h4 className="luxury-serif text-gold-primary text-sm tracking-widest mb-8">INFORMATION</h4>
-            <ul className="space-y-4">
-              <li><Link to="/about-us" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">About Us</Link></li>
-              <li><Link to="/privacy-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Privacy Policy</Link></li>
-              <li><Link to="/shipping-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Shipping Policy</Link></li>
-              <li><Link to="/refund-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Refund Policy</Link></li>
-              <li><Link to="/jewellery-care-guide" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Jewellery Care</Link></li>
-              <li><Link to="/terms-conditions" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Terms & Conditions</Link></li>
-              <li><Link to="/faq" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">FAQ</Link></li>
-            </ul>
-          </div>
-
-
-          {/* Newsletter */}
-          <div className="col-span-1">
-            <h4 className="luxury-serif text-gold-primary text-sm tracking-widest mb-6">JOIN OUR CIRCLE</h4>
-            <p className="text-platinum/70 text-sm mb-6 leading-relaxed">
-              Subscribe for exclusive previews, private sales, and curated collection updates.
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-20 px-4">
+          {/* Brand section */}
+          <div className="md:col-span-1 space-y-8">
+            <Link to="/" className="inline-block transform hover:scale-105 transition-transform duration-300">
+              <img src="/logo.png" alt="Logo" className="h-20 w-auto filter drop-shadow-md" />
+            </Link>
+            <p className="text-text-secondary text-sm leading-relaxed font-light italic">
+              Crafting timeless legacies since 2026. Our masterpieces are a celebration of deep passion and enduring gold.
             </p>
+            <div className="flex gap-4">
+              {[Instagram, Facebook, Twitter].map((Icon, i) => (
+                <a key={i} href="#" className="w-10 h-10 rounded-full border border-gold-primary/20 flex items-center justify-center text-text-primary hover:bg-primary-red hover:text-white hover:border-primary-red transition-all duration-300 shadow-sm">
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
+          </div>
 
-            <form className="space-y-3">
+          {/* Quick links */}
+          <div className="space-y-8">
+            <h4 className="luxury-serif text-text-primary font-bold tracking-[0.2em] text-sm uppercase">Collections</h4>
+            <ul className="space-y-4">
+              {['Earrings', 'Bracelets', 'Necklaces', 'Hand Chains', 'Sets'].map((link) => (
+                <li key={link}>
+                  <Link to={`/${link.toLowerCase().replace(' ', '-')}`} className="text-text-secondary text-sm hover:text-primary-red transition-colors duration-300 flex items-center gap-2 group">
+                    <span className="w-0 group-hover:w-4 h-px bg-primary-red transition-all duration-300"></span>
+                    {link}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-8">
+            <h4 className="luxury-serif text-text-primary font-bold tracking-[0.2em] text-sm uppercase">Concierge</h4>
+            <ul className="space-y-4">
+              {[
+                { name: 'About Us', path: '/about-us' },
+                { name: 'Contact Us', path: '/contact' },
+                { name: 'Track Order', path: '/track-order' },
+                { name: 'FAQ', path: '/faq' },
+                { name: 'Jewellery Care', path: '/jewellery-care-guide' },
+                { name: 'Accessibility', path: '/accessibility' }
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="text-text-secondary text-sm hover:text-primary-red transition-colors duration-300 flex items-center gap-2 group">
+                    <span className="w-0 group-hover:w-4 h-px bg-primary-red transition-all duration-300"></span>
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-8">
+            <h4 className="luxury-serif text-text-primary font-bold tracking-[0.2em] text-sm uppercase">Legal</h4>
+            <ul className="space-y-4">
+              {[
+                { name: 'Shipping Policy', path: '/shipping-policy' },
+                { name: 'Refund Policy', path: '/refund-policy' },
+                { name: 'Privacy Policy', path: '/privacy-policy' },
+                { name: 'Terms & Conditions', path: '/terms-conditions' }
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="text-text-secondary text-sm hover:text-primary-red transition-colors duration-300 flex items-center gap-2 group">
+                    <span className="w-0 group-hover:w-4 h-px bg-primary-red transition-all duration-300"></span>
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Newsletter section */}
+          <div className="md:col-span-1 space-y-8">
+            <h4 className="luxury-serif text-text-primary font-bold tracking-[0.2em] text-sm uppercase">Join the Legacy</h4>
+            <p className="text-text-secondary text-sm font-light leading-relaxed">
+              Subscribe to receive updates on our latest collections and exclusive invitations.
+            </p>
+            <div className="space-y-4">
               <input
                 type="email"
-                placeholder="Your email"
-                className="w-full px-4 py-3 bg-luxury-secondary border border-gold-primary/30 rounded-lg text-platinum placeholder-platinum/40 focus:border-gold-primary/60 focus:outline-none transition-all duration-300 focus:shadow-glow"
+                placeholder="YOUR EMAIL"
+                className="w-full bg-white border border-gold-primary/30 px-6 py-4 rounded-full text-xs tracking-widest luxury-serif text-text-primary placeholder:text-text-muted outline-none focus:border-primary-red transition-all duration-300 shadow-sm"
               />
-              <button className="w-full bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark py-3 px-6 rounded-lg font-semibold text-xs luxury-serif tracking-widest hover:shadow-glow transition-all duration-300">
+              <button className="w-full bg-primary-red text-white py-4 rounded-full text-xs tracking-[0.3em] font-bold luxury-serif hover:bg-text-primary transition-all duration-300 shadow-lg hover:shadow-primary-red/20 transform hover:-translate-y-1">
                 SUBSCRIBE
               </button>
-            </form>
-
-            {/* Social icons */}
-            <div className="mt-6">
-              <a href="#" className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gold-primary/30 hover:border-gold-primary/60 hover:shadow-glow-gold text-platinum hover:text-gold-primary transition-all duration-300">
-                <Instagram className="h-4 w-4" />
-              </a>
             </div>
           </div>
         </div>
 
         {/* Contact section */}
-        <div className="border-y border-gold-primary/20 py-8 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex items-start gap-4">
-              <Mail className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
+        <div className="border-y border-gold-primary/10 py-12 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="flex items-start gap-6 group">
+              <div className="w-12 h-12 rounded-full border border-gold-primary/20 flex items-center justify-center text-primary-red group-hover:bg-primary-red group-hover:text-white transition-all duration-300">
+                <Mail className="h-5 w-5" />
+              </div>
               <div>
-                <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">EMAIL</p>
-                <p className="text-platinum text-sm">moraajewel@gmail.com</p>
+                <p className="text-text-muted text-[10px] tracking-widest luxury-serif mb-2">EMAIL</p>
+                <p className="text-text-primary text-sm font-medium">moraajewel@gmail.com</p>
               </div>
             </div>
-            <div className="flex items-start gap-4">
-              <Phone className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
+            <div className="flex items-start gap-6 group">
+              <div className="w-12 h-12 rounded-full border border-gold-primary/20 flex items-center justify-center text-primary-red group-hover:bg-primary-red group-hover:text-white transition-all duration-300">
+                <Phone className="h-5 w-5" />
+              </div>
               <div>
-                <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">PHONE</p>
-                <p className="text-platinum text-sm">+91 78779 37350</p>
+                <p className="text-text-muted text-[10px] tracking-widest luxury-serif mb-2">PHONE</p>
+                <p className="text-text-primary text-sm font-medium">+91 78779 37350</p>
               </div>
             </div>
-            <div className="flex items-start gap-4">
-              <MapPin className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
+            <div className="flex items-start gap-6 group">
+              <div className="w-12 h-12 rounded-full border border-gold-primary/20 flex items-center justify-center text-primary-red group-hover:bg-primary-red group-hover:text-white transition-all duration-300">
+                <MapPin className="h-5 w-5" />
+              </div>
               <div>
-                <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">LOCATION</p>
-                <p className="text-platinum text-sm">Pahadiya chowk, Jaipur 302002</p>
+                <p className="text-text-muted text-[10px] tracking-widest luxury-serif mb-2">LOCATION</p>
+                <p className="text-text-primary text-sm font-medium">Pahadiya chowk, Jaipur 302002</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Payment Methods */}
-        <div className="pt-8">
-          <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-6 text-center">ACCEPTED PAYMENT METHODS</p>
-          <div className="flex flex-wrap items-center justify-center gap-6 opacity-70 hover:opacity-100 transition-opacity">
-            {/* Visa */}
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png"
-              alt="Visa"
-              className="h-6 object-contain filter brightness-0 invert"
-            />
-
-            {/* Mastercard */}
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png"
-              alt="Mastercard"
-              className="h-6 object-contain filter brightness-0 invert"
-            />
-
-            {/* PayPal */}
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png"
-              alt="PayPal"
-              className="h-6 object-contain filter brightness-0 invert"
-            />
-
-            {/* Google Pay */}
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png"
-              alt="Google Pay"
-              className="h-6 object-contain filter brightness-0 invert"
-            />
-
-            {/* Razorpay */}
-            <img
-              src="https://razorpay.com/assets/razorpay-logo.svg"
-              alt="Razorpay"
-              className="h-6 object-contain filter brightness-0 invert"
-            />
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="border-t border-gold-primary/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-platinum/50 text-xs">
-            © 2024 Moraa Jewelry. All rights reserved.
+        {/* Bottom footer */}
+        <div className="text-center">
+          <p className="text-text-muted text-[10px] tracking-[0.2em] uppercase luxury-serif">
+            &copy; {new Date().getFullYear()} MORAA JEWELS. CRAFTED BY <span className="text-primary-red font-bold">PRECISION</span>
           </p>
-          <div className="flex items-center gap-6">
-            <Link to="/privacy-policy" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Privacy</Link>
-            <Link to="/terms-conditions" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Terms</Link>
-            <Link to="/accessibility" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Accessibility</Link>
-          </div>
-
         </div>
       </div>
     </footer>

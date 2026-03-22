@@ -3,14 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #2D1320;
-  --accent-wine: #8B4557;
-  --accent-rose: #9B6B7A;
-  --accent-dark: #3D1C2A;
-  --accent-teal: #1A6B6A;
-  --gold: #D4AF37;
-  --text-primary: #FDF8F0;
-  --text-secondary: #E8DDD4;
+  --bg-primary: #E8D5C4;
+  --accent-nude: #DBCBC0;
+  --accent-beige: #DBCBC0;
+  --accent-dark: #C9B7A2;
+  --accent-teal: #8B0000; /* Reusing for Red */
+  --gold: #C5A059;
+  --text-primary: #3D1F1F;
+  --text-secondary: #5E4B43;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 
@@ -25,6 +30,21 @@
 
 .animate-marquee {
   animation: marquee 20s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex !important;
+  width: max-content !important;
+  animation: scroll 40s linear infinite !important;
 }
 
 /* Premium Luxury Effects */
@@ -70,9 +90,9 @@
     box-shadow: 0 0 40px rgba(212, 175, 55, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  /* Ruby Glass Card (Wine) */
+  /* Ruby Glass Card */
   .glass-card-ruby {
-    @apply bg-glass-dark backdrop-blur-xl border border-primary-wine/30 rounded-2xl shadow-glow-ruby;
+    @apply bg-glass-dark backdrop-blur-xl border border-primary-red/30 rounded-2xl shadow-glow-ruby;
   }
 
 
@@ -89,10 +109,10 @@
     background: linear-gradient(135deg, #d4af37 0%, #e8c547 50%, #d4af37 100%);
   }
 
-  /* Ruby Gradient */
+  /* Red to Gold Gradient */
   .text-ruby-gradient {
     @apply text-transparent bg-clip-text;
-    background: linear-gradient(135deg, #8B4557 0%, #9B6B7A 100%);
+    background: linear-gradient(135deg, #8B0000 0%, #C5A059 100%);
   }
 
   /* Teal Gradient */
@@ -162,24 +182,24 @@
 
   .hero-spotlight-ruby {
     @apply relative w-96 h-96 mx-auto;
-    background: radial-gradient(circle, rgba(116, 21, 34, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(213, 189, 175, 0.2) 0%, transparent 70%);
   }
 
   .hero-spotlight-emerald {
     @apply relative w-96 h-96 mx-auto;
-    background: radial-gradient(circle, rgba(20, 60, 69, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(229, 211, 192, 0.2) 0%, transparent 70%);
   }
 
-  /* Premium Animated Gradients */
+  /* Premium Animated Gradients (Warm) */
   .animated-gradient {
-    background: linear-gradient(-45deg, #2D1320, #3D1C2A, #1A6B6A, #2D1320);
+    background: linear-gradient(-45deg, #E8D5C4, #DBCBC0, #8B0000, #E8D5C4);
     background-size: 400% 400%;
     animation: gradientPremium 20s ease infinite;
   }
 
-  /* Gradient with Luxury Accents */
+  /* Gradient with Nude Accents */
   .gradient-jewels {
-    background: linear-gradient(135deg, rgba(26, 107, 106, 0.15), rgba(212, 175, 55, 0.12), rgba(139, 69, 87, 0.15), rgba(155, 107, 122, 0.12));
+    background: linear-gradient(135deg, rgba(213, 189, 175, 0.15), rgba(212, 175, 55, 0.12), rgba(229, 211, 192, 0.15), rgba(240, 229, 216, 0.12));
     background-size: 400% 400%;
     animation: gradientPremium 25s ease infinite;
   }
@@ -202,15 +222,15 @@
 
   .btn-premium-ruby {
     @apply relative px-8 py-3 text-white font-semibold rounded-lg overflow-hidden border;
-    background: linear-gradient(135deg, #8B4557, #9B6B7A);
-    box-shadow: 0 0 30px rgba(139, 69, 87, 0.35);
+    background: linear-gradient(135deg, #8B0000, #A52A2A);
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.3);
     transition: all 0.3s ease;
-    border-color: rgba(139, 69, 87, 0.5);
+    border-color: rgba(139, 0, 0, 0.5);
   }
 
   .btn-premium-ruby:hover {
     @apply scale-105;
-    box-shadow: 0 0 40px rgba(139, 69, 87, 0.5), inset 0 0 10px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 40px rgba(139, 0, 0, 0.5), inset 0 0 10px rgba(197, 160, 89, 0.2);
   }
 
 
@@ -228,14 +248,14 @@
   }
 
   .border-ruby-glow {
-    @apply border-primary-wine/40 border-2;
-    box-shadow: inset 0 0 20px rgba(139, 69, 87, 0.2);
+    @apply border-primary-nude/40 border-2;
+    box-shadow: inset 0 0 20px rgba(213, 189, 175, 0.2);
   }
 
   .border-emerald-glow,
   .border-sapphire-glow {
     @apply border-teal-luxury/40 border-2;
-    box-shadow: inset 0 0 20px rgba(26, 107, 106, 0.2);
+    box-shadow: inset 0 0 20px rgba(213, 189, 175, 0.2);
   }
 
 }

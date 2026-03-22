@@ -149,10 +149,10 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
       <div className="glass-card-sapphire border border-teal-luxury/40 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-glow-emerald">
 
         <div className="flex items-center justify-between p-6 border-b border-gold-primary/30">
-          <h2 className="text-2xl font-bold text-gold-primary luxury-serif">Search Products</h2>
+          <h2 className="text-2xl font-bold text-primary-red luxury-serif uppercase tracking-widest">Search Products</h2>
           <button
             onClick={onClose}
-            className="text-platinum/60 hover:text-gold-primary transition-all duration-300"
+            className="text-text-primary hover:text-primary-red transition-all duration-300"
           >
             <X className="h-6 w-6" />
           </button>
@@ -166,7 +166,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
               value={state.searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               placeholder="Search for jewelry by name or category..."
-              className="w-full pl-10 pr-4 py-3 bg-luxury-secondary border border-gold-primary/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-gold-primary/60 focus:border-transparent outline-none transition-all duration-300"
+              className="w-full pl-10 pr-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all duration-300"
               autoFocus
             />
           </div>
@@ -174,12 +174,12 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           <div className="overflow-y-auto max-h-96">
             {state.searchQuery === '' ? (
               <div className="text-center py-8">
-                <Search className="h-16 w-16 text-platinum/20 mx-auto mb-4" />
-                <p className="text-platinum/70 text-lg">Start typing to search for products</p>
+                <Search className="h-16 w-16 text-text-muted/20 mx-auto mb-4" />
+                <p className="text-text-secondary text-lg font-medium italic luxury-serif">Start typing to search for products</p>
               </div>
             ) : state.searchResults.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-platinum/70 text-lg">No products found for "{state.searchQuery}"</p>
+                <p className="text-text-secondary text-lg">No products found for "{state.searchQuery}"</p>
                 <Link
                   to="/products"
                   onClick={onClose}
@@ -222,19 +222,19 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                           }`} />
                         </button>
                       </div>
-                      <h3 className="font-medium text-platinum mb-2 luxury-serif">{product.name}</h3>
+                      <h3 className="font-bold text-text-primary mb-2 luxury-serif uppercase tracking-widest text-sm">{product.name}</h3>
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-2">
-                          <span className="text-gold-primary font-bold">
+                          <span className="text-primary-red font-bold">
                             Rs. {product.price.toLocaleString()}.00
                           </span>
                           {product.originalPrice && (
-                            <span className="text-sm text-platinum/50 line-through">
+                            <span className="text-sm text-text-muted line-through font-normal">
                               Rs. {product.originalPrice.toLocaleString()}.00
                             </span>
                           )}
                         </div>
-                        <span className="text-xs text-platinum/60 capitalize">{product.category}</span>
+                        <span className="text-xs text-text-muted capitalize font-bold">{product.category}</span>
                       </div>
                       {!product.soldOut && (
                         <button

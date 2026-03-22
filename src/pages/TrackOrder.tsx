@@ -4,8 +4,8 @@ import { useSEO } from '../utils/useSEO';
 
 const TrackOrder = () => {
   useSEO({
-    title: 'Track Your Order - MORAA REFLECTION Jewelry Delivery Status',
-    description: 'Track your MORAA REFLECTION jewelry order in real-time. Get live updates on your shipment status, delivery date and package location.',
+    title: 'Track Your Order - MORAA JEWELS Jewelry Delivery Status',
+    description: 'Track your MORAA JEWELS jewelry order in real-time. Get live updates on your shipment status, delivery date and package location.',
     keywords: 'track order, order tracking, jewelry delivery, shipment status, order status',
     url: 'https://moraajewles.com/track-order',
     type: 'website'
@@ -29,7 +29,7 @@ const TrackOrder = () => {
 
             TRACK YOUR ORDER
           </h1>
-          <p className="text-platinum/70">
+          <p className="text-text-secondary text-lg">
             Enter your order details below to track your jewelry shipment
           </p>
         </div>
@@ -39,7 +39,7 @@ const TrackOrder = () => {
 
           <form onSubmit={handleTrackOrder} className="space-y-6">
             <div>
-              <label htmlFor="orderNumber" className="block text-sm font-medium text-platinum mb-2">
+              <label htmlFor="orderNumber" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
                 Order Number
               </label>
               <input
@@ -48,14 +48,13 @@ const TrackOrder = () => {
                 value={orderNumber}
                 onChange={(e) => setOrderNumber(e.target.value)}
                 placeholder="Enter your order number"
-                className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all"
-
+                className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-platinum mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
                 Email Address
               </label>
               <input
@@ -64,8 +63,7 @@ const TrackOrder = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address"
-                className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all"
-
+                className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all"
                 required
               />
             </div>
@@ -90,64 +88,58 @@ const TrackOrder = () => {
           
           <div className="space-y-6">
             {/* Order Confirmed */}
-            <div className="flex items-center space-x-4 pb-6 border-b border-teal-luxury/20">
-
+            <div className="flex items-center space-x-4 pb-6 border-b border-gold-primary/20">
               <div className="flex-shrink-0">
-                <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full shadow-glow-emerald">
-
-                  <CheckCircle className="h-8 w-8 text-gold-primary" />
+                <div className="p-2 bg-gradient-to-r from-gold-primary to-gold-soft rounded-full shadow-glow-gold">
+                  <CheckCircle className="h-8 w-8 text-luxury-dark" />
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-medium text-platinum">Order Confirmed</h3>
-                <p className="text-sm text-platinum/70">Your order has been confirmed and is being prepared</p>
-                <p className="text-xs text-platinum/50 mt-1">Dec 10, 2024 - 2:30 PM</p>
+                <h3 className="text-lg font-bold text-text-primary luxury-serif uppercase">Order Confirmed</h3>
+                <p className="text-sm text-text-secondary">Your order has been confirmed and is being prepared</p>
+                <p className="text-xs text-text-muted mt-1">Dec 10, 2024 - 2:30 PM</p>
               </div>
             </div>
 
             {/* Processing */}
-            <div className="flex items-center space-x-4 pb-6 border-b border-teal-luxury/20">
-
+            <div className="flex items-center space-x-4 pb-6 border-b border-gold-primary/20">
               <div className="flex-shrink-0">
-                <div className="p-2 bg-gradient-to-r from-primary-wine to-gold-soft rounded-full shadow-glow-ruby">
-
-                  <Package className="h-8 w-8 text-gold-primary" />
+                <div className="p-2 bg-gradient-to-r from-primary-red to-gold-primary rounded-full shadow-glow-ruby">
+                  <Package className="h-8 w-8 text-white" />
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-medium text-platinum">Processing</h3>
-                <p className="text-sm text-platinum/70">Your jewelry is being carefully packaged</p>
-                <p className="text-xs text-platinum/50 mt-1">Dec 11, 2024 - 10:15 AM</p>
+                <h3 className="text-lg font-bold text-text-primary luxury-serif uppercase">Processing</h3>
+                <p className="text-sm text-text-secondary">Your jewelry is being carefully packaged</p>
+                <p className="text-xs text-text-muted mt-1">Dec 11, 2024 - 10:15 AM</p>
               </div>
             </div>
 
             {/* Shipped */}
-            <div className="flex items-center space-x-4 pb-6 border-b border-teal-luxury/20">
-
+            <div className="flex items-center space-x-4 pb-6 border-b border-gold-primary/20">
               <div className="flex-shrink-0">
                 <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full shadow-glow-emerald">
-
-                  <Truck className="h-8 w-8 text-platinum" />
+                  <Truck className="h-8 w-8 text-white" />
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-medium text-platinum/80">Shipped</h3>
-                <p className="text-sm text-platinum/60">Your order is on its way</p>
-                <p className="text-xs text-platinum/40 mt-1">Estimated: Dec 12, 2024</p>
+                <h3 className="text-lg font-bold text-text-primary luxury-serif uppercase">Shipped</h3>
+                <p className="text-sm text-text-secondary">Your order is on its way</p>
+                <p className="text-xs text-text-muted mt-1">Estimated: Dec 12, 2024</p>
               </div>
             </div>
 
             {/* Delivered */}
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
-                <div className="p-2 bg-gradient-to-r from-gold-primary to-platinum rounded-full">
+                <div className="p-2 bg-gradient-to-r from-gold-primary to-gold-soft rounded-full shadow-glow-gold">
                   <CheckCircle className="h-8 w-8 text-luxury-dark" />
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-medium text-platinum/60">Delivered</h3>
-                <p className="text-sm text-platinum/50">Your order has been delivered</p>
-                <p className="text-xs text-platinum/40 mt-1">Estimated: Dec 14, 2024</p>
+                <h3 className="text-lg font-bold text-text-primary luxury-serif uppercase">Delivered</h3>
+                <p className="text-sm text-text-secondary">Your order has been delivered successfully</p>
+                <p className="text-xs text-text-muted mt-1">Estimated: Dec 14, 2024</p>
               </div>
             </div>
           </div>

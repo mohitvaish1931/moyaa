@@ -17,7 +17,7 @@ const Bracelets = () => {
 
   // Generate schemas
   const aggregateSchema = generateAggregateOfferSchema(
-    'Premium Bracelets Collection - MORAA REFLECTION',
+    'Premium Bracelets Collection - MORAA JEWELS',
     'Discover our stunning collection of premium bracelets. Elegant designs crafted with finest materials for timeless sophistication.',
     'https://moraajewles.com/logo.png',
     minPrice,
@@ -34,7 +34,7 @@ const Bracelets = () => {
   ]);
 
   useSEO({
-    title: 'Premium Bracelets Collection - MORAA REFLECTION Luxury Jewelry',
+    title: 'Premium Bracelets Collection - MORAA JEWELS Luxury Jewelry',
     description: 'Discover our stunning collection of premium bracelets. Elegant designs crafted with finest materials for timeless sophistication.',
     keywords: 'bracelets, luxury bracelets, premium bracelets, designer bracelets, jewelry bracelets, gold bracelets, diamond bracelets',
     url: 'https://moraajewles.com/bracelets',

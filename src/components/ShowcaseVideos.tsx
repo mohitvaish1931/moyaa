@@ -61,50 +61,70 @@ const ShowcaseVideos: React.FC = () => {
   };
 
   return (
-    <section className="py-16 bg-luxury-dark border-t border-gold-primary/20">
+    <section className="py-24 bg-luxury-dark border-t border-gold-primary/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-          <h3 className="luxury-serif text-2xl text-gold-primary">✨ Showcase Videos ✨</h3>
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between mb-12">
+          <div className="text-left">
+            <h3 className="luxury-serif text-3xl md:text-4xl text-text-primary mb-2">CINEMATIC JOURNEY</h3>
+            <p className="text-text-secondary text-sm font-light italic tracking-wide">Witness the artistry in motion</p>
+          </div>
+          <div className="flex items-center gap-4">
             {state.user && state.user.email === 'admin@moraa.com' && (
-              <div className="mr-4">
-                <button onClick={() => setShowInput(!showInput)} className="px-3 py-2 btn-premium-gold text-luxury-dark rounded hover:shadow-glow transition-all duration-300">{showInput ? 'Close' : 'Add Video'}</button>
-              </div>
+              <button 
+                onClick={() => setShowInput(!showInput)} 
+                className="px-6 py-2.5 bg-primary-red text-white rounded-full text-xs tracking-widest luxury-serif hover:bg-text-primary transition-all duration-300 shadow-lg hover:shadow-primary-red/20"
+              >
+                {showInput ? 'CLOSE' : 'ADD VIDEO'}
+              </button>
             )}
-            <div className="hidden sm:flex gap-3">
-            <button
-              onClick={() => scroll('left')}
-              className="w-10 h-10 rounded-full bg-luxury-dark/40 border border-gold-primary/30 text-platinum hover:text-gold-primary hover:shadow-glow transition-all duration-300"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              className="w-10 h-10 rounded-full bg-luxury-dark/40 border border-gold-primary/30 text-platinum hover:text-gold-primary hover:shadow-glow transition-all duration-300"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+            <div className="hidden sm:flex gap-4">
+              <button
+                onClick={() => scroll('left')}
+                className="w-12 h-12 rounded-full bg-white border border-gold-primary/20 text-text-primary hover:bg-primary-red hover:text-white hover:border-primary-red transition-all duration-300 shadow-sm"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-6 h-6 mx-auto" />
+              </button>
+              <button
+                onClick={() => scroll('right')}
+                className="w-12 h-12 rounded-full bg-white border border-gold-primary/20 text-text-primary hover:bg-primary-red hover:text-white hover:border-primary-red transition-all duration-300 shadow-sm"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-6 h-6 mx-auto" />
+              </button>
+            </div>
           </div>
         </div>
 
-        </div>
-
         {showInput && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-            <div className="glass-card-sapphire border border-teal-luxury/30 p-4 rounded-lg shadow-glow-emerald">
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="p-2 bg-luxury-secondary border border-gold-primary/30 text-platinum rounded placeholder-platinum/40" />
-                <input value={url} onChange={e => setUrl(e.target.value)} placeholder="Video URL (mp4 or embed)" className="p-2 bg-luxury-secondary border border-gold-primary/30 text-platinum rounded placeholder-platinum/40" />
-                <div className="flex items-center">
-                  <label className="flex items-center space-x-2 text-platinum">
-                    <input type="file" accept="video/*" onChange={e => setFile(e.target.files && e.target.files[0] ? e.target.files[0] : null)} />
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <button onClick={addVideo} className="btn-premium-gold text-luxury-dark px-4 py-2 rounded hover:shadow-glow transition-all duration-300">Add</button>
+          <div className="mb-12 animate-fade-in">
+            <div className="bg-white border border-gold-primary/30 p-8 rounded-3xl shadow-xl">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <input 
+                  value={title} 
+                  onChange={e => setTitle(e.target.value)} 
+                  placeholder="Video Title" 
+                  className="px-6 py-3 bg-luxury-dark border border-gold-primary/20 text-text-primary rounded-full placeholder-text-muted outline-none focus:border-primary-red transition-all duration-300" 
+                />
+                <input 
+                  value={url} 
+                  onChange={e => setUrl(e.target.value)} 
+                  placeholder="Video URL (mp4)" 
+                  className="px-6 py-3 bg-luxury-dark border border-gold-primary/20 text-text-primary rounded-full placeholder-text-muted outline-none focus:border-primary-red transition-all duration-300" 
+                />
+                <div className="flex items-center gap-4">
+                  <input 
+                    type="file" 
+                    accept="video/*" 
+                    onChange={e => setFile(e.target.files && e.target.files[0] ? e.target.files[0] : null)} 
+                    className="text-xs text-text-secondary"
+                  />
+                  <button 
+                    onClick={addVideo} 
+                    className="bg-primary-red text-white px-8 py-3 rounded-full text-xs tracking-widest luxury-serif hover:bg-text-primary transition-all duration-300 shadow-md"
+                  >
+                    ADD
+                  </button>
                 </div>
               </div>
             </div>
@@ -113,51 +133,59 @@ const ShowcaseVideos: React.FC = () => {
 
         <div
           ref={scrollerRef}
-          className="flex gap-6 overflow-x-auto no-scrollbar pb-4 pr-4 snap-x snap-mandatory"
+          className="flex gap-8 overflow-x-auto no-scrollbar pb-8 pr-4 snap-x snap-mandatory"
           style={{ scrollBehavior: 'smooth' }}
         >
           {items.map((item) => (
-            <Link
-              to="/products"
+            <div
               key={(item as any)._id || item.id}
-              className="min-w-[260px] sm:min-w-[320px] md:min-w-[360px] lg:min-w-[420px] snap-start glass-card-ruby border border-primary-wine/30 rounded-2xl overflow-hidden relative shadow-glow-ruby hover:shadow-glow transition-all duration-300"
-
+              className="min-w-[280px] sm:min-w-[340px] md:min-w-[380px] snap-start bg-white border border-gold-primary/20 rounded-3xl overflow-hidden relative shadow-lg group hover:border-primary-red/30 transition-all duration-500"
             >
-              {item.type === 'video' ? (
-                <video
-                  src={item.src}
-                  className="w-full h-[480px] object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
-              ) : (
-                <img src={(item as any).src} alt={item.title} className="w-full h-[480px] object-cover" />
-              )}
+              <Link to="/products">
+                {item.type === 'video' ? (
+                  <video
+                    src={item.src}
+                    className="w-full h-[520px] object-cover group-hover:scale-105 transition-transform duration-700"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  <img 
+                    src={(item as any).src} 
+                    alt={item.title} 
+                    className="w-full h-[520px] object-cover group-hover:scale-105 transition-transform duration-700" 
+                  />
+                )}
 
-              <div className="absolute left-4 bottom-4 text-platinum">
-                <p className="text-sm luxury-serif bg-luxury-dark/50 px-3 py-1 rounded-full border border-gold-primary/30">{item.title}</p>
-              </div>
-            </Link>
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-red/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="absolute left-6 bottom-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                  <p className="text-xs luxury-serif tracking-[0.2em] bg-white/90 backdrop-blur-md text-text-primary px-6 py-2.5 rounded-full border border-gold-primary/30 shadow-xl uppercase font-bold">
+                    {item.title}
+                  </p>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
 
         {/* Mobile controls */}
-        <div className="flex sm:hidden justify-between mt-4">
+        <div className="flex sm:hidden justify-center gap-6 mt-6">
           <button
             onClick={() => scroll('left')}
-            className="w-10 h-10 rounded-full bg-luxury-dark/40 border border-gold-primary/30 text-platinum hover:text-gold-primary hover:shadow-glow transition-all duration-300"
+            className="w-12 h-12 rounded-full bg-white border border-gold-primary/20 text-text-primary shadow-sm"
             aria-label="Scroll left mobile"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-6 h-6 mx-auto" />
           </button>
           <button
             onClick={() => scroll('right')}
-            className="w-10 h-10 rounded-full bg-luxury-dark/40 border border-gold-primary/30 text-platinum hover:text-gold-primary hover:shadow-glow transition-all duration-300"
+            className="w-12 h-12 rounded-full bg-white border border-gold-primary/20 text-text-primary shadow-sm"
             aria-label="Scroll right mobile"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-6 h-6 mx-auto" />
           </button>
         </div>
       </div>
