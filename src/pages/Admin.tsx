@@ -133,6 +133,9 @@ const Admin = () => {
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
                 <option value="necklaces">Necklaces</option>
+                <option value="rings">Rings</option>
+                <option value="sets">Sets</option>
+                <option value="hand-chains">Hand Chains</option>
               </select>
             </div>
           </div>
@@ -477,6 +480,9 @@ const Admin = () => {
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
                 <option value="necklaces">Necklaces</option>
+                <option value="rings">Rings</option>
+                <option value="sets">Sets</option>
+                <option value="hand-chains">Hand Chains</option>
               </select>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

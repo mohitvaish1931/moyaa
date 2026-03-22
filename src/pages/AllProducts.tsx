@@ -34,11 +34,13 @@ const AllProducts = () => {
   const products = state.products;
 
   const collections = [
-    { name: 'Home', count: 0 },
-    { name: 'Shop By', count: 19 },
-    { name: 'All Products', count: 19 },
-    { name: 'Track Order', count: 0 },
-    { name: 'Contact', count: 0 }
+    { name: 'All Products', count: state.products.length, path: '/products' },
+    { name: 'Earrings', count: state.products.filter(p => p.category?.toLowerCase() === 'earrings').length, path: '/earrings' },
+    { name: 'Bracelets', count: state.products.filter(p => p.category?.toLowerCase() === 'bracelets').length, path: '/bracelets' },
+    { name: 'Necklaces', count: state.products.filter(p => p.category?.toLowerCase() === 'necklaces').length, path: '/necklaces' },
+    { name: 'Rings', count: state.products.filter(p => p.category?.toLowerCase() === 'rings').length, path: '/rings' },
+    { name: 'Hand Chains', count: state.products.filter(p => p.category?.toLowerCase() === 'hand-chains').length, path: '/hand-chains' },
+    { name: 'Jewelry Sets', count: state.products.filter(p => p.category?.toLowerCase() === 'sets').length, path: '/sets' }
   ];
 
   const toggleWishlist = (product: any) => {
@@ -57,155 +59,145 @@ const AllProducts = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="flex gap-8">
-          {/* Sidebar Filters with luxury styling */}
-          <div className="w-1/4 space-y-6">
-            <div>
-              <h3 className="text-lg font-medium text-gold-primary mb-4 luxury-serif tracking-widest">FILTER:</h3>
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Sidebar Filters */}
+          <div className="w-full lg:w-1/4 space-y-8">
+            <div className="border-b border-gold-primary/20 pb-4">
+              <h3 className="text-xl font-bold text-text-primary luxury-serif tracking-widest">FILTERS</h3>
             </div>
 
             {/* Collection Filter */}
-            <div className="border-b border-gold-primary/30 pb-6">
+            <div className="space-y-4">
               <button
                 onClick={() => setIsCollectionOpen(!isCollectionOpen)}
-                className="flex items-center justify-between w-full text-left"
+                className="flex items-center justify-between w-full text-left group"
               >
-                <h4 className="text-sm font-medium text-gray-900 luxury-serif">COLLECTION</h4>
-                <ChevronDown className={`h-4 w-4 text-gold-primary transform transition-transform ${isCollectionOpen ? 'rotate-180' : ''}`} />
+                <h4 className="text-sm font-bold text-text-primary luxury-serif tracking-widest group-hover:text-gold-primary transition-colors">COLLECTIONS</h4>
+                <ChevronDown className={`h-4 w-4 text-gold-primary transform transition-transform duration-300 ${isCollectionOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {isCollectionOpen && (
-                <div className="mt-4 space-y-3">
+                <div className="space-y-2 pl-2 border-l border-gold-primary/10">
                   {collections.map((collection) => (
-                    <div key={collection.name} className="flex items-center justify-between">
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          name="collection"
-                          className="sr-only"
-                        />
-                        <span className="text-sm text-gray-700 hover:text-gold-primary cursor-pointer transition-colors duration-300">
-                          {collection.name}
-                        </span>
-                      </label>
-                      <span className="text-sm text-gray-500">({collection.count})</span>
-                    </div>
+                    <Link
+                      key={collection.name}
+                      to={collection.path}
+                      className="flex items-center justify-between group py-1"
+                    >
+                      <span className="text-sm text-text-secondary group-hover:text-gold-primary transition-colors cursor-pointer font-light">
+                        {collection.name}
+                      </span>
+                      <span className="text-[10px] text-text-muted font-bold tracking-tighter">[{collection.count}]</span>
+                    </Link>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Price Filter */}
-            <div className="pb-6">
+            {/* Price Filter styling */}
+            <div className="pt-4 border-t border-gold-primary/10">
               <button
                 onClick={() => setIsPriceOpen(!isPriceOpen)}
-                className="flex items-center justify-between w-full text-left"
+                className="flex items-center justify-between w-full text-left group"
               >
-                <h4 className="text-sm font-medium text-gray-900 luxury-serif">PRICE</h4>
-                <ChevronDown className={`h-4 w-4 text-gold-primary transform transition-transform ${isPriceOpen ? 'rotate-180' : ''}`} />
+                <h4 className="text-sm font-bold text-text-primary luxury-serif tracking-widest group-hover:text-gold-primary transition-colors">PRICE RANGE</h4>
+                <ChevronDown className={`h-4 w-4 text-gold-primary transform transition-transform duration-300 ${isPriceOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {isPriceOpen && (
-                <div className="mt-4">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-700 mr-2">₹</span>
-                      <input
-                        type="number"
-                        placeholder="0"
-                        className="w-20 px-2 py-1 bg-white border border-gold-primary/30 text-gray-900 rounded text-sm"
-                      />
+                <div className="mt-6 space-y-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex-1 bg-gray-50 border border-gold-primary/20 rounded-lg p-2 flex items-center">
+                      <span className="text-xs text-text-muted mr-1">₹</span>
+                      <input type="number" placeholder="Min" className="bg-transparent w-full outline-none text-sm text-text-primary" />
                     </div>
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-700 mr-2">₹</span>
-                      <input
-                        type="number"
-                        placeholder="999.00"
-                        className="w-24 px-2 py-1 bg-white border border-gold-primary/30 text-gray-900 rounded text-sm"
-                      />
+                    <div className="flex-1 bg-gray-50 border border-gold-primary/20 rounded-lg p-2 flex items-center">
+                      <span className="text-xs text-text-muted mr-1">₹</span>
+                      <input type="number" placeholder="Max" className="bg-transparent w-full outline-none text-sm text-text-primary" />
                     </div>
                   </div>
-                  <div className="relative">
-                    <input
-                      type="range"
-                      min="0"
-                      max="2000"
-                      className="w-full h-2 bg-gold-primary/30 rounded-lg appearance-none cursor-pointer"
-                    />
-                  </div>
+                  <input type="range" min="0" max="5000" className="w-full h-1 bg-gold-primary/20 rounded-lg appearance-none cursor-pointer accent-gold-primary" />
                 </div>
               )}
             </div>
           </div>
 
-          {/* Products Grid with luxury styling */}
-          <div className="w-3/4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {products.map((product, index) => {
-                const isInWishlist = state.wishlist.find(item => item.id === product.id);
-                
-                return (
-                  <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id || index} className="group cursor-pointer">
-                    <div className="relative overflow-hidden rounded-lg bg-gray-50 aspect-square mb-4 border border-gold-primary/20 shadow-md hover:shadow-lg transition-all">
-                      {product.sale && (
-                        <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-gold-soft text-luxury-dark px-3 py-1 text-sm font-medium rounded z-10 shadow-md">
-                          Sale
-                        </div>
-                      )}
-                      <button 
-                        onClick={() => toggleWishlist(product)}
-                        className="absolute top-4 right-4 p-2 bg-white/80 rounded-full shadow-md hover:shadow-lg transition-all z-10 border border-gold-primary/30"
-                      >
-                        <Heart className={`h-4 w-4 transition-colors ${
-                          isInWishlist ? 'text-primary-wine fill-current' : 'text-gray-800 hover:text-primary-wine'
-                        }`} />
-                      </button>
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <button
-                        onClick={() => addToCart(product)}
-                        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg font-medium hover:shadow-glow opacity-0 group-hover:opacity-100 flex items-center space-x-2 transition-all duration-300"
-                      >
-                        <ShoppingBag className="h-4 w-4" />
-                        <span>Add to Cart</span>
-                      </button>
-
-                      <div className="flex items-center justify-center space-x-2">
-                        <span className="text-lg font-bold text-gold-primary">
-                          Rs. {product.price.toLocaleString()}.00
-                        </span>
-                        {product.originalPrice && (
-                          <span className="text-sm text-gray-500 line-through">
-                            Rs. {product.originalPrice.toLocaleString()}.00
-                          </span>
+          <div className="w-full lg:w-3/4">
+            {products.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                {products.map((product, index) => {
+                  const isInWishlist = state.wishlist.find(item => item.id === product.id);
+                  
+                  return (
+                    <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id || index} className="group">
+                      <div className="relative overflow-hidden rounded-2xl bg-gray-50 border border-gold-primary/20 aspect-square mb-5 shadow-sm group-hover:shadow-xl transition-all duration-500">
+                        {product.sale && (
+                          <div className="absolute top-4 left-4 bg-primary-red text-white px-3 py-1 text-[10px] font-bold rounded z-10 shadow-lg tracking-widest">
+                            SALE
+                          </div>
+                        )}
+                        <button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleWishlist(product);
+                          }}
+                          className="absolute top-4 right-4 p-2.5 bg-white/90 backdrop-blur-md rounded-full shadow-md hover:bg-gold-primary hover:text-white transition-all z-10 border border-gold-primary/10"
+                        >
+                          <Heart className={`h-4 w-4 transition-colors ${
+                            isInWishlist ? 'text-primary-red fill-current' : 'text-gray-400'
+                          }`} />
+                        </button>
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
+                        {!product.soldOut && (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              addToCart(product);
+                            }}
+                            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-text-primary text-white px-6 py-2.5 rounded-full font-bold text-[10px] luxury-serif tracking-[0.2em] hover:bg-primary-red transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-2xl"
+                          >
+                            ADD TO CART
+                          </button>
                         )}
                       </div>
-
-                      {/* Rating if available */}
-                      {product.averageRating !== undefined && product.averageRating > 0 && (
-                        <p className="text-xs text-gold-primary mt-1">⭐ {product.averageRating} ({product.reviewCount || 0} reviews)</p>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-
-            {/* Pagination with luxury styling */}
-            <div className="flex items-center justify-center space-x-2 mt-12">
-              <button className="px-4 py-2 bg-gold-primary text-luxury-dark rounded hover:shadow-glow transition-all duration-300 font-semibold">
-                1
-              </button>
-              <button className="px-4 py-2 bg-white text-gray-900 rounded border border-gold-primary/30 hover:bg-gray-50 transition-colors duration-300">
-                2
-              </button>
-              <button className="px-4 py-2 bg-white text-gray-900 rounded border border-gold-primary/30 hover:bg-gray-50 transition-colors duration-300">
-                →
-              </button>
-            </div>
+                      <div className="text-center space-y-2">
+                        <h3 className="text-sm luxury-serif text-text-primary group-hover:text-primary-red transition-colors duration-300 tracking-wide font-medium">
+                          {product.name}
+                        </h3>
+                        <div className="flex items-center justify-center space-x-3">
+                          <span className="text-lg font-bold text-primary-red">
+                            Rs. {product.price.toLocaleString()}.00
+                          </span>
+                          {product.originalPrice && (
+                            <span className="text-xs text-text-muted line-through opacity-60 italic">
+                              Rs. {product.originalPrice.toLocaleString()}.00
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+              {/* Pagination */}
+              <div className="flex items-center justify-center space-x-2 mt-12">
+                  <button className="px-4 py-2 bg-gold-primary text-luxury-dark rounded-full hover:shadow-glow transition-all duration-300 font-bold text-xs luxury-serif tracking-widest h-10 w-10 flex items-center justify-center">
+                    1
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-32 border-2 border-dashed border-gold-primary/10 rounded-3xl">
+                <ShoppingBag className="w-16 h-16 text-gold-primary/20 mx-auto mb-6" />
+                <h3 className="text-2xl luxury-serif text-text-primary mb-2">NO PRODUCTS FOUND</h3>
+                <p className="text-text-secondary font-light">Try adjusting your filters to find what you're looking for.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

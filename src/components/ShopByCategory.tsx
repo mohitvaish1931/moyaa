@@ -22,13 +22,19 @@ const ShopByCategory = () => {
       description: 'Statement pieces that define elegance'
     },
     {
+      name: 'RINGS',
+      image: 'https://images.pexels.com/photos/265758/pexels-photo-265758.jpeg?auto=compress&cs=tinysrgb&w=600',
+      link: '/rings',
+      description: 'Timeless symbols of elegance'
+    },
+    {
       name: 'HAND CHAIN',
       image: 'https://images.pexels.com/photos/1035655/pexels-photo-1035655.jpeg?auto=compress&cs=tinysrgb&w=600',
       link: '/hand-chains',
       description: 'Sophisticated chains for your hands'
     },
     {
-      name: 'SET',
+      name: 'SETS',
       image: 'https://images.pexels.com/photos/2850438/pexels-photo-2850438.jpeg?auto=compress&cs=tinysrgb&w=600',
       link: '/sets',
       description: 'Complete luxury jewelry sets'
@@ -47,7 +53,7 @@ const ShopByCategory = () => {
           <div className="w-48 h-1 px-10 bg-gradient-to-r from-transparent via-gold-primary to-transparent mx-auto"></div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 justify-items-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8 justify-items-center">
           {categories.map((category, index) => (
             <Link
               key={index}

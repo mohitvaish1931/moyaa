@@ -26,23 +26,22 @@ const JewelleryCareGuide = () => {
         {/* Content */}
         <div className="prose max-w-none text-text-primary space-y-8 font-medium">
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">Keep It Away from Moisture</h2>
+            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">Waterproof & Life-Proof</h2>
             <p className="mb-4 text-text-secondary">
-              Picture this, you are all set to step out for the party & in last minute you feel your hair 
-              needs a tinge more of that hair spray. While you spray it, spritz of it deposits on your 
-              gorgeous earrings. We all know what happens next!
+              Our jewelry is crafted from premium Stainless Steel with an 18k Gold PVD finish, making it completely 
+              <span className="text-primary-red font-bold"> Waterproof, Sweatproof, and Life-proof</span>.
             </p>
             <p className="mb-4 text-text-secondary">
-              To avoid this, your jewellery needs to be kept away from any source of moisture be it mists, 
-              perfumes, moisturizers, etc.
+              Unlike traditional gold plating, you can confidently wear your MORAA pieces while bathing, swimming, or 
+              hitting the gym. The anti-tarnish finish ensures your jewelry stays as radiant as the day you bought it.
             </p>
             <p className="mb-4 text-text-secondary">
-              You should also not wear your jewellery while bathing or gymming because water & sweat can 
-              both ruin your jewellery.
+              While your jewelry can handle water, we still recommend avoiding harsh household chemicals or abrasive cleaners 
+              to keep the crystals sparkling and the finish pristine for decades.
             </p>
             <p className="text-text-primary italic">
-              <span className="text-primary-red font-bold">Important:</span> Do not use any chemicals 
-              to clean your jewellery as it may cause tarnishing.
+              <span className="text-primary-red font-bold">Pro Tip:</span> After contact with chlorine or salt water, 
+              a quick rinse with fresh water and a pat dry with a soft cloth will keep it looking brand new.
             </p>
           </section>
 

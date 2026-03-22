@@ -81,6 +81,7 @@ const Header = () => {
                         { label: 'ALL PRODUCTS', path: '/products' },
                         { label: 'EARRINGS', path: '/earrings' },
                         { label: 'BRACELETS', path: '/bracelets' },
+                        { label: 'RINGS', path: '/rings' },
                         { label: 'NECKLACES', path: '/necklaces' },
                         { label: 'HAND CHAINS', path: '/hand-chains' },
                         { label: 'JEWELRY SETS', path: '/sets' }
@@ -177,6 +178,7 @@ const Header = () => {
                    { n: 'ALL PRODUCTS', p: '/products' },
                    { n: 'EARRINGS', p: '/earrings' },
                    { n: 'BRACELETS', p: '/bracelets' },
+                   { n: 'RINGS', p: '/rings' },
                    { n: 'NECKLACES', p: '/necklaces' },
                    { n: 'HAND CHAINS', p: '/hand-chains' },
                    { n: 'JEWELRY SETS', p: '/sets' }

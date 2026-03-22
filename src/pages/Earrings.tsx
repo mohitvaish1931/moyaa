@@ -34,9 +34,9 @@ const Earrings = () => {
   ]);
 
   useSEO({
-    title: 'Premium Earrings Collection - MORAA JEWELS Luxury Jewelry',
+    title: 'Premium Earrings - MORAA JEWELS',
     description: 'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles, find the perfect earrings to elevate your style.',
-    keywords: 'earrings, luxury earrings, premium earrings, designer earrings, jewelry earrings, gold earrings, diamond earrings',
+    keywords: 'earrings, luxury earrings, gold earrings, premium jewelry, moraa jewels',
     url: 'https://moraajewles.com/earrings',
     type: 'product.group',
     structuredData: {
@@ -62,84 +62,102 @@ const Earrings = () => {
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-soft mb-4">
-
-            EARRINGS
+        <div className="text-center mb-12 mt-8">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-soft mb-4 luxury-serif">
+            LUXURY EARRINGS
           </h1>
-          <p className="text-gray-600">
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent mx-auto mb-6"></div>
+          <p className="text-gray-600 max-w-2xl mx-auto italic font-light">
             Discover our stunning collection of earrings, from elegant studs to statement drops.
           </p>
         </div>
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {earrings.map((product) => {
-            const isInWishlist = state.wishlist.find(item => item.id === product.id);
-            
-            return (
-              <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id} className="group cursor-pointer">
-                {/* Product Image */}
-                <div className="relative overflow-hidden rounded-lg bg-gray-50 border border-gold-primary/20 aspect-square mb-4">
-                  {/* Sale Badge */}
-                  {product.sale && (
-                    <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-gold-soft text-luxury-dark px-3 py-1 text-sm font-medium rounded z-10 shadow-glow-gold">
-
-                      Sale
-                    </div>
-                  )}
-                  {/* Sold Out Badge */}
-                  {product.soldOut && (
-                    <div className="absolute top-4 right-12 bg-primary-wine text-white px-3 py-1 text-sm font-medium rounded z-10 shadow-md">
-                      Sold Out
-                    </div>
-                  )}
-                  {/* Wishlist Button */}
-                  <button 
-                    onClick={() => toggleWishlist(product)}
-                    className="absolute top-4 right-4 p-2 bg-white/80 border border-gold-primary/30 rounded-full hover:shadow-lg transition-shadow z-10"
-                  >
-                    <Heart className={`h-4 w-4 transition-colors ${
-                      isInWishlist ? 'text-primary-wine fill-current' : 'text-gray-400 hover:text-primary-wine'
-                    }`} />
-                  </button>
+          {earrings.length > 0 ? (
+            earrings.map((product) => {
+              const isInWishlist = state.wishlist.find(item => item.id === product.id);
+              
+              return (
+                <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id} className="group cursor-pointer">
                   {/* Product Image */}
-                  <img
-                    src={getImageUrl(product.image)}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={handleImageError}
-                  />
-                  {/* Add to Cart Button */}
-                  {!product.soldOut && (
-                    <button
-                      onClick={() => addToCart(product)}
-                      className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg font-medium hover:shadow-glow-gold transition-all opacity-0 group-hover:opacity-100 flex items-center space-x-2"
+                  <div className="relative overflow-hidden rounded-2xl bg-gray-50 border border-gold-primary/20 aspect-square mb-4 shadow-sm group-hover:shadow-xl transition-all duration-500">
+                    {/* Sale Badge */}
+                    {product.sale && (
+                      <div className="absolute top-4 left-4 bg-primary-red text-white px-3 py-1 text-xs font-bold rounded z-10 shadow-lg">
+                        SALE
+                      </div>
+                    )}
+                    {/* Sold Out Badge */}
+                    {product.soldOut && (
+                      <div className="absolute top-4 right-12 bg-gray-900 text-white px-3 py-1 text-xs font-medium rounded z-10 opacity-80">
+                        Sold Out
+                      </div>
+                    )}
+                    {/* Wishlist Button */}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toggleWishlist(product);
+                      }}
+                      className="absolute top-4 right-4 p-2.5 bg-white/90 backdrop-blur-md border border-gold-primary/20 rounded-full hover:bg-gold-primary hover:text-white shadow-md transition-all z-10"
                     >
-                      <ShoppingBag className="h-4 w-4" />
-                      <span>Add to Cart</span>
+                      <Heart className={`h-4 w-4 transition-colors ${
+                        isInWishlist ? 'text-primary-red fill-current' : 'text-gray-400'
+                      }`} />
                     </button>
-                  )}
-                </div>
-                {/* Product Info */}
-                <div className="text-center">
-                  <h3 className="text-sm font-medium text-gray-900 mb-2 hover:text-gold-primary transition-colors">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center justify-center space-x-2">
-                    <span className="text-lg font-bold text-gold-primary">
-                      Rs. {product.price.toLocaleString()}.00
-                    </span>
-                    {product.originalPrice && (
-                      <span className="text-sm text-gray-500 line-through">
-                        Rs. {product.originalPrice.toLocaleString()}.00
-                      </span>
+                    {/* Product Image */}
+                    <img
+                      src={getImageUrl(product.image)}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      onError={handleImageError}
+                    />
+                    {/* Add to Cart Button */}
+                    {!product.soldOut && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addToCart(product);
+                        }}
+                        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-text-primary text-white px-6 py-2.5 rounded-full font-semibold text-xs luxury-serif tracking-widest hover:bg-primary-red transition-all duration-300 opacity-0 group-hover:opacity-100 flex items-center space-x-2 shadow-2xl"
+                      >
+                        <ShoppingBag className="h-4 w-4" />
+                        <span>ADD TO CART</span>
+                      </button>
                     )}
                   </div>
-                </div>
+                  {/* Product Info */}
+                  <div className="text-center space-y-2">
+                    <h3 className="text-sm luxury-serif text-text-primary group-hover:text-primary-red transition-all duration-300 tracking-wide font-medium">
+                      {product.name}
+                    </h3>
+                    <div className="flex items-center justify-center space-x-3">
+                      <span className="text-lg font-bold text-primary-red">
+                        Rs. {product.price.toLocaleString()}.00
+                      </span>
+                      {product.originalPrice && (
+                        <span className="text-xs text-text-muted line-through">
+                          Rs. {product.originalPrice.toLocaleString()}.00
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })
+          ) : (
+            <div className="col-span-full text-center py-32">
+              <div className="mb-6 inline-block p-4 rounded-full bg-gold-primary/10">
+                <ShoppingBag className="w-12 h-12 text-gold-primary opacity-30" />
+              </div>
+              <h3 className="text-2xl luxury-serif text-text-primary mb-2">COLLECTION COMING SOON</h3>
+              <p className="text-text-secondary font-light">We are curating the finest earrings for you.</p>
+              <Link to="/products" className="inline-block mt-8 text-gold-primary hover:text-primary-red transition-colors border-b border-gold-primary/30 pb-1">
+                Explore Other Collections
               </Link>
-            );
-          })}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -254,7 +254,7 @@ const ProductDetail = () => {
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-3">Key Features</h3>
               <ul className="space-y-2">
-                {(product.features && product.features.length > 0 ? product.features : ['Premium quality materials', 'Handcrafted with precision', 'Hypoallergenic and skin-safe', 'Elegant luxury finish']).map((feature: string, index: number) => (
+                {['Waterproof & Sweatproof', 'Hypoallergenic & Skin-safe', 'Anti-tarnish & Long-lasting', '18k Gold PVD Finish'].map((feature: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-gold-primary">✨</span>
                     <span className="text-gray-700">{feature}</span>
@@ -268,16 +268,17 @@ const ProductDetail = () => {
               <div className="bg-gray-50 border border-gold-primary/20 p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-gray-900 mb-2">Materials</h4>
                 <ul className="text-sm text-gray-700 space-y-1">
-                  {(product.materials && product.materials.length > 0 ? product.materials : ['High-grade alloy', 'Gold/Silver plating', 'Anti-tarnish coating']).map((material: string, index: number) => (
-                    <li key={index}>• {material}</li>
-                  ))}
+                  <li>• Base Metal: Stainless Steel</li>
+                  <li>• Finish: 18k Gold PVD</li>
+                  <li>• Stone: Round-Cut Crystals</li>
                 </ul>
               </div>
               <div className="bg-gray-50 border border-gold-primary/20 p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-gray-900 mb-2">Specifications</h4>
                 <div className="text-sm text-gray-700 space-y-1">
-                  {product.dimensions && <p>📏 {product.dimensions}</p>}
-                  {product.weight && <p>⚖️ {product.weight}</p>}
+                  <p>🌊 Waterproof</p>
+                  <p>🛡️ Anti-Tarnish</p>
+                  <p>🌿 Hypoallergenic</p>
                 </div>
               </div>
             </div>
@@ -367,7 +368,7 @@ const ProductDetail = () => {
               <h3 className="text-lg font-medium text-gray-900 mb-3">Care Instructions</h3>
               <div className="bg-gray-50 border border-gold-primary/20 p-4 rounded-lg">
                 <ul className="space-y-2">
-                  {(product.careInstructions && product.careInstructions.length > 0 ? product.careInstructions : ['Keep away from water and chemicals', 'Store in a dry, cool place', 'Clean gently with a soft cloth', 'Avoid perfume and body spray contact']).map((instruction: string, index: number) => (
+                  {['Waterproof and Sweatproof', 'Chlorine and Sea water safe', 'Store in a cool, dry place', 'Avoid harsh chemical contact'].map((instruction: string, index: number) => (
                     <li key={index} className="flex items-start space-x-2">
                       <span className="text-gold-primary mt-1">✓</span>
                       <span className="text-gray-700 text-sm">{instruction}</span>

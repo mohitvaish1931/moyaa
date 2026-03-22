@@ -5,39 +5,42 @@ import { useSEO } from '../utils/useSEO';
 import { generateAggregateOfferSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
 import { getImageUrl, handleImageError } from '../utils/mediaHelper';
 
-const Bracelets = () => {
+const Rings = () => {
   const { state, dispatch } = useAppContext();
 
-  const bracelets = state.products.filter(p => p.category?.toLowerCase() === 'bracelets' || p.category?.toLowerCase() === 'bracelet');
+  const products = state.products.filter(p => 
+    p.category?.toLowerCase() === 'ring' || 
+    p.category?.toLowerCase() === 'rings'
+  );
 
   // Calculate price range for aggregate offer schema
-  const prices = bracelets.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);
+  const prices = products.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);
   const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
   const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
   // Generate schemas
   const aggregateSchema = generateAggregateOfferSchema(
-    'Premium Bracelets Collection - MORAA JEWELS',
-    'Discover our stunning collection of premium bracelets. Elegant designs crafted with finest materials for timeless sophistication.',
+    'Premium Luxury Rings Collection - MORAA JEWELS',
+    'Shop our exclusive collection of luxury rings. Elegant gold and silver rings for every occasion.',
     'https://moraajewles.com/logo.png',
     minPrice,
     maxPrice,
-    bracelets.length,
+    products.length,
     'INR',
-    'https://moraajewles.com/bracelets'
+    'https://moraajewles.com/rings'
   );
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: 'https://moraajewles.com' },
     { name: 'Products', url: 'https://moraajewles.com/products' },
-    { name: 'Bracelets', url: 'https://moraajewles.com/bracelets' }
+    { name: 'Rings', url: 'https://moraajewles.com/rings' }
   ]);
 
   useSEO({
-    title: 'Premium Bracelets - MORAA JEWELS',
-    description: 'Discover our stunning collection of premium bracelets. Elegant designs crafted with finest materials for timeless sophistication.',
-    keywords: 'bracelets, luxury bracelets, gold bracelets, premium jewelry, moraa jewels',
-    url: 'https://moraajewles.com/bracelets',
+    title: 'Premium Luxury Rings - MORAA JEWELS',
+    description: 'Discover elegantly crafted rings from MORAA JEWELS. Premium gold, silver, and gemstone rings.',
+    keywords: 'rings, luxury rings, gold rings, silver rings, engagement rings, premium jewelry',
+    url: 'https://moraajewles.com/rings',
     type: 'product.group',
     structuredData: {
       '@context': 'https://schema.org',
@@ -64,18 +67,18 @@ const Bracelets = () => {
         {/* Hero Section */}
         <div className="text-center mb-12 mt-8">
           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-soft mb-4 luxury-serif">
-            LUXURY BRACELETS
+            LUXURY RINGS
           </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent mx-auto mb-6"></div>
           <p className="text-gray-600 max-w-2xl mx-auto italic font-light">
-            Explore our exquisite collection of bracelets and kadas, perfect for any occasion.
+            Elegance that wraps around your finger. Discover our finest collection of rings.
           </p>
         </div>
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {bracelets.length > 0 ? (
-            bracelets.map((product) => {
+          {products.length > 0 ? (
+            products.map((product) => {
               const isInWishlist = state.wishlist.find(item => item.id === product.id);
               
               return (
@@ -152,7 +155,7 @@ const Bracelets = () => {
                 <ShoppingBag className="w-12 h-12 text-gold-primary opacity-30" />
               </div>
               <h3 className="text-2xl luxury-serif text-text-primary mb-2">COLLECTION COMING SOON</h3>
-              <p className="text-text-secondary font-light">We are curating the finest bracelets for you.</p>
+              <p className="text-text-secondary font-light">We are curating the finest rings for you.</p>
               <Link to="/products" className="inline-block mt-8 text-gold-primary hover:text-primary-red transition-colors border-b border-gold-primary/30 pb-1">
                 Explore Other Collections
               </Link>
@@ -164,4 +167,4 @@ const Bracelets = () => {
   );
 };
 
-export default Bracelets;
+export default Rings;

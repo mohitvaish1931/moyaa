@@ -45,15 +45,15 @@ const AboutUs = () => {
               <ul className="mt-6 space-y-3">
                 <li className="flex items-center gap-3">
                   <span className="text-primary-red">✦</span>
-                  <span className="text-text-primary font-bold">Hand-selected precious stones</span>
+                  <span className="text-text-primary font-bold">Premium 18k Gold PVD Finish</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-gold-primary">✦</span>
-                  <span className="text-text-primary font-bold">Conflict-free diamonds and ethically sourced metals</span>
+                  <span className="text-text-primary font-bold">High-Grade Surgical Stainless Steel Base</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-primary-red">✦</span>
-                  <span className="text-text-primary font-bold">Intricate settings that maximize brilliance</span>
+                  <span className="text-text-primary font-bold">Hand-Selected Round-Cut Crystals</span>
                 </li>
               </ul>
             </div>

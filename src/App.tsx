@@ -12,6 +12,7 @@ import Bracelets from './pages/Bracelets';
 import Necklaces from './pages/Necklaces';
 import HandChains from './pages/HandChains';
 import Sets from './pages/Sets';
+import Rings from './pages/Rings';
 import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
 import ProductDetail from './pages/ProductDetail';
@@ -45,6 +46,7 @@ const AppContent = () => {
           <Route path="/necklaces" element={<Necklaces />} />
           <Route path="/hand-chains" element={<HandChains />} />
           <Route path="/sets" element={<Sets />} />
+          <Route path="/rings" element={<Rings />} />
           <Route path="/track-order" element={<TrackOrder />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/profile" element={<Profile />} />
