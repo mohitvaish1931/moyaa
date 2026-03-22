@@ -34,6 +34,7 @@ const Header = () => {
     { label: 'COLLECTIONS', path: '/products' },
     { label: 'TRACK ORDER', path: '/track-order' },
     { label: 'CONTACT', path: '/contact' },
+    ...(state.user?.role === 'admin' ? [{ label: 'ADMIN', path: '/admin' }] : []),
   ];
 
   return (
@@ -96,13 +97,13 @@ const Header = () => {
                   </div>
                 </div>
 
-                {['TRACK ORDER', 'CONTACT'].map((item) => (
+                {navItems.filter(item => !['HOME', 'COLLECTIONS'].includes(item.label)).map((item) => (
                   <Link
-                    key={item}
-                    to={`/${item.toLowerCase().replace(' ', '-')}`}
+                    key={item.label}
+                    to={item.path}
                     className="text-white text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 relative group"
                   >
-                    {item}
+                    {item.label}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-primary group-hover:w-full transition-all duration-300" />
                   </Link>
                 ))}

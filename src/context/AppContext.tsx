@@ -52,6 +52,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  role?: string;
 }
 
 interface AppState {
@@ -238,7 +239,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       try {
         const rawUser = localStorage.getItem('rr_user');
         if (rawUser && mounted) {
-          dispatch({ type: 'SET_USER', payload: JSON.parse(rawUser) });
+          const parsedUser = JSON.parse(rawUser);
+          dispatch({ type: 'SET_USER', payload: { id: parsedUser.id, email: parsedUser.email, name: parsedUser.name, role: parsedUser.role } });
         }
       } catch (e) {
         // ignore
