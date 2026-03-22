@@ -106,7 +106,7 @@ const initialState: AppState = {
   searchQuery: '',
   searchResults: [],
   isSearchOpen: false,
-  products: seedProducts as Product[],
+  products: [],
   videos: [],
   banners: [],
   coupons: [],

@@ -54,7 +54,7 @@ const Header = () => {
                 <img 
                   src="/logo.png" 
                   alt="Logo" 
-                  className="h-10 sm:h-14 lg:h-20 w-auto object-contain brightness-110" 
+                  className="h-16 sm:h-20 lg:h-24 w-auto object-contain brightness-110" 
                 />
               </Link>
 
@@ -114,7 +114,7 @@ const Header = () => {
             <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
               <div className="h-4 w-px bg-white/20 hidden sm:block mr-2" />
               
-              <div className="flex items-center gap-1 sm:gap-2 text-white">
+              <div className="flex items-center gap-2.5 sm:gap-4 text-white">
                 <button onClick={() => setIsSearchOpen(true)} className="p-1.5 text-white hover:text-gold-primary transition-colors">
                   <Search className="w-4 h-4 sm:w-5 h-5" />
                 </button>

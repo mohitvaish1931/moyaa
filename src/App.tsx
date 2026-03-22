@@ -35,7 +35,7 @@ const AppContent = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-luxury-dark via-luxury-secondary to-luxury-tertiary overflow-x-hidden">
       <Header />
-      <main className={`${isHomePage ? 'pt-0' : 'pt-16 lg:pt-20'}`}>
+      <main className={`${isHomePage ? 'pt-0' : 'pt-20 lg:pt-28'}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<AllProducts />} />
