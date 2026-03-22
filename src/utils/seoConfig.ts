@@ -5,85 +5,85 @@
 
 export const SEO_CONFIG = {
   // Site Information
-  siteName: 'MORAA REFLECTION',
+  siteName: 'MORAA JEWELS',
   siteUrl: 'https://moraajewles.com',
   siteDescription: 'Premium luxury jewelry collection with exquisite earrings, necklaces, bracelets and more',
   siteLogo: 'https://moraajewles.com/logo.png',
   
   // Business Information
   business: {
-    name: 'MORAA REFLECTION',
+    name: 'MORAA JEWELS',
     type: 'LocalBusiness',
     description: 'Premium Luxury Jewelry Retailer',
     priceRange: '₹₹₹',
     areaServed: 'IN',
-    email: 'support@moraajewles.com',
-    phone: '+91-XXXXXXXXXX', // Update with actual phone
+    email: 'moraajewel@gmail.com',
+    phone: '+91 78779 37350',
     address: {
-      streetAddress: '', // Update with actual address
-      addressLocality: '', // City name
-      addressRegion: '', // State/Region
-      postalCode: '', // ZIP code
+      streetAddress: 'Pahadiya chowk',
+      addressLocality: 'Jaipur',
+      addressRegion: 'Rajasthan',
+      postalCode: '302002',
       addressCountry: 'IN'
     }
   },
 
   // Social Media
   socialProfiles: {
-    facebook: 'https://www.facebook.com/moraaref',
-    instagram: 'https://www.instagram.com/moraaref',
-    twitter: 'https://twitter.com/moraaref',
-    linkedin: 'https://www.linkedin.com/company/moraa-reflection',
-    youtube: 'https://www.youtube.com/channel/moraaref'
+    facebook: 'https://www.facebook.com/moraajewles',
+    instagram: 'https://www.instagram.com/moraajewles',
+    twitter: 'https://twitter.com/moraajewles',
+    linkedin: 'https://www.linkedin.com/company/moraa-jewels',
+    youtube: 'https://www.youtube.com/channel/moraajewles'
   },
 
   // Default Meta Information
   defaultMeta: {
-    title: 'MORAA REFLECTION - Premium Luxury Jewelry Collection | Earrings, Necklaces & Bracelets',
-    description: 'Shop MORAA REFLECTION\'s exquisite luxury jewelry collection. Premium earrings, necklaces, bracelets & more. Timeless elegance with finest craftsmanship. Explore our 100% authentic collection now.',
+    title: 'MORAA JEWELS - Premium Luxury Jewelry Collection | Earrings, Necklaces & Bracelets',
+    description: 'Shop MORAA JEWELS\' exquisite luxury jewelry collection. Premium earrings, necklaces, bracelets & more. Timeless elegance with finest craftsmanship. Explore our 100% authentic collection now.',
     keywords: 'luxury jewelry, premium earrings, necklaces, bracelets, fine jewelry, designer jewelry, luxury accessories, authentic jewelry, jewelry collection'
   },
 
   // Page-Specific Meta
   pages: {
     home: {
-      title: 'MORAA REFLECTION - Premium Luxury Jewelry Collection | Shop Now',
-      description: 'Discover MORAA REFLECTION\'s exquisite luxury jewelry collection. Premium earrings, necklaces, bracelets & more. Timeless elegance with finest craftsmanship. Shop 100% authentic jewelry today.',
+      title: 'MORAA JEWELS - Premium Luxury Jewelry Collection | Shop Now',
+      description: 'Discover MORAA JEWELS\' exquisite luxury jewelry collection. Premium earrings, necklaces, bracelets & more. Timeless elegance with finest craftsmanship. Shop 100% authentic jewelry today.',
       keywords: 'luxury jewelry, premium jewelry collection, earrings, necklaces, bracelets, luxury accessories, designer jewelry, fine jewelry, authentic jewelry'
     },
     products: {
-      title: 'All Products - MORAA REFLECTION Premium Jewelry Collection',
-      description: 'Browse our complete collection of premium luxury jewelry. Find the perfect earrings, necklaces, bracelets and more from MORAA REFLECTION.',
+      title: 'All Products - MORAA JEWELS Premium Jewelry Collection',
+      description: 'Browse our complete collection of premium luxury jewelry. Find the perfect earrings, necklaces, bracelets and more from MORAA JEWELS.',
       keywords: 'all products, jewelry collection, earrings, necklaces, bracelets, luxury jewelry, premium accessories'
     },
     earrings: {
-      title: 'Premium Earrings Collection - MORAA REFLECTION Luxury Jewelry',
+      title: 'Premium Earrings Collection - MORAA JEWELS Luxury Jewelry',
       description: 'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles, find the perfect earrings to elevate your style.',
       keywords: 'earrings, luxury earrings, premium earrings, designer earrings, jewelry earrings, gold earrings, diamond earrings'
     },
     bracelets: {
-      title: 'Premium Bracelets Collection - MORAA REFLECTION Luxury Jewelry',
+      title: 'Premium Bracelets Collection - MORAA JEWELS Luxury Jewelry',
       description: 'Discover our stunning collection of premium bracelets. Elegant designs crafted with finest materials for timeless sophistication.',
       keywords: 'bracelets, luxury bracelets, premium bracelets, designer bracelets, jewelry bracelets, gold bracelets, diamond bracelets'
     },
     necklaces: {
-      title: 'Premium Necklaces Collection - MORAA REFLECTION Luxury Jewelry',
+      title: 'Premium Necklaces Collection - MORAA JEWELS Luxury Jewelry',
       description: 'Browse our exquisite collection of premium necklaces. Find elegant designs with timeless appeal and finest craftsmanship.',
       keywords: 'necklaces, luxury necklaces, premium necklaces, designer necklaces, jewelry necklaces, gold necklaces, diamond necklaces'
     },
     contact: {
-      title: 'Contact Us - MORAA REFLECTION Premium Jewelry',
-      description: 'Get in touch with MORAA REFLECTION. We\'re here to help with your jewelry inquiries, orders, and customer service.',
-      keywords: 'contact us, customer service, jewelry support, MORAA REFLECTION contact'
+      title: 'Contact Us - MORAA JEWELS Premium Jewelry',
+      description: 'Get in touch with MORAA JEWELS. We\'re here to help with your jewelry inquiries, orders, and customer service.',
+      keywords: 'contact us, customer service, jewelry support, MORAA JEWELS contact'
     },
     trackOrder: {
-      title: 'Track Your Order - MORAA REFLECTION Jewelry Delivery Status',
-      description: 'Track your MORAA REFLECTION jewelry order in real-time. Get live updates on your shipment status, delivery date and package location.',
+      title: 'Track Your Order - MORAA JEWELS Jewelry Delivery Status',
+      description: 'Track your MORAA JEWELS jewelry order in real-time. Get live updates on your shipment status, delivery date and package location.',
       keywords: 'track order, order tracking, jewelry delivery, shipment status, order status'
     },
     profile: {
       title: 'My Profile - MORAA Jewelry',
-      description: 'Manage your profile, view orders, cart and wishlist on MORAA REFLECTION.',
+      description: 'Manage your profile, view orders, cart and wishlist on MORAA JEWELS.',
       keywords: 'profile, orders, wishlist, cart, account management'
     }
   },

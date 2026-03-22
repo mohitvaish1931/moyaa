@@ -24,23 +24,22 @@ const NewArrivals = () => {
 
   return (
     <>
-      {/* Announcement Banner */}
       <AnnouncementBanner />
       
-      <section className="py-24 bg-luxury-dark border-t border-gold-primary/20 shadow-[inset_0_1px_0_rgba(255,215,0,0.1)]">
+      <section className="py-24 bg-luxury-dark border-t border-gold-primary/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section header */}
           <div className="text-center mb-20">
             <div className="inline-block mb-6">
-              <div className="text-gold-primary text-sm tracking-widest font-light luxury-serif">
+              <div className="text-primary-red text-sm tracking-widest font-medium luxury-serif uppercase">
                 ✨ LATEST RELEASES ✨
               </div>
             </div>
-            <h2 className="luxury-serif text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold mb-6">
+            <h2 className="luxury-serif text-5xl md:text-6xl text-text-primary mb-6">
               NEW ARRIVALS
             </h2>
-            <p className="text-platinum/70 max-w-2xl mx-auto text-lg">
-              Proudly Supporting Ethical Sourcing – Every Design Has a Story
+            <p className="text-text-secondary max-w-2xl mx-auto text-lg font-light italic">
+              Experience the passion of deep Rubies and the elegance of Antique Gold.
             </p>
           </div>
 
@@ -53,11 +52,11 @@ const NewArrivals = () => {
                 <div key={(product as any)._id || product.id} className="group cursor-pointer">
                   <Link to={`/product/${product.id}`}>
                     {/* Product card */}
-                    <div className="relative overflow-hidden rounded-xl glass-card-emerald border border-teal-luxury/40 aspect-square mb-6 hover:border-gold-primary/60 transition-all duration-300 shadow-glow-emerald hover:shadow-glow">
+                    <div className="relative overflow-hidden rounded-xl bg-white border border-gold-primary/20 aspect-square mb-6 hover:border-primary-red/50 transition-all duration-300 shadow-sm hover:shadow-xl">
 
                       {/* Sale badge */}
                       {product.sale && (
-                        <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark px-3 py-1.5 text-xs font-semibold rounded-full z-10 luxury-serif shadow-glow-gold">
+                        <div className="absolute top-4 left-4 bg-primary-red text-white px-3 py-1.5 text-xs font-semibold rounded-full z-10 luxury-serif shadow-sm">
                           SALE
                         </div>
                       )}
@@ -68,10 +67,10 @@ const NewArrivals = () => {
                           e.preventDefault();
                           toggleWishlist(product);
                         }}
-                        className="absolute top-4 right-4 p-2.5 bg-luxury-dark/50 backdrop-blur-md rounded-full hover:bg-ruby-luxury/30 transition-all duration-300 z-10 border border-ruby-luxury/40 hover-ruby-glow"
+                        className="absolute top-4 right-4 p-2.5 bg-white/90 backdrop-blur-md rounded-full hover:bg-primary-red hover:text-white transition-all duration-300 z-10 border border-gold-primary/20"
                       >
                         <Heart className={`h-4 w-4 transition-colors ${
-                          isInWishlist ? 'text-ruby-luxury fill-current' : 'text-platinum/80 hover:text-ruby-luxury'
+                          isInWishlist ? 'text-primary-red fill-current' : 'text-text-muted hover:text-white'
                         }`} />
                       </button>
 
@@ -83,7 +82,7 @@ const NewArrivals = () => {
                       />
 
                       {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-luxury-dark/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary-red/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                       {/* Add to cart button */}
                       <button
@@ -91,7 +90,7 @@ const NewArrivals = () => {
                           e.preventDefault();
                           addToCart(product);
                         }}
-                        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-6 py-2.5 rounded-full font-semibold text-xs luxury-serif tracking-widest hover:shadow-glow transition-all duration-300 opacity-0 group-hover:opacity-100 flex items-center gap-2"
+                        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-text-primary text-white px-6 py-2.5 rounded-full font-semibold text-xs luxury-serif tracking-widest hover:bg-primary-red transition-all duration-300 opacity-0 group-hover:opacity-100 flex items-center gap-2"
                       >
                         <ShoppingBag className="h-4 w-4" />
                         ADD TO CART
@@ -100,18 +99,18 @@ const NewArrivals = () => {
                   </Link>
 
                   {/* Product info */}
-                  <div className="space-y-3">
+                  <div className="space-y-3 text-center">
                     <Link to={`/product/${product.id}`}>
-                      <h3 className="text-sm luxury-serif text-platinum hover:text-gold-primary transition-all duration-300 tracking-wide">
+                      <h3 className="text-sm luxury-serif text-text-primary hover:text-primary-red transition-all duration-300 tracking-wide font-medium">
                         {product.name}
                       </h3>
                     </Link>
                     <div className="flex items-center justify-center gap-3">
-                      <span className="text-lg font-semibold text-gold-primary">
+                      <span className="text-lg font-semibold text-primary-red">
                         Rs. {product.price.toLocaleString()}.00
                       </span>
                       {product.originalPrice && (
-                        <span className="text-xs text-platinum/50 line-through">
+                        <span className="text-xs text-text-muted line-through">
                           Rs. {product.originalPrice.toLocaleString()}.00
                         </span>
                       )}
@@ -126,7 +125,7 @@ const NewArrivals = () => {
           <div className="flex justify-center mt-16">
             <Link
               to="/products"
-              className="inline-flex items-center gap-3 btn-premium-gold text-luxury-dark px-8 py-4 rounded-full luxury-serif text-sm tracking-widest font-semibold hover:shadow-glow transition-all duration-300"
+              className="inline-flex items-center gap-3 bg-primary-red text-white px-8 py-4 rounded-full luxury-serif text-sm tracking-widest font-semibold hover:bg-gold-primary transition-all duration-300 shadow-lg hover:shadow-primary-red/20"
             >
               VIEW ALL COLLECTIONS
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

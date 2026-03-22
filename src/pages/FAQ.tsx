@@ -33,10 +33,10 @@ const FAQ = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 text-center">
-          <h1 className="luxury-serif text-5xl md:text-6xl text-platinum mb-6">
+          <h1 className="luxury-serif text-5xl md:text-6xl text-text-primary mb-6">
             Frequently Asked Questions
           </h1>
-          <p className="text-platinum/70 text-lg">
+          <p className="text-text-secondary text-lg italic luxury-serif">
             Find answers to common questions about our products and services.
           </p>
         </div>
@@ -46,16 +46,14 @@ const FAQ = () => {
           {faqs.map((faq, index) => (
             <div 
               key={index} 
-              className="glass-card-emerald border border-teal-luxury/20 p-8 rounded-2xl hover:border-gold-primary/40 transition-all duration-300"
-
+              className="bg-white/60 backdrop-blur-md border border-gold-primary/30 p-8 rounded-2xl hover:border-primary-red/40 transition-all duration-300 shadow-sm"
             >
-              <h3 className="luxury-serif text-xl text-gold-primary mb-4 flex items-start gap-4">
-                <span className="bg-gold-primary/10 text-gold-primary w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm">Q</span>
+              <h3 className="luxury-serif text-xl text-text-primary mb-4 flex items-start gap-4 font-bold">
+                <span className="bg-primary-red text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm shadow-sm font-bold">Q</span>
                 {faq.question}
               </h3>
-              <div className="text-platinum/80 leading-relaxed flex items-start gap-4">
-                <span className="bg-teal-luxury/10 text-teal-luxury w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm">A</span>
-
+              <div className="text-text-secondary leading-relaxed flex items-start gap-4 font-medium">
+                <span className="bg-gold-primary text-luxury-dark w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm shadow-sm font-bold">A</span>
                 <p>{faq.answer}</p>
               </div>
             </div>
@@ -63,9 +61,9 @@ const FAQ = () => {
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-16 bg-gradient-to-r from-gold-primary/10 to-gold-soft/10 p-12 rounded-3xl border border-gold-primary/20 text-center">
-          <h2 className="luxury-serif text-3xl text-platinum mb-4">Still have questions?</h2>
-          <p className="text-platinum/70 mb-8 max-w-xl mx-auto">
+        <div className="mt-16 bg-white/40 p-12 rounded-3xl border border-gold-primary/20 text-center shadow-lg backdrop-blur-sm">
+          <h2 className="luxury-serif text-3xl text-text-primary mb-4">Still have questions?</h2>
+          <p className="text-text-secondary mb-8 max-w-xl mx-auto font-medium">
             Our luxury consultants are available to assist you with any inquiries you may have.
           </p>
           <a 

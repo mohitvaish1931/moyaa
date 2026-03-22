@@ -14,8 +14,8 @@ const AllProducts = () => {
   ]);
 
   useSEO({
-    title: 'All Products - MORAA REFLECTION Premium Jewelry Collection',
-    description: 'Browse our complete collection of premium luxury jewelry. Find the perfect earrings, necklaces, bracelets and more from MORAA REFLECTION.',
+    title: 'All Products - MORAA JEWELS Premium Jewelry Collection',
+    description: 'Browse our complete collection of premium luxury jewelry. Find the perfect earrings, necklaces, bracelets and more from MORAA JEWELS.',
     keywords: 'all products, jewelry collection, earrings, necklaces, bracelets, luxury jewelry, premium accessories',
     url: 'https://moraajewles.com/products',
     type: 'product.group',

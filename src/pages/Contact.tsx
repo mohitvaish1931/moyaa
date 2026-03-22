@@ -4,9 +4,9 @@ import { useSEO } from '../utils/useSEO';
 
 const Contact = () => {
   useSEO({
-    title: 'Contact Us - MORAA REFLECTION Premium Jewelry',
-    description: 'Get in touch with MORAA REFLECTION. We\'re here to help with your jewelry inquiries, orders, and customer service.',
-    keywords: 'contact us, customer service, jewelry support, MORAA REFLECTION contact',
+    title: 'Contact Us - MORAA JEWELS Premium Jewelry',
+    description: 'Get in touch with MORAA JEWELS. We\'re here to help with your jewelry inquiries, orders, and customer service.',
+    keywords: 'contact us, customer service, jewelry support, MORAA JEWELS contact',
     url: 'https://moraajewles.com/contact',
     type: 'website'
   });
@@ -40,9 +40,9 @@ const Contact = () => {
       <div className="bg-gradient-to-r from-primary-wine/20 via-teal-luxury/10 to-primary-wine/20 py-16 shadow-[inset_0_1px_0_rgba(255,215,0,0.1)]">
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-soft mb-6 luxury-serif">CONTACT US</h1>
+          <h1 className="text-5xl md:text-6xl font-black text-text-primary mb-6 luxury-serif uppercase tracking-widest drop-shadow-sm">CONTACT US</h1>
 
-          <p className="text-xl text-platinum/80 leading-relaxed">
+          <p className="text-xl text-text-primary leading-relaxed">
             We'd love to hear from you. Get in touch with our team for any questions,
             custom orders, or jewelry consultations.
           </p>
@@ -54,8 +54,8 @@ const Contact = () => {
           {/* Contact Information */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-bold text-gold-primary mb-6 luxury-serif">Get In Touch</h2>
-              <p className="text-platinum/70 text-lg leading-relaxed mb-8">
+              <h2 className="text-3xl font-black text-primary-red mb-6 luxury-serif uppercase tracking-widest">Get In Touch</h2>
+              <p className="text-text-secondary text-lg leading-relaxed mb-8 font-medium">
                 Whether you have questions about our jewelry collection, need assistance with an order,
                 or want to discuss custom designs, our team is here to help. Reach out to us through
                 any of the channels below.
@@ -69,8 +69,8 @@ const Contact = () => {
                   <Mail className="h-6 w-6 text-luxury-dark" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gold-primary mb-1">Email Us</h3>
-                  <p className="text-platinum/70">moraajewel@gmail.com</p>
+                  <h3 className="text-lg font-semibold text-text-primary mb-1">Email Us</h3>
+                  <p className="text-text-secondary uppercase tracking-widest text-sm font-medium">moraajewel@gmail.com</p>
                 </div>
               </div>
 
@@ -80,8 +80,9 @@ const Contact = () => {
                   <Phone className="h-6 w-6 text-platinum" />
                 </div>
                 <div>
-                  <p className="text-platinum/70">+91 78779 37350</p>
-                  <p className="text-platinum/70">+91 80940 51710</p>
+                  <h3 className="text-lg font-bold text-text-primary mb-1 uppercase tracking-widest">Phone</h3>
+                  <p className="text-text-secondary font-bold">+91 78779 37350</p>
+                  <p className="text-text-secondary font-bold">+91 80940 51710</p>
                 </div>
               </div>
 
@@ -91,9 +92,8 @@ const Contact = () => {
                   <MapPin className="h-6 w-6 text-platinum" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-primary-wine mb-1">Visit Our Store</h3>
-
-                  <p className="text-platinum/70">
+                  <h3 className="text-lg font-black text-primary-red mb-1 uppercase tracking-widest">Visit Our Store</h3>
+                  <p className="text-text-secondary font-bold">
                     455, four gate out side mandhi khatikan<br />
                     Pahadiya chowk, near chota shiv tample<br />
                     Pincode- 302002
@@ -109,7 +109,7 @@ const Contact = () => {
                 <div>
                   <h3 className="text-lg font-semibold text-teal-luxury mb-1">Business Hours</h3>
 
-                  <p className="text-platinum/70">
+                  <p className="text-text-secondary font-medium">
                     Monday - Saturday: 10:00 AM - 8:00 PM<br />
                     Sunday: 11:00 AM - 6:00 PM
                   </p>
@@ -118,28 +118,27 @@ const Contact = () => {
             </div>
 
             {/* Services */}
-            <div className="glass-card-emerald border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
-
-              <h3 className="text-xl font-bold text-gold-primary mb-4 luxury-serif">Our Services</h3>
-              <ul className="space-y-2 text-platinum/80">
+            <div className="bg-white/30 border border-gold-primary/20 p-6 rounded-2xl shadow-sm">
+              <h3 className="text-xl font-black text-primary-red mb-4 luxury-serif uppercase tracking-widest">Our Services</h3>
+              <ul className="space-y-2 text-text-primary font-medium">
                 <li className="flex items-center space-x-2">
-                  <span className="text-gold-soft">✨</span>
+                  <span className="text-primary-red">✨</span>
                   <span>Custom Jewelry Design</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <span className="text-teal-luxury">✨</span>
+                  <span className="text-gold-primary">✨</span>
                   <span>Jewelry Repair & Maintenance</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <span className="text-primary-wine">✨</span>
+                  <span className="text-primary-red">✨</span>
                   <span>Professional Resizing</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <span className="text-teal-luxury">✨</span>
+                  <span className="text-gold-primary">✨</span>
                   <span>Gift Wrapping Services</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <span className="text-gold-soft">✨</span>
+                  <span className="text-primary-red">✨</span>
                   <span>Jewelry Authentication</span>
                 </li>
               </ul>
@@ -147,14 +146,13 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="glass-card-sapphire border border-teal-luxury/40 p-8 rounded-lg shadow-glow-emerald">
-
-            <h2 className="text-2xl font-bold text-gold-primary mb-6 luxury-serif">Send Us a Message</h2>
+          <div className="bg-white/40 border border-gold-primary/20 p-8 rounded-2xl shadow-sm">
+            <h2 className="text-2xl font-black text-primary-red mb-6 luxury-serif uppercase tracking-widest">Send Us a Message</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-platinum mb-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
                     Full Name *
                   </label>
                   <input
@@ -163,15 +161,14 @@ const Contact = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all duration-300"
-
+                    className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all duration-300"
                     placeholder="Your full name"
                     required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-platinum mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
                     Email Address *
                   </label>
                   <input
@@ -180,8 +177,7 @@ const Contact = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all duration-300"
-
+                    className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all duration-300"
                     placeholder="your.email@example.com"
                     required
                   />
@@ -189,7 +185,7 @@ const Contact = () => {
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-platinum mb-2">
+                <label htmlFor="subject" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
                   Subject *
                 </label>
                 <input
@@ -198,15 +194,14 @@ const Contact = () => {
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all duration-300"
-
+                  className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all duration-300"
                   placeholder="What is this regarding?"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-platinum mb-2">
+                <label htmlFor="message" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
                   Message *
                 </label>
                 <textarea
@@ -215,7 +210,7 @@ const Contact = () => {
                   value={formData.message}
                   onChange={handleInputChange}
                   rows={6}
-                  className="w-full px-4 py-3 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none resize-none transition-all duration-300"
+                  className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none resize-none transition-all duration-300"
                   placeholder="Tell us how we can help you..."
                   required
                 />
@@ -230,10 +225,9 @@ const Contact = () => {
               </button>
             </form>
 
-            <div className="mt-6 p-4 glass-card-ruby border border-primary-wine/30 rounded-lg shadow-glow-ruby">
-
-              <p className="text-sm text-platinum">
-                <strong>Response Time:</strong> We typically respond to all inquiries within 24 hours during business days.
+            <div className="mt-8 p-4 bg-primary-red/10 border-l-4 border-primary-red rounded-r-lg">
+              <p className="text-sm text-text-primary font-bold">
+                <strong className="text-primary-red">Response Time:</strong> We typically respond to all inquiries within 24 hours during business days.
               </p>
             </div>
           </div>

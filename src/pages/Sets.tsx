@@ -1,0 +1,157 @@
+import { Heart, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
+import { useSEO } from '../utils/useSEO';
+import { generateAggregateOfferSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
+import { getImageUrl, handleImageError } from '../utils/mediaHelper';
+
+const Sets = () => {
+  const { state, dispatch } = useAppContext();
+
+  const products = state.products.filter(p => 
+    p.category?.toLowerCase() === 'set' || 
+    p.category?.toLowerCase() === 'sets' ||
+    p.category?.toLowerCase() === 'combo'
+  );
+
+  // Calculate price range for aggregate offer schema
+  const prices = products.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+  const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+
+  // Generate schemas
+  const aggregateSchema = generateAggregateOfferSchema(
+    'Premium Jewelry Sets Collection - MORAA JEWELS',
+    'Shop our exclusive collection of luxury jewelry sets. Perfectly matched earrings, necklaces and bracelets.',
+    'https://moraajewles.com/logo.png',
+    minPrice,
+    maxPrice,
+    products.length,
+    'INR',
+    'https://moraajewles.com/sets'
+  );
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: 'https://moraajewles.com' },
+    { name: 'Products', url: 'https://moraajewles.com/products' },
+    { name: 'Jewelry Sets', url: 'https://moraajewles.com/sets' }
+  ]);
+
+  useSEO({
+    title: 'Premium Jewelry Sets - MORAA JEWELS Luxury Jewelry',
+    description: 'Discover perfectly matched jewelry sets from MORAA JEWELS. Curated luxury sets for special occasions.',
+    keywords: 'jewelry set, luxury jewelry sets, combo jewelry, wedding jewelry set, premium necklace set',
+    url: 'https://moraajewles.com/sets',
+    type: 'product.group',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@graph': [aggregateSchema, breadcrumbSchema]
+    }
+  });
+
+  const toggleWishlist = (product: any) => {
+    const isInWishlist = state.wishlist.find(item => item.id === product.id);
+    if (isInWishlist) {
+      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: product.id });
+    } else {
+      dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
+    }
+  };
+
+  const addToCart = (product: any) => {
+    dispatch({ type: 'ADD_TO_CART', payload: product });
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-soft mb-4">
+            JEWELRY SETS
+          </h1>
+          <p className="text-gray-600">
+            Discover our curated collection of luxury jewelry sets, perfectly matched for a complete elegant look.
+          </p>
+        </div>
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {products.length > 0 ? (
+            products.map((product) => {
+              const isInWishlist = state.wishlist.find(item => item.id === product.id);
+              
+              return (
+                <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id} className="group cursor-pointer">
+                  {/* Product Image */}
+                  <div className="relative overflow-hidden rounded-lg bg-gray-50 border border-gold-primary/20 aspect-square mb-4">
+                    {/* Sale Badge */}
+                    {product.sale && (
+                      <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-gold-soft text-luxury-dark px-3 py-1 text-sm font-medium rounded z-10 shadow-glow-gold">
+                        Sale
+                      </div>
+                    )}
+                    {/* Sold Out Badge */}
+                    {product.soldOut && (
+                      <div className="absolute top-4 right-12 bg-primary-wine text-white px-3 py-1 text-sm font-medium rounded z-10 shadow-md">
+                        Sold Out
+                      </div>
+                    )}
+                    {/* Wishlist Button */}
+                    <button 
+                      onClick={() => toggleWishlist(product)}
+                      className="absolute top-4 right-4 p-2 bg-white/80 border border-gold-primary/30 rounded-full hover:shadow-lg transition-shadow z-10"
+                    >
+                      <Heart className={`h-4 w-4 transition-colors ${
+                        isInWishlist ? 'text-primary-wine fill-current' : 'text-gray-400 hover:text-primary-wine'
+                      }`} />
+                    </button>
+                    {/* Product Image */}
+                    <img
+                      src={getImageUrl(product.image)}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={handleImageError}
+                    />
+                    {/* Add to Cart Button */}
+                    {!product.soldOut && (
+                      <button
+                        onClick={() => addToCart(product)}
+                        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg font-medium hover:shadow-glow-gold transition-all duration-300 opacity-0 group-hover:opacity-100 flex items-center space-x-2"
+                      >
+                        <ShoppingBag className="h-4 w-4" />
+                        <span>Add to Cart</span>
+                      </button>
+                    )}
+                  </div>
+                  {/* Product Info */}
+                  <div className="text-center">
+                    <h3 className="text-sm font-medium text-gray-900 mb-2 hover:text-gold-primary transition-colors">
+                      {product.name}
+                    </h3>
+                    <div className="flex items-center justify-center space-x-2">
+                      <span className="text-lg font-bold text-gold-primary">
+                        Rs. {product.price.toLocaleString()}.00
+                      </span>
+                      {product.originalPrice && (
+                        <span className="text-sm text-gray-500 line-through">
+                          Rs. {product.originalPrice.toLocaleString()}.00
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })
+          ) : (
+            <div className="col-span-full text-center py-20">
+              <p className="text-gray-500 luxury-serif text-xl">Coming Soon...</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Sets;

@@ -17,7 +17,7 @@ const Earrings = () => {
 
   // Generate schemas
   const aggregateSchema = generateAggregateOfferSchema(
-    'Premium Earrings Collection - MORAA REFLECTION',
+    'Premium Earrings Collection - MORAA JEWELS',
     'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles.',
     'https://moraajewles.com/logo.png',
     minPrice,
@@ -34,7 +34,7 @@ const Earrings = () => {
   ]);
 
   useSEO({
-    title: 'Premium Earrings Collection - MORAA REFLECTION Luxury Jewelry',
+    title: 'Premium Earrings Collection - MORAA JEWELS Luxury Jewelry',
     description: 'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles, find the perfect earrings to elevate your style.',
     keywords: 'earrings, luxury earrings, premium earrings, designer earrings, jewelry earrings, gold earrings, diamond earrings',
     url: 'https://moraajewles.com/earrings',

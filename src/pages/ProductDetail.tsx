@@ -51,14 +51,14 @@ const ProductDetail = () => {
     const productImage = (product.images && product.images.length > 0) ? product.images[0] : product.image || 'https://moraajewles.com/logo.png';
     const productSchema = generateProductSchema({
       name: product.name,
-      description: product.description || `Premium ${product.category} from MORAA REFLECTION`,
+      description: product.description || `Premium ${product.category} from MORAA JEWELS`,
       image: product.images || [productImage],
       price: product.price || product.originalPrice || 0,
       priceCurrency: 'INR',
       availability: product.soldOut ? 'OutOfStock' : 'InStock',
       category: product.category,
       url: `https://moraajewles.com/product/${id}`,
-      brand: 'MORAA REFLECTION'
+      brand: 'MORAA JEWELS'
     });
 
     const breadcrumbSchema = generateBreadcrumbSchema([
@@ -69,8 +69,8 @@ const ProductDetail = () => {
     ]);
 
     useSEO({
-      title: `${product.name} - Premium ${product.category} | MORAA REFLECTION`,
-      description: product.description || `Buy ${product.name} from MORAA REFLECTION. Premium ${product.category} with finest craftsmanship. Original price: ${product.originalPrice ? `₹${product.originalPrice}` : 'Contact for price'}`,
+      title: `${product.name} - Premium ${product.category} | MORAA JEWELS`,
+      description: product.description || `Buy ${product.name} from MORAA JEWELS. Premium ${product.category} with finest craftsmanship. Original price: ${product.originalPrice ? `₹${product.originalPrice}` : 'Contact for price'}`,
       keywords: `${product.name}, ${product.category}, luxury jewelry, premium jewelry, buy ${product.category.toLowerCase()}`,
       image: productImage,
       url: `https://moraajewles.com/product/${id}`,
