@@ -91,6 +91,14 @@ const Admin = () => {
             fd.append('specifications', JSON.stringify(specsArray));
           }
           fd.delete('specifications_raw');
+
+          // Parse materials from raw text
+          const matsRaw = fd.get('materials_raw')?.toString() || '';
+          if (matsRaw) {
+            const matsArray = matsRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+            fd.append('materials', JSON.stringify(matsArray));
+          }
+          fd.delete('materials_raw');
           
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
@@ -206,13 +214,23 @@ const Admin = () => {
             </div>
           </div>
           <div>
+            <label htmlFor="product-materials" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Materials (One per line)</label>
+            <textarea
+              id="product-materials"
+              name="materials_raw"
+              rows={2}
+              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+              placeholder="Stainless Steel&#10;18k Gold PVD"
+            />
+          </div>
+          <div>
             <label htmlFor="product-specifications" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Specifications (One per line)</label>
             <textarea
               id="product-specifications"
               name="specifications_raw"
               rows={3}
               className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
-              placeholder="Stainless Steel&#10;18k Gold Finish&#10;Hypoallergenic"
+              placeholder="Waterproof&#10;Anti-Tarnish&#10;Hypoallergenic"
             />
           </div>
           <div>
@@ -421,6 +439,13 @@ const Admin = () => {
           description: editProduct.description || '',
           dimensions: editProduct.dimensions || '',
           weight: editProduct.weight || '',
+          materials: (() => {
+            let mats = editProduct.materials;
+            if (typeof mats === 'string' && mats.startsWith('[')) {
+              try { mats = JSON.parse(mats); } catch (e) { /* ignore */ }
+            }
+            return Array.isArray(mats) ? mats.join('\n') : (mats || '');
+          })(),
           specifications: (() => {
             let specs = editProduct.specifications;
             if (typeof specs === 'string' && specs.startsWith('[')) {
@@ -459,7 +484,7 @@ const Admin = () => {
         const fd = new FormData();
         // include fields from form state
         Object.keys(localForm).forEach(k => {
-          if (localForm[k] !== undefined && localForm[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'specifications') {
+          if (localForm[k] !== undefined && localForm[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'specifications' && k !== 'materials') {
             fd.append(k, localForm[k]);
           }
         });
@@ -468,6 +493,12 @@ const Admin = () => {
         if (localForm.specifications) {
           const specsArray = localForm.specifications.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
           fd.append('specifications', JSON.stringify(specsArray));
+        }
+
+        // Handle materials array
+        if (localForm.materials) {
+          const matsArray = localForm.materials.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          fd.append('materials', JSON.stringify(matsArray));
         }
         
         // Handle video files
@@ -602,6 +633,16 @@ const Admin = () => {
                   placeholder="e.g. 50g"
                 />
               </div>
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Materials (One per line)</label>
+              <textarea
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                rows={2}
+                value={localForm?.materials || ''}
+                onChange={e => setLocalForm({ ...localForm, materials: e.target.value })}
+                placeholder="Stainless Steel&#10;18k Gold PVD"
+              />
             </div>
             <div>
               <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Specifications (One per line)</label>

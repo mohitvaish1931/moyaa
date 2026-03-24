@@ -17,6 +17,7 @@ const EditProduct = () => {
     description: '',
     dimensions: '',
     weight: '',
+    materials: '',
     specifications: '',
     soldOut: false,
     images: [],
@@ -45,6 +46,13 @@ const EditProduct = () => {
         description: product.description || '',
         dimensions: product.dimensions || '',
         weight: product.weight || '',
+        materials: (() => {
+          let mats = productAny.materials;
+          if (typeof mats === 'string' && mats.startsWith('[')) {
+            try { mats = JSON.parse(mats); } catch (e) { /* ignore */ }
+          }
+          return Array.isArray(mats) ? mats.join('\n') : (mats || '');
+        })(),
         specifications: (() => {
           let specs = productAny.specifications;
           if (typeof specs === 'string' && specs.startsWith('[')) {
@@ -83,7 +91,7 @@ const EditProduct = () => {
       
       // Add form fields
       Object.keys(form).forEach(k => {
-        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'stock' && k !== 'specifications') {
+        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'stock' && k !== 'specifications' && k !== 'materials') {
           fd.append(k, form[k]);
         }
       });
@@ -92,6 +100,12 @@ const EditProduct = () => {
       if (form.specifications) {
         const specsArray = form.specifications.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
         fd.append('specifications', JSON.stringify(specsArray));
+      }
+
+      // Handle materials array
+      if (form.materials) {
+        const matsArray = form.materials.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        fd.append('materials', JSON.stringify(matsArray));
       }
       
       // Handle video files
@@ -291,16 +305,28 @@ const EditProduct = () => {
             </div>
           </div>
 
-          {/* Specifications */}
-          <div>
-            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Specifications (One per line)</label>
-            <textarea
-              value={form.specifications || ''}
-              onChange={e => setForm({ ...form, specifications: e.target.value })}
-              rows={4}
-              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
-              placeholder="18k Gold Finish&#10;Waterproof&#10;Hypoallergenic"
-            />
+          {/* Specifications & Materials */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Materials (One per line)</label>
+              <textarea
+                value={form.materials || ''}
+                onChange={e => setForm({ ...form, materials: e.target.value })}
+                rows={3}
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                placeholder="Stainless Steel&#10;18k Gold Finish"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Specifications (One per line)</label>
+              <textarea
+                value={form.specifications || ''}
+                onChange={e => setForm({ ...form, specifications: e.target.value })}
+                rows={3}
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                placeholder="18k Gold Finish&#10;Waterproof&#10;Hypoallergenic"
+              />
+            </div>
           </div>
 
           {/* Images */}
