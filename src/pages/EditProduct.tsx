@@ -15,6 +15,9 @@ const EditProduct = () => {
     price: 0,
     originalPrice: '',
     description: '',
+    dimensions: '',
+    weight: '',
+    specifications: '',
     soldOut: false,
     images: [],
     videos: []
@@ -40,6 +43,15 @@ const EditProduct = () => {
         price: product.price || 0,
         originalPrice: product.originalPrice || '',
         description: product.description || '',
+        dimensions: product.dimensions || '',
+        weight: product.weight || '',
+        specifications: (() => {
+          let specs = productAny.specifications;
+          if (typeof specs === 'string' && specs.startsWith('[')) {
+            try { specs = JSON.parse(specs); } catch (e) { /* ignore */ }
+          }
+          return Array.isArray(specs) ? specs.join('\n') : (specs || '');
+        })(),
         soldOut: productAny.soldOut || false,
         images: product.images || [],
         videos: productAny.videos || []
@@ -71,10 +83,16 @@ const EditProduct = () => {
       
       // Add form fields
       Object.keys(form).forEach(k => {
-        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'stock') {
+        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'stock' && k !== 'specifications') {
           fd.append(k, form[k]);
         }
       });
+      
+      // Handle specifications array
+      if (form.specifications) {
+        const specsArray = form.specifications.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        fd.append('specifications', JSON.stringify(specsArray));
+      }
       
       // Handle video files
       videoFiles.forEach((file) => {
@@ -246,6 +264,42 @@ const EditProduct = () => {
               rows={5}
               className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
               placeholder="Enter product description"
+            />
+          </div>
+
+          {/* New Fields: Dimensions & Weight */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Dimensions</label>
+              <input
+                type="text"
+                value={form.dimensions || ''}
+                onChange={e => setForm({ ...form, dimensions: e.target.value })}
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                placeholder="Length x Width x Height"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Weight</label>
+              <input
+                type="text"
+                value={form.weight || ''}
+                onChange={e => setForm({ ...form, weight: e.target.value })}
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                placeholder="e.g. 50g"
+              />
+            </div>
+          </div>
+
+          {/* Specifications */}
+          <div>
+            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Specifications (One per line)</label>
+            <textarea
+              value={form.specifications || ''}
+              onChange={e => setForm({ ...form, specifications: e.target.value })}
+              rows={4}
+              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+              placeholder="18k Gold Finish&#10;Waterproof&#10;Hypoallergenic"
             />
           </div>
 

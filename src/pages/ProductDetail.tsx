@@ -264,21 +264,48 @@ const ProductDetail = () => {
             </div>
 
             {/* Materials and Specifications */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-luxury-secondary/20 border border-gold-primary/20 p-5 rounded-2xl shadow-sm">
-                <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-3 uppercase">Materials</h4>
-                <ul className="text-sm text-text-secondary space-y-1.5 font-medium">
-                  <li>• Base Metal: Stainless Steel</li>
-                  <li>• Finish: 18k Gold PVD</li>
-                  <li>• Stone: Round-Cut Crystals</li>
-                </ul>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-luxury-secondary/10 border border-gold-primary/10 p-5 rounded-2xl shadow-sm">
+                <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-4 uppercase">Product Dimensions</h4>
+                <div className="text-sm text-text-secondary space-y-2 font-medium">
+                  <div className="flex justify-between border-b border-gold-primary/5 pb-2">
+                    <span className="opacity-60">Dimensions:</span>
+                    <span>{product.dimensions || 'Standard Size'}</span>
+                  </div>
+                  <div className="flex justify-between border-b border-gold-primary/5 pb-2">
+                    <span className="opacity-60">Weight:</span>
+                    <span>{product.weight || 'Lightweight'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="opacity-60">Material:</span>
+                    <span>Stainless Steel / 18k Gold</span>
+                  </div>
+                </div>
               </div>
-              <div className="bg-luxury-secondary/20 border border-gold-primary/20 p-5 rounded-2xl shadow-sm">
-                <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-3 uppercase">Specifications</h4>
-                <div className="text-sm text-text-secondary space-y-1.5 font-medium">
-                  <p>🌊 Waterproof</p>
-                  <p>🛡️ Anti-Tarnish</p>
-                  <p>🌿 Hypoallergenic</p>
+              <div className="bg-luxury-secondary/10 border border-gold-primary/10 p-5 rounded-2xl shadow-sm">
+                <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-4 uppercase">Specifications</h4>
+                <div className="text-sm text-text-secondary space-y-2 font-medium">
+                  {(() => {
+                    let specs = product.specifications;
+                    if (typeof specs === 'string' && (specs as string).startsWith('[')) {
+                      try { specs = JSON.parse(specs); } catch (e) { /* ignore */ }
+                    }
+                    if (Array.isArray(specs) && specs.length > 0) {
+                      return specs.map((spec: string, i: number) => (
+                        <p key={i} className="flex items-center gap-2">
+                          <span className="text-gold-primary text-[10px]">✦</span>
+                          {spec}
+                        </p>
+                      ));
+                    }
+                    return (
+                      <>
+                        <p className="flex items-center gap-2">🌊 Waterproof & Sweatproof</p>
+                        <p className="flex items-center gap-2">🛡️ High-Grade PVD Finish</p>
+                        <p className="flex items-center gap-2">🌿 Hypoallergenic Base</p>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             </div>

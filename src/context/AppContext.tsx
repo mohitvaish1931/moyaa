@@ -17,6 +17,7 @@ export interface Product {
   materials?: string[];
   dimensions?: string;
   weight?: string;
+  specifications?: string[];
   careInstructions?: string[];
   averageRating?: number;
   reviewCount?: number;

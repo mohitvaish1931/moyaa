@@ -83,6 +83,14 @@ const Admin = () => {
 
           // Add soldOut status
           fd.append('soldOut', String(soldOut));
+
+          // Parse specifications from raw text
+          const specsRaw = fd.get('specifications_raw')?.toString() || '';
+          if (specsRaw) {
+            const specsArray = specsRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+            fd.append('specifications', JSON.stringify(specsArray));
+          }
+          fd.delete('specifications_raw');
           
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
@@ -164,12 +172,47 @@ const Admin = () => {
             </div>
           </div>
           <div>
-            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Description</label>
+            <label htmlFor="product-description" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Description</label>
             <textarea
+              id="product-description"
               name="description"
               rows={4}
               className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
               placeholder="Enter product description"
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label htmlFor="product-dimensions" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Dimensions (e.g. 20cm x 15cm)</label>
+              <input
+                id="product-dimensions"
+                name="dimensions"
+                type="text"
+                autoComplete="off"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                placeholder="Length x Width x Height"
+              />
+            </div>
+            <div>
+              <label htmlFor="product-weight" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Weight (e.g. 50g)</label>
+              <input
+                id="product-weight"
+                name="weight"
+                type="text"
+                autoComplete="off"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                placeholder="50g"
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="product-specifications" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Specifications (One per line)</label>
+            <textarea
+              id="product-specifications"
+              name="specifications_raw"
+              rows={3}
+              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+              placeholder="Stainless Steel&#10;18k Gold Finish&#10;Hypoallergenic"
             />
           </div>
           <div>
@@ -376,6 +419,15 @@ const Admin = () => {
           price: editProduct.price || 0,
           originalPrice: editProduct.originalPrice || '',
           description: editProduct.description || '',
+          dimensions: editProduct.dimensions || '',
+          weight: editProduct.weight || '',
+          specifications: (() => {
+            let specs = editProduct.specifications;
+            if (typeof specs === 'string' && specs.startsWith('[')) {
+              try { specs = JSON.parse(specs); } catch (e) { /* ignore */ }
+            }
+            return Array.isArray(specs) ? specs.join('\n') : (specs || '');
+          })(),
           soldOut: editProduct.soldOut || false,
           images: editProduct.images || [],
           videos: editProduct.videos || []
@@ -407,8 +459,16 @@ const Admin = () => {
         const fd = new FormData();
         // include fields from form state
         Object.keys(localForm).forEach(k => {
-          if (localForm[k] !== undefined && localForm[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos') fd.append(k, localForm[k]);
+          if (localForm[k] !== undefined && localForm[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'specifications') {
+            fd.append(k, localForm[k]);
+          }
         });
+
+        // Handle specifications array
+        if (localForm.specifications) {
+          const specsArray = localForm.specifications.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          fd.append('specifications', JSON.stringify(specsArray));
+        }
         
         // Handle video files
         videoFiles.forEach((file) => {
@@ -521,6 +581,36 @@ const Admin = () => {
                 value={localForm?.description || ''}
                 onChange={e => setLocalForm({ ...localForm, description: e.target.value })}
                 placeholder="Description"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Dimensions</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.dimensions || ''}
+                  onChange={e => setLocalForm({ ...localForm, dimensions: e.target.value })}
+                  placeholder="e.g. 20cm x 15cm"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Weight</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.weight || ''}
+                  onChange={e => setLocalForm({ ...localForm, weight: e.target.value })}
+                  placeholder="e.g. 50g"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Specifications (One per line)</label>
+              <textarea
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                rows={3}
+                value={localForm?.specifications || ''}
+                onChange={e => setLocalForm({ ...localForm, specifications: e.target.value })}
+                placeholder="Stainless Steel&#10;18k Gold Finish"
               />
             </div>
             <div>
