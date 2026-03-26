@@ -10,7 +10,7 @@ interface CartProps {
 const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
   const { state, dispatch } = useAppContext();
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: string | number, quantity: number) => {
     if (quantity <= 0) {
       dispatch({ type: 'REMOVE_FROM_CART', payload: id });
     } else {
@@ -18,7 +18,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const removeFromCart = (id: number) => {
+  const removeFromCart = (id: string | number) => {
     dispatch({ type: 'REMOVE_FROM_CART', payload: id });
   };
 

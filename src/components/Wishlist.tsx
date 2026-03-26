@@ -10,7 +10,7 @@ interface WishlistProps {
 const Wishlist: React.FC<WishlistProps> = ({ isOpen, onClose }) => {
   const { state, dispatch } = useAppContext();
 
-  const removeFromWishlist = (id: number) => {
+  const removeFromWishlist = (id: string | number) => {
     dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: id });
   };
 

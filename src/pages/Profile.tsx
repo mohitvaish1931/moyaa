@@ -47,11 +47,11 @@ const Profile = () => {
     }
   };
 
-  const handleRemoveFromCart = (productId: number) => {
+  const handleRemoveFromCart = (productId: string | number) => {
     dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
   };
 
-  const handleRemoveFromWishlist = (productId: number) => {
+  const handleRemoveFromWishlist = (productId: string | number) => {
     dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: productId });
   };
 

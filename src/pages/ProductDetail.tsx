@@ -20,6 +20,8 @@ interface Product {
   images: string[];
   materials: string[];
   specifications: string[];
+  dimensions?: string;
+  weight?: string;
   stock: number;
   soldOut?: boolean;
 }
@@ -33,7 +35,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'description' | 'specifications' | 'materials'>('description');
+  const [activeTab, setActiveTab] = useState<'description' | 'specifications' | 'materials' | 'details'>('description');
 
 
 
@@ -255,8 +257,9 @@ const ProductDetail = () => {
             {/* Tabs */}
             <div className="mb-10">
               <div className="flex space-x-8 border-b border-gold-primary/10 mb-6 overflow-x-auto">
-                {['description', 'specifications', 'materials'].map((tab) => (
-                  (tab === 'description' || (product as any)[tab]?.length > 0) && (
+                {['description', 'details', 'specifications', 'materials'].map((tab) => (
+                  (tab === 'description' || 
+                   (tab === 'details' ? (product.dimensions || product.weight) : (product as any)[tab]?.length > 0)) && (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab as any)}
@@ -276,6 +279,29 @@ const ProductDetail = () => {
               <div className="prose prose-sm max-w-none text-text-secondary leading-relaxed">
                 {activeTab === 'description' && (
                    <p className="whitespace-pre-line font-medium leading-loose">{product.description}</p>
+                )}
+                
+                {activeTab === 'details' && (
+                  <div className="space-y-4">
+                    {product.dimensions && (
+                      <div className="flex items-start">
+                        <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
+                        <div className="flex flex-col">
+                           <span className="font-bold tracking-widest uppercase text-[10px] text-text-muted">Dimensions</span>
+                           <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary">{product.dimensions}</span>
+                        </div>
+                      </div>
+                    )}
+                    {product.weight && (
+                      <div className="flex items-start">
+                        <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
+                        <div className="flex flex-col">
+                           <span className="font-bold tracking-widest uppercase text-[10px] text-text-muted">Weight</span>
+                           <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary">{product.weight}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
                 
                 {activeTab === 'specifications' && (
