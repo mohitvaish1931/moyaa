@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
-import { products as seedProducts } from '../data/products';
-import { API_ENDPOINTS } from '../utils/api';
+import { products as seedProducts, Product as SeedProduct } from '../data/products';
+import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
 
 export interface Product {
   id: number;
@@ -154,7 +154,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     case 'REMOVE_COUPON':
       return { ...state, coupons: state.coupons.filter(c => c.code !== action.payload) };
     
-    case 'ADD_TO_CART': {
+    case 'ADD_TO_CART':
       const existingCartItem = state.cart.find(item => item.id === action.payload.id);
       if (existingCartItem) {
         return {
@@ -170,7 +170,6 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         ...state,
         cart: [...state.cart, { ...action.payload, quantity: 1 }],
       };
-    }
     
     case 'REMOVE_FROM_CART':
       return {

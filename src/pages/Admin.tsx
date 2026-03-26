@@ -31,7 +31,7 @@ const Admin = () => {
     const [error, setError] = useState('');
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = Array.from(e.target.files || []);
+      const files: File[] = Array.from(e.target.files || []);
       setImageFiles(files);
       const previews = files.map(file => URL.createObjectURL(file));
       setPreviewImages(previews);
@@ -506,7 +506,7 @@ const Admin = () => {
     }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = Array.from(e.target.files || []);
+      const files: File[] = Array.from(e.target.files || []);
       const previews = files.map(file => URL.createObjectURL(file));
       setPreviewImages(previews);
     };
