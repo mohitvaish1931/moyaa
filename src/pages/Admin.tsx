@@ -1027,6 +1027,7 @@ const Admin = () => {
             {[
               { id: 'dashboard', name: 'Dashboard' },
               { id: 'products', name: 'Products' },
+              { id: 'inventory', name: 'Inventory' },
               { id: 'content', name: 'Content' },
               { id: 'orders', name: 'Orders' },
               { id: 'customers', name: 'Customers' },
@@ -1115,6 +1116,81 @@ const Admin = () => {
                             }`}>
                             {order.status}
                           </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Inventory Tab */}
+        {activeTab === 'inventory' && (
+          <div className="space-y-8">
+            <div className="bg-white p-8 rounded-2xl border border-gold-primary/20 shadow-sm flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-1">Stock Inventory</h2>
+                <div className="w-12 h-1 bg-gold-primary rounded-full"></div>
+              </div>
+              <div className="flex items-center space-x-3 bg-luxury-secondary/10 px-4 py-2 rounded-xl border border-gold-primary/10">
+                <Package className="h-4 w-4 text-gold-primary" />
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">{state.products.length} Items Total</span>
+              </div>
+            </div>
+
+            <div className="bg-white border border-gold-primary/10 rounded-2xl overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gold-primary/5">
+                  <thead className="bg-[#FDFBF9]">
+                    <tr>
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Product</th>
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Category</th>
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest text-center">In Stock</th>
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Status</th>
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-sapphire-luxury/5 bg-white">
+                    {state.products.map((product, i) => (
+                      <tr key={(product as any)._id || product.id || i} className="hover:bg-luxury-secondary/5 transition-colors">
+                        <td className="px-8 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <img className="h-10 w-10 rounded-lg object-cover border border-gold-primary/30" src={product.image} alt={product.name} />
+                            <span className="ml-4 text-sm font-bold text-text-primary">{product.name}</span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-4 whitespace-nowrap text-xs text-text-primary/70 uppercase tracking-wider font-medium">
+                          {product.category}
+                        </td>
+                        <td className="px-8 py-4 whitespace-nowrap text-center">
+                          <span className={`text-lg font-black luxury-serif ${((product as any).stock || 0) <= 5 ? 'text-primary-red' : 'text-gold-primary'}`}>
+                            {(product as any).stock || 0}
+                          </span>
+                        </td>
+                        <td className="px-8 py-4 whitespace-nowrap">
+                          {((product as any).stock || 0) > 0 ? (
+                            <span className="inline-flex px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-emerald-luxury/10 text-emerald-luxury border border-emerald-luxury/20">
+                              Available
+                            </span>
+                          ) : (
+                            <span className="inline-flex px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-primary-wine/10 text-primary-wine border border-primary-wine/20">
+                              Out of Stock
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-8 py-4 whitespace-nowrap">
+                          <button
+                            onClick={() => {
+                              const productId = (product as any)._id || product.id;
+                              navigate(`/admin/edit-product/${productId}`);
+                            }}
+                            className="p-2 bg-luxury-secondary/10 rounded-lg hover:bg-gold-primary/20 text-gold-primary transition-all"
+                            title="Update Stock"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </button>
                         </td>
                       </tr>
                     ))}
