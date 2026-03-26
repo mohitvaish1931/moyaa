@@ -282,8 +282,13 @@ const ProductDetail = () => {
                         )}
                         <div className="space-y-1">
                           {product.dimensions.split('*').map((dim: string, i: number) => {
-                            const trimmed = dim.trim();
-                            if (!trimmed) return null;
+                            let trimmed = dim.trim();
+                            // Strip outer quotes from individual dimension parts
+                            if (trimmed.startsWith('"')) trimmed = trimmed.substring(1);
+                            if (trimmed.endsWith('"')) trimmed = trimmed.substring(0, trimmed.length - 1);
+                            trimmed = trimmed.trim();
+
+                            if (!trimmed || trimmed === '"') return null;
                             if (trimmed.toLowerCase() === 'dimensions:') return null;
                             return <p key={i} className="text-xs">{trimmed}</p>;
                           })}
@@ -312,15 +317,26 @@ const ProductDetail = () => {
                           }
                           
                           if (Array.isArray(result)) {
-                            // Flatten and filter non-empty strings
-                            return result.map(i => String(i).trim()).filter(i => i.length > 0);
+                            // Flatten and filter non-empty strings, and strip unwanted outer quotes
+                            return result.map(i => {
+                              let s = String(i).trim();
+                              // Strip leading/trailing quotes that might be left over
+                              if (s.startsWith('"') && s.endsWith('"')) s = s.substring(1, s.length - 1);
+                              return s.trim();
+                            }).filter(i => i.length > 0);
                           }
                           
                           if (typeof result === 'string' && result.length > 0) {
-                            return [result.trim()];
+                            let s = result.trim();
+                            if (s.startsWith('"') && s.endsWith('"')) s = s.substring(1, s.length - 1);
+                            return [s.trim()];
                           }
                         } catch (e) {
-                          if (typeof result === 'string') return [result.trim()];
+                          if (typeof result === 'string') {
+                            let s = result.trim();
+                            if (s.startsWith('"') && s.endsWith('"')) s = s.substring(1, s.length - 1);
+                            return [s.trim()];
+                          }
                         }
                         return Array.isArray(result) ? result : [];
                       };
@@ -331,7 +347,13 @@ const ProductDetail = () => {
                       const finalMats: string[] = [];
                       mats.forEach(m => {
                         if (m.includes('*')) {
-                          finalMats.push(...m.split('*').map(s => s.trim()).filter(s => s.length > 0));
+                          finalMats.push(...m.split('*').map(s => {
+                            let res = s.trim();
+                            // Clean up quotes from individual split items
+                            if (res.startsWith('"')) res = res.substring(1);
+                            if (res.endsWith('"')) res = res.substring(0, res.length - 1);
+                            return res.trim();
+                          }).filter(s => s.length > 0));
                         } else {
                           finalMats.push(m);
                         }
