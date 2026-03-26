@@ -21,7 +21,9 @@ const EditProduct = () => {
     specifications: '',
     soldOut: false,
     images: [],
-    videos: []
+    videos: [],
+    stock: 0,
+    sizes: ''
   });
   
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -62,7 +64,15 @@ const EditProduct = () => {
         })(),
         soldOut: productAny.soldOut || false,
         images: product.images || [],
-        videos: productAny.videos || []
+        videos: productAny.videos || [],
+        stock: productAny.stock || 0,
+        sizes: (() => {
+          let s = productAny.sizes;
+          if (typeof s === 'string' && s.startsWith('[')) {
+            try { s = JSON.parse(s); } catch (e) { /* ignore */ }
+          }
+          return Array.isArray(s) ? s.join(', ') : (s || '');
+        })()
       });
       setVideoUrls((productAny.videos && productAny.videos.length > 0) ? productAny.videos : ['', '']);
     }
@@ -108,6 +118,12 @@ const EditProduct = () => {
         fd.append('materials', JSON.stringify(matsArray));
       }
       
+      // Handle sizes array
+      if (form.sizes) {
+        const sizesArray = form.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        fd.append('sizes', JSON.stringify(sizesArray));
+      }
+
       // Handle video files
       videoFiles.forEach((file) => {
         fd.append('videos_file', file);
@@ -264,6 +280,26 @@ const EditProduct = () => {
                   onChange={e => setForm({ ...form, originalPrice: e.target.value })}
                   className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
                   placeholder="0"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Available Stock</label>
+                <input
+                  type="number"
+                  value={form.stock || 0}
+                  onChange={e => setForm({ ...form, stock: e.target.value })}
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  placeholder="0"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Sizes (Comma separated)</label>
+                <input
+                  type="text"
+                  value={form.sizes || ''}
+                  onChange={e => setForm({ ...form, sizes: e.target.value })}
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  placeholder="5, 6, 7"
                 />
               </div>
             </div>

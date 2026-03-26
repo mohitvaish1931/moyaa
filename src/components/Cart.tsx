@@ -64,6 +64,9 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                   />
                   <div className="flex-1">
                     <h3 className="font-medium text-platinum">{item.name}</h3>
+                    {item.selectedSize && (
+                      <p className="text-xs text-gold-primary italic mb-1">Size: {item.selectedSize}</p>
+                    )}
                     <p className="text-gold-primary font-bold">Rs. {item.price.toLocaleString()}.00</p>
                   </div>
                   <div className="flex items-center space-x-2">

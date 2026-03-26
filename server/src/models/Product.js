@@ -14,7 +14,10 @@ const ProductSchema = new mongoose.Schema({
   materials: [String],
   dimensions: String,
   weight: String,
-  careInstructions: [String]
+  careInstructions: [String],
+  specifications: [String],
+  stock: { type: Number, default: 0 },
+  sizes: [String]
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', ProductSchema);

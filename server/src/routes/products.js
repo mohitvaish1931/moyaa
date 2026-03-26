@@ -104,6 +104,18 @@ router.post('/', upload.array('image', 10), async (req, res) => {
       }
     }
 
+    // Parse array fields if they are sent as JSON strings
+    ['materials', 'specifications', 'sizes'].forEach(field => {
+      if (typeof body[field] === 'string') {
+        try {
+          const parsed = JSON.parse(body[field]);
+          body[field] = Array.isArray(parsed) ? parsed : [body[field]];
+        } catch (e) {
+          // Keep as string or handle error - here we keep it as is
+        }
+      }
+    });
+
     const p = new Product(body);
     await p.save();
     res.status(201).json(normalizeProductMedia(req, p));
@@ -136,6 +148,18 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
         body.images = body.images.map((img) => normalizeUploadUrl(req, img));
       }
     }
+
+    // Parse array fields if they are sent as JSON strings
+    ['materials', 'specifications', 'sizes'].forEach(field => {
+      if (typeof body[field] === 'string') {
+        try {
+          const parsed = JSON.parse(body[field]);
+          body[field] = Array.isArray(parsed) ? parsed : [body[field]];
+        } catch (e) {
+          // Keep as is
+        }
+      }
+    });
 
     const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });

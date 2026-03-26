@@ -13,6 +13,7 @@ const ProductDetail = () => {
   const { state, dispatch } = useAppContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
   const [apiProduct, setApiProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -118,8 +119,12 @@ const ProductDetail = () => {
   };
 
   const addToCart = () => {
+    if (product.category.toLowerCase() === 'rings' && (product as any).sizes?.length > 0 && !selectedSize) {
+      alert('Please select a ring size first');
+      return;
+    }
     for (let i = 0; i < quantity; i++) {
-      dispatch({ type: 'ADD_TO_CART', payload: product });
+      dispatch({ type: 'ADD_TO_CART', payload: { ...product, selectedSize } });
     }
   };
 
@@ -254,7 +259,7 @@ const ProductDetail = () => {
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-3">Key Features</h3>
               <ul className="space-y-2">
-                {['Waterproof & Sweatproof', 'Hypoallergenic & Skin-safe', 'Anti-tarnish & Long-lasting', '18k Gold PVD Finish'].map((feature: string, index: number) => (
+                {['Waterproof & Sweatproof', 'Hypoallergenic & Skin-safe', 'Anti-tarnish & Long-lasting', '18k Gold PVD Finish', '1 Year Warranty'].map((feature: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-gold-primary">✨</span>
                     <span className="text-gray-700">{feature}</span>
@@ -271,9 +276,18 @@ const ProductDetail = () => {
                   <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-4 uppercase">Product Dimensions</h4>
                   <div className="text-sm text-text-secondary space-y-2 font-medium">
                     {product.dimensions && (
-                      <div className="flex justify-between border-b border-gold-primary/5 pb-2">
-                        <span className="opacity-60">Dimensions:</span>
-                        <span>{product.dimensions}</span>
+                      <div className="border-b border-gold-primary/5 pb-2">
+                        {(!product.dimensions.toLowerCase().includes('dimensions:')) && (
+                          <span className="opacity-60 block mb-1">Dimensions:</span>
+                        )}
+                        <div className="space-y-1">
+                          {product.dimensions.split('*').map((dim: string, i: number) => {
+                            const trimmed = dim.trim();
+                            if (!trimmed) return null;
+                            if (trimmed.toLowerCase() === 'dimensions:') return null;
+                            return <p key={i} className="text-xs">{trimmed}</p>;
+                          })}
+                        </div>
                       </div>
                     )}
                     {product.weight && (
@@ -284,15 +298,21 @@ const ProductDetail = () => {
                     )}
                     {(() => {
                       let mats = product.materials as any;
-                      if (typeof (mats as any) === 'string' && (mats as any).startsWith('[')) {
-                        try { mats = JSON.parse(mats); } catch (e) { /* ignore */ }
-                      }
-                      if (Array.isArray(mats) && (mats as any).length > 0) {
+                      // Handle double stringification
+                      try {
+                        if (typeof mats === 'string') mats = JSON.parse(mats);
+                        if (typeof mats === 'string') mats = JSON.parse(mats);
+                        if (Array.isArray(mats) && mats.length === 1 && typeof mats[0] === 'string' && mats[0].startsWith('[')) {
+                          mats = JSON.parse(mats[0]);
+                        }
+                      } catch (e) { /* ignore */ }
+
+                      if (Array.isArray(mats) && mats.length > 0) {
                         return (
-                          <div className="flex justify-between">
-                            <span className="opacity-60">Materials:</span>
-                            <div className="text-right">
-                              {mats.map((m: any, i: any) => <p key={i}>{m}</p>)}
+                          <div className="pt-2">
+                            <span className="opacity-60 block mb-1">Materials:</span>
+                            <div className="space-y-1">
+                              {mats.map((m: any, i: any) => <p key={i} className="text-xs italic">{m}</p>)}
                             </div>
                           </div>
                         );
@@ -306,10 +326,12 @@ const ProductDetail = () => {
               {/* Specifications Card */}
               {(() => {
                 let specs = product.specifications as any;
-                if (typeof (specs as any) === 'string' && (specs as any).startsWith('[')) {
-                  try { specs = JSON.parse(specs); } catch (e) { /* ignore */ }
-                }
-                if (Array.isArray(specs) && (specs as any).length > 0) {
+                try {
+                  if (typeof specs === 'string') specs = JSON.parse(specs);
+                  if (typeof specs === 'string') specs = JSON.parse(specs);
+                } catch (e) { /* ignore */ }
+                
+                if (Array.isArray(specs) && specs.length > 0) {
                   return (
                     <div className="bg-luxury-secondary/10 border border-gold-primary/10 p-5 rounded-2xl shadow-sm">
                       <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-4 uppercase">Specifications</h4>
@@ -330,23 +352,67 @@ const ProductDetail = () => {
 
             {/* Quantity and Actions */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <label className="text-sm font-medium text-gray-900">Quantity:</label>
-                <div className="flex items-center border border-gray-300 bg-white rounded-lg">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-3 py-2 text-gray-900 hover:text-gold-primary transition-colors"
-                  >
-                    -
-                  </button>
-                  <span className="px-4 py-2 border-x border-gray-300 text-gray-900">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="px-3 py-2 text-gray-900 hover:text-gold-primary transition-colors"
-                  >
-                    +
-                  </button>
+              {/* Ring Size Selection */}
+              {product.category.toLowerCase() === 'rings' && (product as any).sizes && (
+                <div className="flex flex-col space-y-2">
+                  <label className="text-sm font-medium text-gray-900">Choose Ring Size:</label>
+                  <div className="flex flex-wrap gap-2">
+                    {(() => {
+                      let s = (product as any).sizes;
+                      if (typeof s === 'string' && s.startsWith('[')) {
+                        try { s = JSON.parse(s); } catch (e) { /* ignore */ }
+                      }
+                      if (Array.isArray(s)) {
+                        return s.map((size: string, idx: number) => (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedSize(size)}
+                            className={`px-4 py-2 border rounded-lg transition-all text-sm font-medium ${
+                              selectedSize === size
+                                ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold'
+                                : 'border-gold-primary/30 text-gray-700 hover:border-gold-primary/60'
+                            }`}
+                          >
+                            {size}
+                          </button>
+                        ));
+                      }
+                      return null;
+                    })()}
+                  </div>
                 </div>
+              )}
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <label className="text-sm font-medium text-gray-900">Quantity:</label>
+                  <div className="flex items-center border border-gray-300 bg-white rounded-lg">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="px-3 py-2 text-gray-900 hover:text-gold-primary transition-colors"
+                    >
+                      -
+                    </button>
+                    <span className="px-4 py-2 border-x border-gray-300 text-gray-900">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="px-3 py-2 text-gray-900 hover:text-gold-primary transition-colors"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Stock Info */}
+                {(product as any).stock !== undefined && (
+                  <div className="text-sm font-medium">
+                    {(product as any).stock > 0 ? (
+                      <span className="text-teal-600">In Stock ({(product as any).stock} available)</span>
+                    ) : (
+                      <span className="text-primary-wine">Out of Stock</span>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Add to Cart & Wishlist */}

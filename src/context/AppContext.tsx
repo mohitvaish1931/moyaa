@@ -9,6 +9,7 @@ export interface Product {
   originalPrice?: number;
   image: string;
   images?: string[];
+  videos?: string[];
   sale?: boolean;
   soldOut?: boolean;
   category: string;
@@ -21,6 +22,9 @@ export interface Product {
   careInstructions?: string[];
   averageRating?: number;
   reviewCount?: number;
+  stock?: number;
+  sizes?: string[];
+  selectedSize?: string;
 }
 
 export interface Video {

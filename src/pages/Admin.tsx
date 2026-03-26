@@ -99,6 +99,14 @@ const Admin = () => {
             fd.append('materials', JSON.stringify(matsArray));
           }
           fd.delete('materials_raw');
+
+          // Handle sizes
+          const sizesRaw = fd.get('sizes_raw')?.toString() || '';
+          if (sizesRaw) {
+            const sizesArray = sizesRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            fd.append('sizes', JSON.stringify(sizesArray));
+          }
+          fd.delete('sizes_raw');
           
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
@@ -176,6 +184,27 @@ const Admin = () => {
                 autoComplete="off"
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="0"
+              />
+            </div>
+            <div>
+              <label htmlFor="product-stock" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Available Stock</label>
+              <input
+                id="product-stock"
+                name="stock"
+                type="number"
+                defaultValue={1}
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                placeholder="Number of items in stock"
+              />
+            </div>
+            <div>
+              <label htmlFor="product-sizes" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Sizes (For rings, comma separated)</label>
+              <input
+                id="product-sizes"
+                name="sizes_raw"
+                type="text"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                placeholder="5, 6, 7, 8, 9"
               />
             </div>
           </div>
@@ -455,7 +484,15 @@ const Admin = () => {
           })(),
           soldOut: editProduct.soldOut || false,
           images: editProduct.images || [],
-          videos: editProduct.videos || []
+          videos: editProduct.videos || [],
+          stock: editProduct.stock || 0,
+          sizes: (() => {
+            let s = editProduct.sizes;
+            if (typeof s === 'string' && s.startsWith('[')) {
+              try { s = JSON.parse(s); } catch (e) { /* ignore */ }
+            }
+            return Array.isArray(s) ? s.join(', ') : (s || '');
+          })()
         });
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
       } else {
@@ -501,6 +538,12 @@ const Admin = () => {
           fd.append('materials', JSON.stringify(matsArray));
         }
         
+        // Handle sizes array
+        if (localForm.sizes) {
+          const sizesArray = localForm.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          fd.append('sizes', JSON.stringify(sizesArray));
+        }
+
         // Handle video files
         videoFiles.forEach((file) => {
           fd.append('videos_file', file);
@@ -601,6 +644,25 @@ const Admin = () => {
                   value={localForm?.originalPrice || ''}
                   onChange={e => setLocalForm({ ...localForm, originalPrice: e.target.value })}
                   placeholder="Original price"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Stock</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
+                  type="number"
+                  value={localForm?.stock || 0}
+                  onChange={e => setLocalForm({ ...localForm, stock: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Sizes (Comma separated)</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
+                  type="text"
+                  value={localForm?.sizes || ''}
+                  onChange={e => setLocalForm({ ...localForm, sizes: e.target.value })}
+                  placeholder="5, 6, 7"
                 />
               </div>
             </div>
