@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from 'lucide-react';
 
@@ -10,7 +9,7 @@ const Footer = () => {
           {/* Brand section */}
           <div className="md:col-span-1 space-y-8">
             <Link to="/" className="inline-block transform hover:scale-105 transition-transform duration-300">
-              <img src="/logo.jpeg" alt="Logo" className="h-20 w-auto filter drop-shadow-md" />
+              <img src="/logo.png" alt="Logo" className="h-20 w-auto filter drop-shadow-md" />
             </Link>
             <p className="text-text-secondary text-sm leading-relaxed font-light italic">
               Crafting timeless legacies since 2026. Our masterpieces are a celebration of deep passion and enduring gold.

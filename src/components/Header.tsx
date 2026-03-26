@@ -52,7 +52,7 @@ const Header = () => {
             <div className="flex items-center gap-12 lg:gap-20">
               <Link to="/" className="flex items-center transition-transform hover:scale-105 flex-shrink-0">
                 <img 
-                  src="/logo.jpeg" 
+                  src="/logo.png" 
                   alt="Logo" 
                   className="h-16 sm:h-20 lg:h-24 w-auto object-contain brightness-110" 
                 />
