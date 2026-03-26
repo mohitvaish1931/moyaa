@@ -22,7 +22,7 @@ const Rings = () => {
   const aggregateSchema = generateAggregateOfferSchema(
     'Premium Luxury Rings Collection - MORAA JEWELS',
     'Shop our exclusive collection of luxury rings. Elegant gold and silver rings for every occasion.',
-    'https://moraajewles.com/logo.jpeg',
+    'https://moraajewles.com/logo.png',
     minPrice,
     maxPrice,
     products.length,

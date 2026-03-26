@@ -23,7 +23,7 @@ const HandChains = () => {
   const aggregateSchema = generateAggregateOfferSchema(
     'Premium Hand Chains Collection - MORAA JEWELS',
     'Shop our exclusive collection of premium hand chains. Elegant and sophisticated designs to elevate your style.',
-    'https://moraajewles.com/logo.jpeg',
+    'https://moraajewles.com/logo.png',
     minPrice,
     maxPrice,
     products.length,
