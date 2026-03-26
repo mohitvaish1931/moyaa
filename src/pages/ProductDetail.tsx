@@ -297,22 +297,57 @@ const ProductDetail = () => {
                       </div>
                     )}
                     {(() => {
-                      let mats = product.materials as any;
-                      // Handle double stringification
-                      try {
-                        if (typeof mats === 'string') mats = JSON.parse(mats);
-                        if (typeof mats === 'string') mats = JSON.parse(mats);
-                        if (Array.isArray(mats) && mats.length === 1 && typeof mats[0] === 'string' && mats[0].startsWith('[')) {
-                          mats = JSON.parse(mats[0]);
+                      const parseJSONItems = (input: any): string[] => {
+                        if (!input) return [];
+                        let result = input;
+                        try {
+                          // Aggressively parse recursively if it's a string that looks like JSON
+                          while (typeof result === 'string' && (result.trim().startsWith('[') || result.trim().startsWith('{'))) {
+                            result = JSON.parse(result);
+                          }
+                          
+                          // If it's an array with one element that is also a JSON string, parse that too
+                          if (Array.isArray(result) && result.length === 1 && typeof result[0] === 'string' && result[0].trim().startsWith('[')) {
+                            return parseJSONItems(result[0]);
+                          }
+                          
+                          if (Array.isArray(result)) {
+                            // Flatten and filter non-empty strings
+                            return result.map(i => String(i).trim()).filter(i => i.length > 0);
+                          }
+                          
+                          if (typeof result === 'string' && result.length > 0) {
+                            return [result.trim()];
+                          }
+                        } catch (e) {
+                          if (typeof result === 'string') return [result.trim()];
                         }
-                      } catch (e) { /* ignore */ }
+                        return Array.isArray(result) ? result : [];
+                      };
 
-                      if (Array.isArray(mats) && mats.length > 0) {
+                      const mats = parseJSONItems(product.materials);
+                      
+                      // Handle cases where materials might be a single string with * separators
+                      const finalMats: string[] = [];
+                      mats.forEach(m => {
+                        if (m.includes('*')) {
+                          finalMats.push(...m.split('*').map(s => s.trim()).filter(s => s.length > 0));
+                        } else {
+                          finalMats.push(m);
+                        }
+                      });
+
+                      if (finalMats.length > 0) {
                         return (
                           <div className="pt-2">
-                            <span className="opacity-60 block mb-1">Materials:</span>
-                            <div className="space-y-1">
-                              {mats.map((m: any, i: any) => <p key={i} className="text-xs italic">{m}</p>)}
+                            <span className="opacity-60 block mb-2 font-semibold text-[10px] uppercase tracking-wider">Materials & Details:</span>
+                            <div className="space-y-1.5 ml-1">
+                              {finalMats.map((m: string, i: number) => (
+                                <p key={i} className="text-xs text-text-primary flex items-start gap-2">
+                                  <span className="text-gold-primary mt-0.5">•</span>
+                                  <span>{m.replace(/^\*/, '').trim()}</span>
+                                </p>
+                              ))}
                             </div>
                           </div>
                         );
@@ -325,21 +360,32 @@ const ProductDetail = () => {
 
               {/* Specifications Card */}
               {(() => {
-                let specs = product.specifications as any;
-                try {
-                  if (typeof specs === 'string') specs = JSON.parse(specs);
-                  if (typeof specs === 'string') specs = JSON.parse(specs);
-                } catch (e) { /* ignore */ }
-                
-                if (Array.isArray(specs) && specs.length > 0) {
+                const parseJSONItems = (input: any): string[] => {
+                  if (!input) return [];
+                  let result = input;
+                  try {
+                    while (typeof result === 'string' && (result.trim().startsWith('[') || result.trim().startsWith('{'))) {
+                      result = JSON.parse(result);
+                    }
+                    if (Array.isArray(result) && result.length === 1 && typeof result[0] === 'string' && result[0].trim().startsWith('[')) {
+                      return parseJSONItems(result[0]);
+                    }
+                    return Array.isArray(result) ? result.map(i => String(i).trim()) : (typeof result === 'string' ? [result] : []);
+                  } catch (e) {
+                    return typeof result === 'string' ? [result] : [];
+                  }
+                };
+
+                const specs = parseJSONItems(product.specifications);
+                if (specs.length > 0 && specs[0]) {
                   return (
                     <div className="bg-luxury-secondary/10 border border-gold-primary/10 p-5 rounded-2xl shadow-sm">
                       <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-4 uppercase">Specifications</h4>
                       <div className="text-sm text-text-secondary space-y-2 font-medium">
                         {specs.map((spec: string, i: number) => (
-                          <p key={i} className="flex items-center gap-2">
-                            <span className="text-gold-primary text-[10px]">✦</span>
-                            {spec}
+                          <p key={i} className="flex items-start gap-2">
+                            <span className="text-gold-primary text-[10px] mt-1">✦</span>
+                            <span className="text-xs">{spec.replace(/^\*/, '').trim()}</span>
                           </p>
                         ))}
                       </div>
