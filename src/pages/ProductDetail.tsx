@@ -426,12 +426,31 @@ const ProductDetail = () => {
                   <label className="text-sm font-medium text-gray-900">Choose Ring Size:</label>
                   <div className="flex flex-wrap gap-2">
                     {(() => {
-                      let s = (product as any).sizes;
-                      if (typeof s === 'string' && s.startsWith('[')) {
-                        try { s = JSON.parse(s); } catch (e) { /* ignore */ }
-                      }
-                      if (Array.isArray(s)) {
-                        return s.map((size: string, idx: number) => (
+                      const parseSizesList = (raw: any): string[] => {
+                        if (!raw) return [];
+                        if (Array.isArray(raw)) {
+                          // If it's an array, flatten and recursively parse each item
+                          return raw.flatMap(item => parseSizesList(item));
+                        }
+                        if (typeof raw === 'string') {
+                          // If it looks like JSON array, parse it
+                          if (raw.trim().startsWith('[') && raw.trim().endsWith(']')) {
+                            try {
+                              return parseSizesList(JSON.parse(raw));
+                            } catch (e) {
+                              // If parse fails, treat as normal string
+                            }
+                          }
+                          // Split by comma and clean up
+                          return raw.split(',').map(s => s.trim()).filter(s => s && s !== 'null' && s !== 'undefined');
+                        }
+                        return [String(raw)];
+                      };
+
+                      const allSizes = [...new Set(parseSizesList((product as any).sizes))];
+                      
+                      if (allSizes.length > 0) {
+                        return allSizes.map((size: string, idx: number) => (
                           <button
                             key={idx}
                             onClick={() => setSelectedSize(size)}
