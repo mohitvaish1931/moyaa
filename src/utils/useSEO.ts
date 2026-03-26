@@ -104,5 +104,5 @@ export const useSEO = (props: SEOProps) => {
     
     // Scroll to top on component mount
     window.scrollTo(0, 0);
-  }, [props.title, props.description, props.image, props.url, props.type, props.keywords, props.author, props.structuredData]);
+  }, [props.title, props.description, props.image, props.url, props.type, props.keywords, props.author, JSON.stringify(props.structuredData)]);
 };

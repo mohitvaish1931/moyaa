@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { useSEO } from '../utils/useSEO';
 import { generateBreadcrumbSchema } from '../utils/schemaGenerator';
+import { getImageUrl } from '../utils/mediaHelper';
 
 const AllProducts = () => {
   const { state, dispatch } = useAppContext();
@@ -130,7 +131,7 @@ const AllProducts = () => {
                   const isInWishlist = state.wishlist.find(item => item.id === product.id);
                   
                   return (
-                    <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id || index} className="group">
+                    <Link to={`/product/${(product as any)._id || product.id}`} key={(product as any)._id || product.id || `p-${index}`} className="group">
                       <div className="relative overflow-hidden rounded-2xl bg-gray-50 border border-gold-primary/20 aspect-square mb-5 shadow-sm group-hover:shadow-xl transition-all duration-500">
                         {product.sale && (
                           <div className="absolute top-4 left-4 bg-primary-red text-white px-3 py-1 text-[10px] font-bold rounded z-10 shadow-lg tracking-widest">
@@ -149,7 +150,7 @@ const AllProducts = () => {
                           }`} />
                         </button>
                         <img
-                          src={product.image}
+                          src={getImageUrl(product.image)}
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />

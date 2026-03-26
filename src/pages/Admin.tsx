@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, TrendingUp } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
+import { getImageUrl } from '../utils/mediaHelper';
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -1171,7 +1172,7 @@ const Admin = () => {
                       <tr key={(product as any)._id || product.id || i} className="hover:bg-luxury-secondary/5 transition-colors">
                         <td className="px-8 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <img className="h-10 w-10 rounded-lg object-cover border border-gold-primary/30" src={product.image} alt={product.name} />
+                            <img className="h-10 w-10 rounded-lg object-cover border border-gold-primary/30" src={getImageUrl(product.image)} alt={product.name} />
                             <span className="ml-4 text-sm font-bold text-text-primary">{product.name}</span>
                           </div>
                         </td>
@@ -1263,7 +1264,7 @@ const Admin = () => {
                           <div className="flex items-center">
                             <img
                               className="h-10 w-10 rounded-lg object-cover border border-gold-primary"
-                              src={product.image}
+                              src={getImageUrl(product.image)}
                               alt={product.name}
                             />
                             <div className="ml-4">

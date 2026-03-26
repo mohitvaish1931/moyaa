@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import AnnouncementBanner from './AnnouncementBanner';
+import { getImageUrl } from '../utils/mediaHelper';
 
 const NewArrivals = () => {
   const { state, dispatch } = useAppContext();
@@ -76,7 +77,7 @@ const NewArrivals = () => {
 
                       {/* Product image */}
                       <img
-                        src={product.image}
+                        src={getImageUrl(product.image)}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />

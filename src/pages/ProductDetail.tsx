@@ -103,7 +103,7 @@ const ProductDetail = () => {
       const fetchProduct = async () => {
         try {
           setLoading(true);
-          const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PRODUCTS}/${id}`);
+          const response = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
           if (!response.ok) throw new Error('Product not found');
           const data = await response.json();
           setProduct(data);
