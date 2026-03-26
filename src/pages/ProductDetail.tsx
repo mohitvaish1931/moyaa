@@ -1,42 +1,114 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ShoppingBag, Heart, ChevronLeft, ChevronRight, Star, Truck, Shield, RotateCcw, PlayCircle } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
 import { useSEO } from '../utils/useSEO';
 import { generateProductSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
-import { getImageUrl, handleImageError, handleVideoError } from '../utils/mediaHelper';
-import { API_ENDPOINTS } from '../utils/api';
 import ProductReviews from '../components/ProductReviews';
+import { getImageUrl, handleImageError, handleVideoError } from '../utils/mediaHelper';
+
+interface Product {
+  id: string | number;
+  _id?: string;
+  name: string;
+  price: number;
+  originalPrice: number;
+  description: string;
+  category: string;
+  image: string;
+  images: string[];
+  materials: string[];
+  specifications: string[];
+  stock: number;
+  soldOut?: boolean;
+}
 
 const ProductDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { state, dispatch } = useAppContext();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
-  const [apiProduct, setApiProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'description' | 'specifications' | 'materials'>('description');
 
-  // First try to find in state
-  let product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
 
-  // If not in state and we have an API product, use that
-  if (!product && apiProduct) {
-    product = apiProduct;
-  }
 
-  // Fetch product from API if not found in state
+  // Define parsing logic outside render
+  const parseSizesList = (raw: any): string[] => {
+    if (!raw) return [];
+    let items: any[] = [];
+    if (Array.isArray(raw)) {
+      items = raw;
+    } else if (typeof raw === 'string') {
+      const trimmed = raw.trim();
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try { items = JSON.parse(trimmed); } catch (e) { items = trimmed.split(','); }
+      } else { items = trimmed.split(','); }
+    } else { items = [raw]; }
+    
+    const result: string[] = [];
+    items.forEach(item => {
+      if (!item) return;
+      if (typeof item === 'string') {
+        const trimmedItem = item.trim();
+        if (trimmedItem.startsWith('[') && trimmedItem.endsWith(']')) {
+          try { 
+            const parsed = JSON.parse(trimmedItem);
+            if (Array.isArray(parsed)) {
+              parsed.forEach(p => {
+                if (typeof p === 'string') result.push(...p.split(',').map(s => s.trim()).filter(Boolean));
+                else result.push(String(p));
+              });
+            } else {
+              result.push(String(parsed));
+            }
+          } catch (e) { 
+            result.push(...trimmedItem.split(',').map(s => s.trim()).filter(Boolean));
+          }
+        } else {
+          result.push(...trimmedItem.split(',').map(s => s.trim()).filter(Boolean));
+        }
+      } else {
+        result.push(String(item));
+      }
+    });
+    return [...new Set(result.filter(s => s && s !== 'null' && s !== 'undefined'))];
+  };
+
+  const allSizes = product ? parseSizesList((product as any).sizes) : [];
+
+  // Hook for SEO - must be top level
+  useSEO({
+    title: product ? `${product.name} - Premium ${product.category} | MORAA JEWELS` : 'Product Detail - MORAA JEWELS',
+    description: product ? (product.description || `Buy ${product.name} from MORAA JEWELS.`) : 'Discover our exquisite luxury jewelry collection.',
+    keywords: product ? `${product.name}, ${product.category}, luxury jewelry` : 'luxury jewelry, premium pieces',
+    image: product ? ((product.images && product.images.length > 0 ? product.images[0] : product.image) || 'https://moraajewles.com/logo.png') : 'https://moraajewles.com/logo.png',
+    url: product ? `https://moraajewles.com/product/${id}` : 'https://moraajewles.com',
+    type: 'product',
+  });
+
+  // Hook for size selection - must be top level
   useEffect(() => {
-    if (!product && id) {
+    if (allSizes.length > 0 && !selectedSize) {
+      setSelectedSize(allSizes[0]);
+    }
+  }, [allSizes, selectedSize]);
+
+  useEffect(() => {
+    if (id) {
       const fetchProduct = async () => {
         try {
-          const response = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
-          if (response.ok) {
-            const data = await response.json();
-            setApiProduct(data);
-          }
+          setLoading(true);
+          const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PRODUCTS}/${id}`);
+          if (!response.ok) throw new Error('Product not found');
+          const data = await response.json();
+          setProduct(data);
         } catch (err) {
-          console.error('Failed to fetch product:', err);
+          console.error('Fetch error:', err);
         } finally {
           setLoading(false);
         }
@@ -45,43 +117,31 @@ const ProductDetail = () => {
     } else {
       setLoading(false);
     }
-  }, [id, product]);
+  }, [id]);
 
-  // Update SEO after product is loaded
-  if (product) {
-    const productImage = (product.images && product.images.length > 0) ? product.images[0] : product.image || 'https://moraajewles.com/logo.png';
-    const productSchema = generateProductSchema({
-      name: product.name,
-      description: product.description || `Premium ${product.category} from MORAA JEWELS`,
-      image: product.images || [productImage],
-      price: product.price || product.originalPrice || 0,
-      priceCurrency: 'INR',
-      availability: product.soldOut ? 'OutOfStock' : 'InStock',
-      category: product.category,
-      url: `https://moraajewles.com/product/${id}`,
-      brand: 'MORAA JEWELS'
+  const addToCart = () => {
+    if (!product) return;
+    dispatch({
+      type: 'ADD_TO_CART',
+      payload: { ...product, quantity, selectedSize: product.category.toLowerCase() === 'rings' ? selectedSize : undefined }
     });
+    // Visual feedback could be added here
+  };
 
-    const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', url: 'https://moraajewles.com' },
-      { name: 'Products', url: 'https://moraajewles.com/products' },
-      { name: product.category, url: `https://moraajewles.com/${product.category.toLowerCase()}` },
-      { name: product.name, url: `https://moraajewles.com/product/${id}` }
-    ]);
+  const toggleWishlist = () => {
+    if (!product) return;
+    const isInWishlist = state.wishlist.some((item: any) => (item._id || item.id) === (product._id || product.id));
+    if (isInWishlist) {
+      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: product._id || product.id });
+    } else {
+      dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
+    }
+  };
 
-    useSEO({
-      title: `${product.name} - Premium ${product.category} | MORAA JEWELS`,
-      description: product.description || `Buy ${product.name} from MORAA JEWELS. Premium ${product.category} with finest craftsmanship. Original price: ${product.originalPrice ? `₹${product.originalPrice}` : 'Contact for price'}`,
-      keywords: `${product.name}, ${product.category}, luxury jewelry, premium jewelry, buy ${product.category.toLowerCase()}`,
-      image: productImage,
-      url: `https://moraajewles.com/product/${id}`,
-      type: 'product',
-      structuredData: {
-        '@context': 'https://schema.org',
-        '@graph': [productSchema, breadcrumbSchema]
-      }
-    });
-  }
+  const handleVideoError = (e: any) => {
+    console.warn('Video failed to load:', e);
+    e.target.style.display = 'none';
+  };
 
   if (loading) {
     return (
@@ -98,407 +158,176 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
-          <Link to="/products" className="text-brand hover:text-brand-hover">
-            Back to Products
-          </Link>
+          <h2 className="text-2xl font-bold text-gray-900">Product Not Found</h2>
+          <button
+            onClick={() => navigate('/products')}
+            className="mt-4 text-gold-primary hover:text-gold-dark font-medium"
+          >
+            ← Back to Categories
+          </button>
         </div>
       </div>
     );
   }
 
-  const isInWishlist = state.wishlist.find(item => item.id === product.id || (item as any)._id === (product as any)._id);
-  const images = (product.images && product.images.length > 0) ? product.images : (product.image ? [product.image] : ['https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=600']);
-
-  const toggleWishlist = () => {
-    if (isInWishlist) {
-      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: product.id });
-    } else {
-      dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
-    }
-  };
-
-  const addToCart = () => {
-    if (product.category.toLowerCase() === 'rings' && (product as any).sizes?.length > 0 && !selectedSize) {
-      alert('Please select a ring size first');
-      return;
-    }
-    for (let i = 0; i < quantity; i++) {
-      dispatch({ type: 'ADD_TO_CART', payload: { ...product, selectedSize } });
-    }
-  };
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
+  const isInWishlist = state.wishlist.some((item: any) => (item._id || item.id) === (product._id || product.id));
+  const productImages = product.images && product.images.length > 0 ? product.images : [product.image];
 
   return (
-    <div className="min-h-screen bg-[#FDFBF9]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb */}
-        <nav className="mb-8">
-          <ol className="flex items-center space-x-2 text-sm text-gray-700">
-            <li><Link to="/" className="hover:text-gold-primary transition-colors">Home</Link></li>
-            <li>/</li>
-            <li><Link to="/products" className="hover:text-gold-primary transition-colors">Products</Link></li>
-            <li>/</li>
-            <li><Link to={`/${product.category}`} className="hover:text-gold-primary transition-colors capitalize">{product.category}</Link></li>
-            <li>/</li>
-            <li className="text-gray-600">{product.name}</li>
-          </ol>
-        </nav>
+    <div className="min-h-screen bg-luxury-cream/30 pt-24 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb & Navigation */}
+        <div className="mb-8 flex items-center justify-between">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center text-text-muted hover:text-gold-primary transition-colors font-medium tracking-widest text-xs"
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            BACK
+          </button>
+          <div className="hidden sm:flex items-center space-x-2 text-xs font-bold tracking-[0.2em] text-text-muted">
+            <span className="hover:text-gold-primary cursor-pointer" onClick={() => navigate('/')}>HOME</span>
+            <span>/</span>
+            <span className="hover:text-gold-primary cursor-pointer uppercase" onClick={() => navigate('/products')}>{product.category}</span>
+            <span>/</span>
+            <span className="text-gold-primary truncate max-w-[150px] uppercase">{product.name}</span>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Images */}
-          <div className="space-y-4">
-            {/* Main Image */}
-            <div className="relative aspect-square bg-luxury-secondary/10 border border-gold-primary/20 rounded-2xl overflow-hidden shadow-sm">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20">
+          {/* Image Gallery */}
+          <div className="space-y-6">
+            <div className="relative aspect-[4/5] bg-white rounded-3xl overflow-hidden shadow-2xl border border-gold-primary/10 group">
               <img
-                src={getImageUrl(images[currentImageIndex])}
+                src={getImageUrl(productImages[selectedImage])}
                 alt={product.name}
-                className="w-full h-full object-cover"
-                onError={handleImageError}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              {images.length > 1 && (
-                <>
-                  <button
-                    onClick={prevImage}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 border border-gold-primary/30 hover:shadow-lg rounded-full p-2 shadow-md transition-all"
-                  >
-                    <ChevronLeft className="h-5 w-5 text-gray-900" />
-                  </button>
-                  <button
-                    onClick={nextImage}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 border border-gold-primary/30 hover:shadow-lg rounded-full p-2 shadow-md transition-all"
-                  >
-                    <ChevronRight className="h-5 w-5 text-gray-900" />
-                  </button>
-                </>
-              )}
-              {/* Sale Badge */}
-              {product.sale && (
-                <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-gold-soft text-luxury-dark px-3 py-1 text-sm font-medium rounded shadow-md">
-                  Sale
-                </div>
-              )}
-              {/* Sold Out Badge */}
               {product.soldOut && (
-                <div className="absolute top-4 right-4 bg-primary-wine text-white px-3 py-1 text-sm font-medium rounded shadow-md">
-                  Sold Out
+                <div className="absolute inset-0 bg-luxury-dark/40 backdrop-blur-[2px] flex items-center justify-center">
+                  <span className="bg-ruby-luxury text-white px-8 py-3 rounded-full font-bold tracking-[0.3em] shadow-2xl animate-pulse">
+                    SOLD OUT
+                  </span>
                 </div>
               )}
             </div>
-
-            {/* Thumbnail Images */}
-            {images.length > 1 && (
-              <div className="flex space-x-2">
-                {images.map((image, index) => (
+            
+            {productImages.length > 1 && (
+              <div className="grid grid-cols-4 gap-4">
+                {productImages.map((img, idx) => (
                   <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                      currentImageIndex === index ? 'border-gold-primary shadow-sm' : 'border-gold-primary/10'
+                    key={idx}
+                    onClick={() => setSelectedImage(idx)}
+                    className={`relative aspect-[4/5] rounded-xl overflow-hidden border-2 transition-all ${
+                      selectedImage === idx ? 'border-gold-primary shadow-glow-gold' : 'border-transparent hover:border-gold-primary/30'
                     }`}
                   >
-                    <img
-                      src={getImageUrl(image)}
-                      alt={`${product.name} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      onError={handleImageError}
-                    />
+                    <img src={getImageUrl(img)} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Product Information */}
-          <div className="space-y-6">
-            {/* Title and Rating */}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`h-4 w-4 ${i < Math.round(product.averageRating || 0) ? 'fill-gold-primary text-gold-primary' : 'text-gray-300'}`} />
-                  ))}
-                </div>
-                <span className="text-sm text-gray-600">
-                  {product.averageRating ? `${product.averageRating}` : 'No ratings'} ({product.reviewCount || 0} review{product.reviewCount !== 1 ? 's' : ''})
-                </span>
+          {/* Product Info */}
+          <div className="flex flex-col">
+            <div className="mb-8">
+              <span className="inline-block text-[10px] font-bold tracking-[0.3em] text-gold-primary uppercase mb-3 px-3 py-1 bg-gold-primary/5 rounded-full border border-gold-primary/10">
+                {product.category}
+              </span>
+              <h1 className="text-3xl sm:text-4xl font-bold text-text-primary luxury-serif tracking-tight leading-tight mb-4 uppercase">
+                {product.name}
+              </h1>
+              
+              <div className="flex items-baseline space-x-4 mb-6">
+                <span className="text-3xl font-bold text-ruby-luxury luxury-serif">₹{product.price}</span>
+                {product.originalPrice > product.price && (
+                  <span className="text-lg text-text-muted line-through">₹{product.originalPrice}</span>
+                )}
+                {product.originalPrice > product.price && (
+                  <span className="text-xs font-bold text-teal-600 tracking-widest bg-teal-50 px-2 py-1 rounded">
+                    {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Tabs */}
+            <div className="mb-10">
+              <div className="flex space-x-8 border-b border-gold-primary/10 mb-6 overflow-x-auto">
+                {['description', 'specifications', 'materials'].map((tab) => (
+                  (tab === 'description' || (product as any)[tab]?.length > 0) && (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab as any)}
+                      className={`pb-4 text-xs font-bold tracking-[0.3em] uppercase transition-all relative ${
+                        activeTab === tab ? 'text-gold-primary' : 'text-text-muted hover:text-text-primary'
+                      }`}
+                    >
+                      {tab}
+                      {activeTab === tab && (
+                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gold-primary animate-width-in" />
+                      )}
+                    </button>
+                  )
+                ))}
               </div>
               
-              <div className="flex items-center space-x-4 mb-6">
-                <span className="text-3xl font-bold text-gold-primary">
-                  Rs. {product.price.toLocaleString()}.00
-                </span>
-                {product.originalPrice && (
-                  <span className="text-xl text-gray-500 line-through">
-                    Rs. {product.originalPrice.toLocaleString()}.00
-                  </span>
+              <div className="prose prose-sm max-w-none text-text-secondary leading-relaxed">
+                {activeTab === 'description' && (
+                   <p className="whitespace-pre-line font-medium leading-loose">{product.description}</p>
                 )}
-                {product.sale && (
-                  <span className="bg-primary-wine text-white px-2 py-1 rounded text-sm font-medium">
-                    Save {Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)}%
-                  </span>
+                
+                {activeTab === 'specifications' && (
+                  <ul className="space-y-4">
+                    {(product as any).specifications?.map((spec: string, idx: number) => (
+                      <li key={idx} className="flex items-start">
+                        <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
+                        <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary">{spec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {activeTab === 'materials' && (
+                  <ul className="space-y-4">
+                    {(product as any).materials?.map((material: string, idx: number) => (
+                      <li key={idx} className="flex items-start">
+                        <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
+                        <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary">{material}</span>
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
-            </div>
-
-            {/* Description */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Description</h3>
-              <p className="text-gray-700 leading-relaxed">{product.description || 'This exquisite piece from our collection showcases premium craftsmanship and elegant design. Perfect for everyday wear or special occasions.'}</p>
-            </div>
-
-            {/* Key Features */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Key Features</h3>
-              <ul className="space-y-2">
-                {['Waterproof & Sweatproof', 'Hypoallergenic & Skin-safe', 'Anti-tarnish & Long-lasting', '18k Gold PVD Finish', '1 Year Warranty'].map((feature: string, index: number) => (
-                  <li key={index} className="flex items-center space-x-2">
-                    <span className="text-gold-primary">✨</span>
-                    <span className="text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Materials and Specifications */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Dimensions Card */}
-              {(product.dimensions || product.weight) && (
-                <div className="bg-luxury-secondary/10 border border-gold-primary/10 p-5 rounded-2xl shadow-sm">
-                  <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-4 uppercase">Product Dimensions</h4>
-                  <div className="text-sm text-text-secondary space-y-2 font-medium">
-                    {product.dimensions && (
-                      <div className="border-b border-gold-primary/5 pb-2">
-                        {(!product.dimensions.toLowerCase().includes('dimensions:')) && (
-                          <span className="opacity-60 block mb-1">Dimensions:</span>
-                        )}
-                        <div className="space-y-1">
-                          {product.dimensions.split('*').map((dim: string, i: number) => {
-                            let trimmed = dim.trim();
-                            // Strip outer quotes from individual dimension parts
-                            if (trimmed.startsWith('"')) trimmed = trimmed.substring(1);
-                            if (trimmed.endsWith('"')) trimmed = trimmed.substring(0, trimmed.length - 1);
-                            trimmed = trimmed.trim();
-
-                            if (!trimmed || trimmed === '"') return null;
-                            if (trimmed.toLowerCase() === 'dimensions:') return null;
-                            return <p key={i} className="text-xs">{trimmed}</p>;
-                          })}
-                        </div>
-                      </div>
-                    )}
-                    {product.weight && (
-                      <div className="flex justify-between border-b border-gold-primary/5 pb-2">
-                        <span className="opacity-60">Weight:</span>
-                        <span>{product.weight}</span>
-                      </div>
-                    )}
-                    {(() => {
-                      const parseJSONItems = (input: any): string[] => {
-                        if (!input) return [];
-                        let result = input;
-                        try {
-                          // Aggressively parse recursively if it's a string that looks like JSON
-                          while (typeof result === 'string' && (result.trim().startsWith('[') || result.trim().startsWith('{'))) {
-                            result = JSON.parse(result);
-                          }
-                          
-                          // If it's an array with one element that is also a JSON string, parse that too
-                          if (Array.isArray(result) && result.length === 1 && typeof result[0] === 'string' && result[0].trim().startsWith('[')) {
-                            return parseJSONItems(result[0]);
-                          }
-                          
-                          if (Array.isArray(result)) {
-                            // Flatten and filter non-empty strings, and strip unwanted outer quotes
-                            return result.map(i => {
-                              let s = String(i).trim();
-                              // Strip leading/trailing quotes that might be left over
-                              if (s.startsWith('"') && s.endsWith('"')) s = s.substring(1, s.length - 1);
-                              return s.trim();
-                            }).filter(i => i.length > 0);
-                          }
-                          
-                          if (typeof result === 'string' && result.length > 0) {
-                            let s = result.trim();
-                            if (s.startsWith('"') && s.endsWith('"')) s = s.substring(1, s.length - 1);
-                            return [s.trim()];
-                          }
-                        } catch (e) {
-                          if (typeof result === 'string') {
-                            let s = result.trim();
-                            if (s.startsWith('"') && s.endsWith('"')) s = s.substring(1, s.length - 1);
-                            return [s.trim()];
-                          }
-                        }
-                        return Array.isArray(result) ? result : [];
-                      };
-
-                      const mats = parseJSONItems(product.materials);
-                      
-                      // Handle cases where materials might be a single string with * separators
-                      const finalMats: string[] = [];
-                      mats.forEach(m => {
-                        if (m.includes('*')) {
-                          finalMats.push(...m.split('*').map(s => {
-                            let res = s.trim();
-                            // Clean up quotes from individual split items
-                            if (res.startsWith('"')) res = res.substring(1);
-                            if (res.endsWith('"')) res = res.substring(0, res.length - 1);
-                            return res.trim();
-                          }).filter(s => s.length > 0));
-                        } else {
-                          finalMats.push(m);
-                        }
-                      });
-
-                      if (finalMats.length > 0) {
-                        return (
-                          <div className="pt-2">
-                            <span className="opacity-60 block mb-2 font-semibold text-[10px] uppercase tracking-wider">Materials & Details:</span>
-                            <div className="space-y-1.5 ml-1">
-                              {finalMats.map((m: string, i: number) => (
-                                <p key={i} className="text-xs text-text-primary flex items-start gap-2">
-                                  <span className="text-gold-primary mt-0.5">•</span>
-                                  <span>{m.replace(/^\*/, '').trim()}</span>
-                                </p>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      }
-                      return null;
-                    })()}
-                  </div>
-                </div>
-              )}
-
-              {/* Specifications Card */}
-              {(() => {
-                const parseJSONItems = (input: any): string[] => {
-                  if (!input) return [];
-                  let result = input;
-                  try {
-                    while (typeof result === 'string' && (result.trim().startsWith('[') || result.trim().startsWith('{'))) {
-                      result = JSON.parse(result);
-                    }
-                    if (Array.isArray(result) && result.length === 1 && typeof result[0] === 'string' && result[0].trim().startsWith('[')) {
-                      return parseJSONItems(result[0]);
-                    }
-                    return Array.isArray(result) ? result.map(i => String(i).trim()) : (typeof result === 'string' ? [result] : []);
-                  } catch (e) {
-                    return typeof result === 'string' ? [result] : [];
-                  }
-                };
-
-                const specs = parseJSONItems(product.specifications);
-                if (specs.length > 0 && specs[0]) {
-                  return (
-                    <div className="bg-luxury-secondary/10 border border-gold-primary/10 p-5 rounded-2xl shadow-sm">
-                      <h4 className="font-bold text-text-primary luxury-serif tracking-widest text-xs mb-4 uppercase">Specifications</h4>
-                      <div className="text-sm text-text-secondary space-y-2 font-medium">
-                        {specs.map((spec: string, i: number) => (
-                          <p key={i} className="flex items-start gap-2">
-                            <span className="text-gold-primary text-[10px] mt-1">✦</span>
-                            <span className="text-xs">{spec.replace(/^\*/, '').trim()}</span>
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                }
-                return null;
-              })()}
             </div>
 
             {/* Quantity and Actions */}
             <div className="space-y-4">
               {/* Ring Size Selection */}
-              {product.category.toLowerCase() === 'rings' && (product as any).sizes && (
+              {product.category.toLowerCase() === 'rings' && (
                 <div className="flex flex-col space-y-2">
                   <label className="text-sm font-medium text-gray-900">Choose Ring Size:</label>
                   <div className="flex flex-wrap gap-2">
-                    {(() => {
-                      const parseSizesList = (raw: any): string[] => {
-                        if (!raw) return [];
-                        
-                        // Handle potential double-encoded JSON or weird stringified arrays
-                        let items: any[] = [];
-                        if (Array.isArray(raw)) {
-                          items = raw;
-                        } else if (typeof raw === 'string') {
-                          const trimmed = raw.trim();
-                          if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-                            try {
-                              items = JSON.parse(trimmed);
-                            } catch (e) {
-                              items = trimmed.split(',');
-                            }
-                          } else {
-                            items = trimmed.split(',');
-                          }
-                        } else {
-                          items = [raw];
-                        }
-                        
-                        // Deeply parse each item and flatMap
-                        return items.flatMap(item => {
-                          if (!item) return [];
-                          if (typeof item === 'string') {
-                            const trimmedItem = item.trim();
-                            // If item itself looks like a JSON array, parse it
-                            if (trimmedItem.startsWith('[') && trimmedItem.endsWith(']')) {
-                              try {
-                                return parseSizesList(JSON.parse(trimmedItem));
-                              } catch (e) {
-                                // fall through to comma split
-                              }
-                            }
-                            return trimmedItem.split(',').map(s => s.trim()).filter(s => s && s !== 'null' && s !== 'undefined');
-                          }
-                          return [String(item)];
-                        });
-                      };
-
-                      const allSizes = [...new Set(parseSizesList((product as any).sizes))];
-                      
-                      // Auto-select first size if none selected
-                      useEffect(() => {
-                        if (allSizes.length > 0 && !selectedSize) {
-                          setSelectedSize(allSizes[0]);
-                        }
-                      }, [allSizes, selectedSize]);
-
-                      if (allSizes.length > 0) {
-                        return (
-                          <div className="flex flex-wrap gap-2 pt-1">
-                            {allSizes.map((size: string, idx: number) => (
-                              <button
-                                key={idx}
-                                onClick={() => setSelectedSize(size)}
-                                className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest ${
-                                  selectedSize === size
-                                    ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105'
-                                    : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary'
-                                }`}
-                              >
-                                {size}
-                              </button>
-                            ))}
-                          </div>
-                        );
-                      }
-                      return (
-                         <p className="text-[10px] text-text-muted italic">Standard Ring Size</p>
-                      );
-                    })()}
+                    {allSizes.length > 0 ? (
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {allSizes.map((size: string, idx: number) => (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedSize(size)}
+                            className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest ${
+                              selectedSize === size
+                                ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105'
+                                : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary'
+                            }`}
+                          >
+                            {size}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[10px] text-text-muted italic">Standard Ring Size</p>
+                    )}
                   </div>
                 </div>
               )}
@@ -522,18 +351,21 @@ const ProductDetail = () => {
                     </button>
                   </div>
                 </div>
-                
-                {/* Stock Info removed from customer view as per request */}
               </div>
 
               {/* Add to Cart & Wishlist */}
               <div className="flex space-x-4">
                 <button
                   onClick={addToCart}
-                  className="flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-all btn-premium-gold text-luxury-dark hover:shadow-glow-gold"
+                  disabled={product.soldOut}
+                  className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-all ${
+                    product.soldOut 
+                      ? 'bg-gray-300 cursor-not-allowed text-gray-500' 
+                      : 'btn-premium-gold text-luxury-dark hover:shadow-glow-gold'
+                  }`}
                 >
                   <ShoppingBag className="h-5 w-5" />
-                  <span>Add to Cart</span>
+                  <span>{product.soldOut ? 'Sold Out' : 'Add to Cart'}</span>
                 </button>
                 <button
                   onClick={toggleWishlist}
@@ -547,43 +379,34 @@ const ProductDetail = () => {
             </div>
 
             {/* Service Features */}
-            <div className="border-t border-gold-primary/10 pt-8">
+            <div className="border-t border-gold-primary/10 pt-8 mt-8">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {/* Free Shipping */}
                 <div className="flex items-center space-x-3 bg-luxury-secondary/20 border border-gold-primary/10 p-4 rounded-xl">
-                  <div className="p-2 bg-gold-primary/10 rounded-full">
-                    <Truck className="h-5 w-5 text-gold-primary" />
-                  </div>
+                  <Truck className="h-5 w-5 text-gold-primary" />
                   <div>
-                    <p className="text-xs font-bold text-text-primary tracking-widest">FREE SHIPPING</p>
-                    <p className="text-[10px] text-text-secondary uppercase font-medium">On orders over ₹1000</p>
+                    <p className="text-[9px] font-bold text-text-primary tracking-widest uppercase">FREE SHIPPING</p>
+                    <p className="text-[8px] text-text-secondary uppercase">Orders over ₹1000</p>
                   </div>
                 </div>
-                {/* Secure Payment */}
                 <div className="flex items-center space-x-3 bg-luxury-secondary/20 border border-gold-primary/10 p-4 rounded-xl">
-                  <div className="p-2 bg-gold-primary/10 rounded-full">
-                    <Shield className="h-5 w-5 text-gold-primary" />
-                  </div>
+                  <Shield className="h-5 w-5 text-gold-primary" />
                   <div>
-                    <p className="text-xs font-bold text-text-primary tracking-widest">SECURE PAYMENT</p>
-                    <p className="text-[10px] text-text-secondary uppercase font-medium">100% secure checkout</p>
+                    <p className="text-[9px] font-bold text-text-primary tracking-widest uppercase">SECURE PAYMENT</p>
+                    <p className="text-[8px] text-text-secondary uppercase">100% encryption</p>
                   </div>
                 </div>
-                {/* Easy Returns */}
                 <div className="flex items-center space-x-3 bg-luxury-secondary/20 border border-gold-primary/10 p-4 rounded-xl">
-                  <div className="p-2 bg-ruby-luxury/10 rounded-full">
-                    <RotateCcw className="h-5 w-5 text-primary-red" />
-                  </div>
+                  <RotateCcw className="h-5 w-5 text-primary-red" />
                   <div>
-                    <p className="text-xs font-bold text-text-primary tracking-widest">EASY RETURNS</p>
-                    <p className="text-[10px] text-text-secondary uppercase font-medium">30-day return policy</p>
+                    <p className="text-[9px] font-bold text-text-primary tracking-widest uppercase">EASY RETURNS</p>
+                    <p className="text-[8px] text-text-secondary uppercase">30-day policy</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Care Instructions */}
-            <div className="border-t border-gold-primary/10 pt-8">
+            <div className="border-t border-gold-primary/10 pt-8 mt-8">
               <h3 className="text-sm font-bold text-text-primary luxury-serif tracking-[0.2em] mb-4 uppercase">Care Instructions</h3>
               <div className="bg-luxury-secondary/10 border border-gold-primary/10 p-6 rounded-2xl">
                 <ul className="space-y-3">
@@ -599,8 +422,8 @@ const ProductDetail = () => {
 
             {/* Product Videos */}
             {(product as any).videos && (product as any).videos.length > 0 && (
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Product Videos</h3>
+              <div className="border-t border-gray-200 pt-8 mt-8">
+                <h3 className="text-[11px] font-bold text-text-primary luxury-serif tracking-[0.2em] mb-4 uppercase">Product Videos</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {(product as any).videos.map((video: string, idx: number) => {
                     if (!video) return null;

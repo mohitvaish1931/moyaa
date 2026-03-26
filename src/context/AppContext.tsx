@@ -3,7 +3,7 @@ import { products as seedProducts, Product as SeedProduct } from '../data/produc
 import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
 
 export interface Product {
-  id: number;
+  id: string | number;
   name: string;
   price: number;
   originalPrice?: number;
@@ -25,6 +25,7 @@ export interface Product {
   stock?: number;
   sizes?: string[];
   selectedSize?: string;
+  quantity?: number;
 }
 
 export interface Video {
@@ -43,7 +44,7 @@ export interface Coupon {
   code: string;
   discountPercent: number;
   active: boolean;
-  productId?: number | null;
+  productId?: string | number | null;
   expiresAt?: string | null;
   usageLimit?: number | null;
   used?: number;
@@ -80,7 +81,7 @@ type AppAction =
   | { type: 'SET_PRODUCTS'; payload: Product[] }
   | { type: 'ADD_PRODUCT'; payload: Product }
   | { type: 'UPDATE_PRODUCT'; payload: Product }
-  | { type: 'REMOVE_PRODUCT'; payload: number }
+  | { type: 'REMOVE_PRODUCT'; payload: string | number }
   | { type: 'SET_VIDEOS'; payload: Video[] }
   | { type: 'ADD_VIDEO'; payload: Video }
   | { type: 'REMOVE_VIDEO'; payload: string }
@@ -93,11 +94,11 @@ type AppAction =
   | { type: 'UPDATE_COUPON'; payload: Coupon }
   | { type: 'REMOVE_COUPON'; payload: string }
   | { type: 'ADD_TO_CART'; payload: Product }
-  | { type: 'REMOVE_FROM_CART'; payload: number }
-  | { type: 'UPDATE_CART_QUANTITY'; payload: { id: number; quantity: number } }
+  | { type: 'REMOVE_FROM_CART'; payload: string | number }
+  | { type: 'UPDATE_CART_QUANTITY'; payload: { id: string | number; quantity: number } }
   | { type: 'CLEAR_CART' }
   | { type: 'ADD_TO_WISHLIST'; payload: Product }
-  | { type: 'REMOVE_FROM_WISHLIST'; payload: number }
+  | { type: 'REMOVE_FROM_WISHLIST'; payload: string | number }
   | { type: 'TOGGLE_SIGNIN'; payload?: boolean }
   | { type: 'SET_SEARCH_QUERY'; payload: string }
   | { type: 'SET_SEARCH_RESULTS'; payload: Product[] }
