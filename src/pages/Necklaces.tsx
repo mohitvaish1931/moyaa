@@ -19,7 +19,7 @@ const Necklaces = () => {
   const aggregateSchema = generateAggregateOfferSchema(
     'Premium Necklaces Collection - MORAA JEWELS',
     'Browse our exquisite collection of premium necklaces. Find elegant designs with timeless appeal and finest craftsmanship.',
-    'https://moraajewles.com/logo.png',
+    'https://moraajewles.com/logo.jpeg',
     minPrice,
     maxPrice,
     necklaces.length,

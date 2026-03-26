@@ -23,7 +23,7 @@ const Sets = () => {
   const aggregateSchema = generateAggregateOfferSchema(
     'Premium Jewelry Sets Collection - MORAA JEWELS',
     'Shop our exclusive collection of luxury jewelry sets. Perfectly matched earrings, necklaces and bracelets.',
-    'https://moraajewles.com/logo.png',
+    'https://moraajewles.com/logo.jpeg',
     minPrice,
     maxPrice,
     products.length,

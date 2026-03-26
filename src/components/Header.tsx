@@ -52,7 +52,7 @@ const Header = () => {
             <div className="flex items-center gap-12 lg:gap-20">
               <Link to="/" className="flex items-center transition-transform hover:scale-105 flex-shrink-0">
                 <img 
-                  src="/logo.png" 
+                  src="/logo.jpeg" 
                   alt="Logo" 
                   className="h-16 sm:h-20 lg:h-24 w-auto object-contain brightness-110" 
                 />
@@ -157,7 +157,7 @@ const Header = () => {
         <div className="fixed inset-0 z-[100] bg-text-primary/60 backdrop-blur-md animate-fade-in lg:hidden">
           <div className="absolute top-0 left-0 h-full w-80 bg-luxury-dark shadow-2xl border-r border-gold-primary/20 p-8 flex flex-col">
             <div className="flex items-center justify-between mb-12">
-              <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
+              <img src="/logo.jpeg" alt="Logo" className="h-10 w-auto" />
               <button onClick={() => setIsSidebarOpen(false)} className="p-2 text-text-primary hover:text-primary-red transition-colors">
                 <X className="w-6 h-6" />
               </button>

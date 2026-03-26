@@ -49,7 +49,7 @@ const ProductDetail = () => {
 
   // Update SEO after product is loaded
   if (product) {
-    const productImage = (product.images && product.images.length > 0) ? product.images[0] : product.image || 'https://moraajewles.com/logo.png';
+    const productImage = (product.images && product.images.length > 0) ? product.images[0] : product.image || 'https://moraajewles.com/logo.jpeg';
     const productSchema = generateProductSchema({
       name: product.name,
       description: product.description || `Premium ${product.category} from MORAA JEWELS`,

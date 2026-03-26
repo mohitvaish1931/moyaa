@@ -8,7 +8,7 @@ export const SEO_CONFIG = {
   siteName: 'MORAA JEWELS',
   siteUrl: 'https://moraajewles.com',
   siteDescription: 'Premium luxury jewelry collection with exquisite earrings, necklaces, bracelets and more',
-  siteLogo: 'https://moraajewles.com/logo.png',
+  siteLogo: 'https://moraajewles.com/logo.jpeg',
   
   // Business Information
   business: {

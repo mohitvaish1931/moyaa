@@ -17,7 +17,7 @@ const Profile = () => {
     title: 'My Profile - MORAA Jewelry',
     description: 'Manage your profile, view orders, cart and wishlist',
     keywords: 'profile, orders, wishlist, cart',
-    image: 'https://moraajewles.com/logo.png',
+    image: 'https://moraajewles.com/logo.jpeg',
     url: 'https://moraajewles.com/profile',
     type: 'website'
   });

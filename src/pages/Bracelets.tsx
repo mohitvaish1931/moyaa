@@ -19,7 +19,7 @@ const Bracelets = () => {
   const aggregateSchema = generateAggregateOfferSchema(
     'Premium Bracelets Collection - MORAA JEWELS',
     'Discover our stunning collection of premium bracelets. Elegant designs crafted with finest materials for timeless sophistication.',
-    'https://moraajewles.com/logo.png',
+    'https://moraajewles.com/logo.jpeg',
     minPrice,
     maxPrice,
     bracelets.length,

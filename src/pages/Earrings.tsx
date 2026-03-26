@@ -19,7 +19,7 @@ const Earrings = () => {
   const aggregateSchema = generateAggregateOfferSchema(
     'Premium Earrings Collection - MORAA JEWELS',
     'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles.',
-    'https://moraajewles.com/logo.png',
+    'https://moraajewles.com/logo.jpeg',
     minPrice,
     maxPrice,
     earrings.length,
