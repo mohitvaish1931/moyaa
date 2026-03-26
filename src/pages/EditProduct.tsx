@@ -101,7 +101,7 @@ const EditProduct = () => {
       
       // Add form fields
       Object.keys(form).forEach(k => {
-        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'stock' && k !== 'specifications' && k !== 'materials') {
+        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'specifications' && k !== 'materials') {
           fd.append(k, form[k]);
         }
       });
@@ -285,11 +285,18 @@ const EditProduct = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Available Stock</label>
                 <input
-                  type="number"
-                  value={form.stock || 0}
-                  onChange={e => setForm({ ...form, stock: e.target.value })}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={form.stock === 0 ? '0' : (form.stock || '')}
+                  onChange={e => {
+                    const val = e.target.value;
+                    if (val === '' || /^\d+$/.test(val)) {
+                      setForm({ ...form, stock: val === '' ? '' : parseInt(val, 10) });
+                    }
+                  }}
                   className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
-                  placeholder="0"
+                  placeholder="Enter stock quantity"
                 />
               </div>
               <div>

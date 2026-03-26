@@ -191,10 +191,11 @@ const Admin = () => {
               <input
                 id="product-stock"
                 name="stock"
-                type="number"
-                defaultValue={1}
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
-                placeholder="Number of items in stock"
+                placeholder="Enter stock quantity"
               />
             </div>
             <div>
@@ -650,9 +651,17 @@ const Admin = () => {
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Stock</label>
                 <input
                   className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
-                  type="number"
-                  value={localForm?.stock || 0}
-                  onChange={e => setLocalForm({ ...localForm, stock: e.target.value })}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={localForm?.stock === 0 ? '0' : (localForm?.stock || '')}
+                  onChange={e => {
+                    const val = e.target.value;
+                    if (val === '' || /^\d+$/.test(val)) {
+                      setLocalForm({ ...localForm, stock: val === '' ? '' : parseInt(val, 10) });
+                    }
+                  }}
+                  placeholder="Enter stock quantity"
                 />
               </div>
               <div>
