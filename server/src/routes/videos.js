@@ -32,7 +32,7 @@ router.post('/', upload.single('file'), async (req, res) => {
   try {
     const body = { ...(req.body || {}) };
     if (req.file) {
-      body.url = req.file.secure_url;
+      body.url = req.file.secure_url || req.file.url || req.file.path;
       body.title = body.title || req.file.originalname;
     }
     const v = new Video(body);

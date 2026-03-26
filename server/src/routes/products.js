@@ -44,10 +44,12 @@ router.post('/', upload.array('image', 10), async (req, res) => {
     const files = req.files || [];
 
     if (files.length > 0) {
-      // Files uploaded to Cloudinary - req.files[i].secure_url contains the Cloudinary URL
-      const urls = files.map((f) => f.secure_url);
+      // Files uploaded to Cloudinary - extract URL from cloudinary response
+      console.log('Uploaded files:', JSON.stringify(files[0], null, 2));
+      const urls = files.map((f) => f.secure_url || f.url || f.path);
       body.image = urls[0];
       body.images = urls;
+      console.log('Image URLs:', urls);
     } else {
       // Handle direct Cloudinary URLs if provided in the body
       if (typeof body.images === 'string') {
@@ -87,8 +89,8 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
     const files = req.files || [];
 
     if (files.length > 0) {
-      // Files uploaded to Cloudinary
-      const urls = files.map((f) => f.secure_url);
+      // Files uploaded to Cloudinary - extract URL from cloudinary response
+      const urls = files.map((f) => f.secure_url || f.url || f.path);
       body.image = urls[0];
       body.images = urls;
     } else {
