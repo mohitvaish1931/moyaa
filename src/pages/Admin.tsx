@@ -541,7 +541,12 @@ const Admin = () => {
         
         // Handle sizes array
         if (localForm.sizes) {
-          const sizesArray = localForm.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          let sizesArray: string[] = [];
+          if (Array.isArray(localForm.sizes)) {
+            sizesArray = localForm.sizes;
+          } else if (typeof localForm.sizes === 'string') {
+            sizesArray = localForm.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          }
           fd.append('sizes', JSON.stringify(sizesArray));
         }
 

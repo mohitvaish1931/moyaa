@@ -101,28 +101,47 @@ const EditProduct = () => {
       
       // Add form fields
       Object.keys(form).forEach(k => {
-        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'specifications' && k !== 'materials') {
+        if (form[k] !== undefined && form[k] !== null && 
+            k !== 'images' && k !== 'image' && k !== 'videos' && 
+            k !== 'specifications' && k !== 'materials' && k !== 'sizes') {
           fd.append(k, form[k]);
         }
       });
       
       // Handle specifications array
       if (form.specifications) {
-        const specsArray = form.specifications.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        let specsArray = [];
+        if (Array.isArray(form.specifications)) {
+          specsArray = form.specifications;
+        } else if (typeof form.specifications === 'string') {
+          specsArray = form.specifications.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        }
         fd.append('specifications', JSON.stringify(specsArray));
       }
 
       // Handle materials array
       if (form.materials) {
-        const matsArray = form.materials.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        let matsArray = [];
+        if (Array.isArray(form.materials)) {
+          matsArray = form.materials;
+        } else if (typeof form.materials === 'string') {
+          matsArray = form.materials.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        }
         fd.append('materials', JSON.stringify(matsArray));
       }
-      
+
       // Handle sizes array
       if (form.sizes) {
-        const sizesArray = form.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        let sizesArray = [];
+        if (Array.isArray(form.sizes)) {
+          sizesArray = form.sizes;
+        } else if (typeof form.sizes === 'string') {
+          sizesArray = form.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        }
         fd.append('sizes', JSON.stringify(sizesArray));
       }
+      
+
 
       // Handle video files
       videoFiles.forEach((file) => {

@@ -428,43 +428,76 @@ const ProductDetail = () => {
                     {(() => {
                       const parseSizesList = (raw: any): string[] => {
                         if (!raw) return [];
+                        
+                        // Handle potential double-encoded JSON or weird stringified arrays
+                        let items: any[] = [];
                         if (Array.isArray(raw)) {
-                          // If it's an array, flatten and recursively parse each item
-                          return raw.flatMap(item => parseSizesList(item));
-                        }
-                        if (typeof raw === 'string') {
-                          // If it looks like JSON array, parse it
-                          if (raw.trim().startsWith('[') && raw.trim().endsWith(']')) {
+                          items = raw;
+                        } else if (typeof raw === 'string') {
+                          const trimmed = raw.trim();
+                          if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
                             try {
-                              return parseSizesList(JSON.parse(raw));
+                              items = JSON.parse(trimmed);
                             } catch (e) {
-                              // If parse fails, treat as normal string
+                              items = trimmed.split(',');
                             }
+                          } else {
+                            items = trimmed.split(',');
                           }
-                          // Split by comma and clean up
-                          return raw.split(',').map(s => s.trim()).filter(s => s && s !== 'null' && s !== 'undefined');
+                        } else {
+                          items = [raw];
                         }
-                        return [String(raw)];
+                        
+                        // Deeply parse each item and flatMap
+                        return items.flatMap(item => {
+                          if (!item) return [];
+                          if (typeof item === 'string') {
+                            const trimmedItem = item.trim();
+                            // If item itself looks like a JSON array, parse it
+                            if (trimmedItem.startsWith('[') && trimmedItem.endsWith(']')) {
+                              try {
+                                return parseSizesList(JSON.parse(trimmedItem));
+                              } catch (e) {
+                                // fall through to comma split
+                              }
+                            }
+                            return trimmedItem.split(',').map(s => s.trim()).filter(s => s && s !== 'null' && s !== 'undefined');
+                          }
+                          return [String(item)];
+                        });
                       };
 
                       const allSizes = [...new Set(parseSizesList((product as any).sizes))];
                       
+                      // Auto-select first size if none selected
+                      useEffect(() => {
+                        if (allSizes.length > 0 && !selectedSize) {
+                          setSelectedSize(allSizes[0]);
+                        }
+                      }, [allSizes, selectedSize]);
+
                       if (allSizes.length > 0) {
-                        return allSizes.map((size: string, idx: number) => (
-                          <button
-                            key={idx}
-                            onClick={() => setSelectedSize(size)}
-                            className={`px-4 py-2 border rounded-lg transition-all text-sm font-medium ${
-                              selectedSize === size
-                                ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold'
-                                : 'border-gold-primary/30 text-gray-700 hover:border-gold-primary/60'
-                            }`}
-                          >
-                            {size}
-                          </button>
-                        ));
+                        return (
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {allSizes.map((size: string, idx: number) => (
+                              <button
+                                key={idx}
+                                onClick={() => setSelectedSize(size)}
+                                className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest ${
+                                  selectedSize === size
+                                    ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105'
+                                    : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary'
+                                }`}
+                              >
+                                {size}
+                              </button>
+                            ))}
+                          </div>
+                        );
                       }
-                      return null;
+                      return (
+                         <p className="text-[10px] text-text-muted italic">Standard Ring Size</p>
+                      );
                     })()}
                   </div>
                 </div>
