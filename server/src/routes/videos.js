@@ -1,21 +1,21 @@
 import express from 'express';
 import Video from '../models/Video.js';
 import multer from 'multer';
-import path from 'path';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import cloudinary from '../config/cloudinary.js';
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'moyaa-videos',
+    resource_type: 'video',
+    allowed_formats: ['mp4', 'webm', 'mov', 'avi', 'mkv'],
+  },
+});
+
+const upload = multer({ storage });
 
 const router = express.Router();
-
-const uploadDir = path.join(path.resolve(), 'server', 'uploads');
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    cb(null, `${Date.now()}-${Math.random().toString(36).substr(2,6)}${ext}`);
-  }
-});
-const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
   try {
@@ -32,7 +32,7 @@ router.post('/', upload.single('file'), async (req, res) => {
   try {
     const body = { ...(req.body || {}) };
     if (req.file) {
-      body.url = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      body.url = req.file.secure_url;
       body.title = body.title || req.file.originalname;
     }
     const v = new Video(body);
