@@ -471,16 +471,7 @@ const ProductDetail = () => {
                   </div>
                 </div>
                 
-                {/* Stock Info - Admin Only */}
-                {state.user?.isAdmin && (product as any).stock !== undefined && (
-                  <div className="text-sm font-medium">
-                    {(product as any).stock > 0 ? (
-                      <span className="text-teal-600">In Stock ({(product as any).stock} available)</span>
-                    ) : (
-                      <span className="text-primary-wine">Out of Stock</span>
-                    )}
-                  </div>
-                )}
+                {/* Stock Info removed from customer view as per request */}
               </div>
 
               {/* Add to Cart & Wishlist */}
