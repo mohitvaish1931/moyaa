@@ -35,7 +35,6 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'description' | 'specifications' | 'materials' | 'details'>('description');
 
 
 
@@ -254,78 +253,91 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="mb-10">
-              <div className="flex space-x-8 border-b border-gold-primary/10 mb-6 overflow-x-auto">
-                {['description', 'details', 'specifications', 'materials'].map((tab) => (
-                  (tab === 'description' || 
-                   (tab === 'details' ? (product.dimensions || product.weight) : (product as any)[tab]?.length > 0)) && (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(tab as any)}
-                      className={`pb-4 text-xs font-bold tracking-[0.3em] uppercase transition-all relative ${
-                        activeTab === tab ? 'text-gold-primary' : 'text-text-muted hover:text-text-primary'
-                      }`}
-                    >
-                      {tab}
-                      {activeTab === tab && (
-                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gold-primary animate-width-in" />
-                      )}
-                    </button>
-                  )
-                ))}
-              </div>
+            {/* Product Information Sequence */}
+            <div className="mb-10 space-y-10">
               
-              <div className="prose prose-sm max-w-none text-text-secondary leading-relaxed">
-                {activeTab === 'description' && (
-                   <p className="whitespace-pre-line font-medium leading-loose">{product.description}</p>
-                )}
-                
-                {activeTab === 'details' && (
+              {/* Description */}
+              {product.description && (
+                <div>
+                   <h3 className="text-[11px] font-bold text-text-primary luxury-serif tracking-[0.2em] mb-4 uppercase">Description</h3>
+                   <div className="prose prose-sm max-w-none text-text-secondary leading-relaxed">
+                     <p className="whitespace-pre-line font-medium leading-loose">{product.description}</p>
+                   </div>
+                </div>
+              )}
+              
+              {/* Details (Dimensions & Weight) */}
+              {(product.dimensions || product.weight) && (
+                <div>
+                   <h3 className="text-[11px] font-bold text-text-primary luxury-serif tracking-[0.2em] mb-4 uppercase">Details</h3>
                   <div className="space-y-4">
                     {product.dimensions && (
-                      <div className="flex items-start">
-                        <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
-                        <div className="flex flex-col">
-                           <span className="font-bold tracking-widest uppercase text-[10px] text-text-muted">Dimensions</span>
-                           <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary">{product.dimensions}</span>
-                        </div>
+                      <div className="flex flex-col mb-4">
+                         <span className="font-bold tracking-widest uppercase text-[10px] text-text-muted mb-2">Dimensions</span>
+                         <ul className="space-y-3">
+                           {product.dimensions.split('*').map(s => s.trim()).filter(Boolean).map((dim, idx) => (
+                             <li key={idx} className="flex items-start">
+                               <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
+                               <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary leading-tight">{dim}</span>
+                             </li>
+                           ))}
+                         </ul>
                       </div>
                     )}
                     {product.weight && (
-                      <div className="flex items-start">
-                        <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
-                        <div className="flex flex-col">
-                           <span className="font-bold tracking-widest uppercase text-[10px] text-text-muted">Weight</span>
-                           <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary">{product.weight}</span>
-                        </div>
+                      <div className="flex flex-col">
+                         <span className="font-bold tracking-widest uppercase text-[10px] text-text-muted mb-2">Weight</span>
+                         <ul className="space-y-3">
+                           {product.weight.split('*').map(s => s.trim()).filter(Boolean).map((w, idx) => (
+                             <li key={idx} className="flex items-start">
+                               <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
+                               <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary leading-tight">{w}</span>
+                             </li>
+                           ))}
+                         </ul>
                       </div>
                     )}
                   </div>
-                )}
-                
-                {activeTab === 'specifications' && (
-                  <ul className="space-y-4">
-                    {(product as any).specifications?.map((spec: string, idx: number) => (
+                </div>
+              )}
+              
+              {/* Specifications */}
+              {(product as any).specifications?.length > 0 && (
+                <div>
+                   <h3 className="text-[11px] font-bold text-text-primary luxury-serif tracking-[0.2em] mb-4 uppercase">Specifications</h3>
+                  <ul className="space-y-3">
+                    {((product as any).specifications as string[])
+                      .flatMap(s => s.split('*'))
+                      .map(s => s.trim())
+                      .filter(Boolean)
+                      .map((spec: string, idx: number) => (
                       <li key={idx} className="flex items-start">
                         <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
-                        <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary">{spec}</span>
+                        <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary leading-tight">{spec}</span>
                       </li>
                     ))}
                   </ul>
-                )}
+                </div>
+              )}
 
-                {activeTab === 'materials' && (
-                  <ul className="space-y-4">
-                    {(product as any).materials?.map((material: string, idx: number) => (
+              {/* Materials */}
+              {(product as any).materials?.length > 0 && (
+                <div>
+                   <h3 className="text-[11px] font-bold text-text-primary luxury-serif tracking-[0.2em] mb-4 uppercase">Materials</h3>
+                  <ul className="space-y-3">
+                    {((product as any).materials as string[])
+                      .flatMap(s => s.split('*'))
+                      .map(s => s.trim())
+                      .filter(Boolean)
+                      .map((material: string, idx: number) => (
                       <li key={idx} className="flex items-start">
                         <span className="text-gold-primary mr-3 mt-1 text-xs">✦</span>
-                        <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary">{material}</span>
+                        <span className="font-bold tracking-widest uppercase text-[11px] text-text-primary leading-tight">{material}</span>
                       </li>
                     ))}
                   </ul>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
             {/* Quantity and Actions */}
