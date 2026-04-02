@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Plus, Minus, Trash2, ArrowLeft, CreditCard, Truck } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
+import { parseList } from '../utils/dataHelper';
 
 interface CartProps {
   isOpen: boolean;
@@ -195,7 +196,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                               className="bg-luxury-dark/30 border border-gold-primary/20 rounded px-2 py-0.5 text-[10px] text-platinum outline-none focus:border-gold-primary/50"
                             >
                               <option value="">Select Shape</option>
-                              {item.shapes.map((shape, idx) => (
+                              {parseList(item.shapes).map((shape, idx) => (
                                 <option key={idx} value={shape}>{shape}</option>
                               ))}
                             </select>

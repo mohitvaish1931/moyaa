@@ -4,6 +4,7 @@ import { ShoppingBag, Heart, ChevronLeft, ChevronRight, Star, Truck, Shield, Rot
 import { useAppContext } from '../context/AppContext';
 import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
 import { useSEO } from '../utils/useSEO';
+import { parseList } from '../utils/dataHelper';
 import { generateProductSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
 import ProductReviews from '../components/ProductReviews';
 import { getImageUrl, handleImageError, handleVideoError } from '../utils/mediaHelper';
@@ -39,50 +40,8 @@ const ProductDetail = () => {
 
 
 
-  // Define parsing logic outside render
-  const parseSizesList = (raw: any): string[] => {
-    if (!raw) return [];
-    let items: any[] = [];
-    if (Array.isArray(raw)) {
-      items = raw;
-    } else if (typeof raw === 'string') {
-      const trimmed = raw.trim();
-      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-        try { items = JSON.parse(trimmed); } catch (e) { items = trimmed.split(','); }
-      } else { items = trimmed.split(','); }
-    } else { items = [raw]; }
-    
-    const result: string[] = [];
-    items.forEach(item => {
-      if (!item) return;
-      if (typeof item === 'string') {
-        const trimmedItem = item.trim();
-        if (trimmedItem.startsWith('[') && trimmedItem.endsWith(']')) {
-          try { 
-            const parsed = JSON.parse(trimmedItem);
-            if (Array.isArray(parsed)) {
-              parsed.forEach(p => {
-                if (typeof p === 'string') result.push(...p.split(',').map(s => s.trim()).filter(Boolean));
-                else result.push(String(p));
-              });
-            } else {
-              result.push(String(parsed));
-            }
-          } catch (e) { 
-            result.push(...trimmedItem.split(',').map(s => s.trim()).filter(Boolean));
-          }
-        } else {
-          result.push(...trimmedItem.split(',').map(s => s.trim()).filter(Boolean));
-        }
-      } else {
-        result.push(String(item));
-      }
-    });
-    return [...new Set(result.filter(s => s && s !== 'null' && s !== 'undefined'))];
-  };
-
-  const allSizes = product ? parseSizesList((product as any).sizes) : [];
-  const allShapes = product ? parseSizesList((product as any).shapes) : [];
+  const allSizes = product ? parseList((product as any).sizes) : [];
+  const allShapes = product ? parseList((product as any).shapes) : [];
 
   // Hook for SEO - must be top level
   useSEO({
