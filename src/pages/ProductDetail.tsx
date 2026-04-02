@@ -35,6 +35,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const [selectedShape, setSelectedShape] = useState<string>('');
 
 
 
@@ -81,6 +82,7 @@ const ProductDetail = () => {
   };
 
   const allSizes = product ? parseSizesList((product as any).sizes) : [];
+  const allShapes = product ? parseSizesList((product as any).shapes) : [];
 
   // Hook for SEO - must be top level
   useSEO({
@@ -98,6 +100,12 @@ const ProductDetail = () => {
       setSelectedSize(allSizes[0]);
     }
   }, [allSizes, selectedSize]);
+
+  useEffect(() => {
+    if (allShapes.length > 0 && !selectedShape) {
+      setSelectedShape(allShapes[0]);
+    }
+  }, [allShapes, selectedShape]);
 
   useEffect(() => {
     if (id) {
@@ -124,7 +132,12 @@ const ProductDetail = () => {
     if (!product) return;
     dispatch({
       type: 'ADD_TO_CART',
-      payload: { ...product, quantity, selectedSize: product.category.toLowerCase() === 'rings' ? selectedSize : undefined }
+      payload: { 
+        ...product, 
+        quantity, 
+        selectedSize: product.category.toLowerCase() === 'rings' ? selectedSize : undefined,
+        selectedShape: selectedShape || undefined
+      }
     });
     // Visual feedback could be added here
   };
@@ -342,6 +355,30 @@ const ProductDetail = () => {
 
             {/* Quantity and Actions */}
             <div className="space-y-4">
+              {/* Shape Selection */}
+              {allShapes.length > 0 && (
+                <div className="flex flex-col space-y-2">
+                  <label className="text-sm font-medium text-gray-900">Choose Shape:</label>
+                  <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {allShapes.map((shape: string, idx: number) => (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedShape(shape)}
+                            className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest ${
+                              selectedShape === shape
+                                ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105'
+                                : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary'
+                            }`}
+                          >
+                            {shape}
+                          </button>
+                        ))}
+                      </div>
+                  </div>
+                </div>
+              )}
+
               {/* Ring Size Selection */}
               {product.category.toLowerCase() === 'rings' && (
                 <div className="flex flex-col space-y-2">

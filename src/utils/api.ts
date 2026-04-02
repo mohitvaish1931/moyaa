@@ -25,6 +25,13 @@ export const API_ENDPOINTS = {
 
   // Chat
   CHAT: `${API_BASE_URL}/api/chat`,
+
+  // Orders
+  ORDERS: {
+    CREATE: `${API_BASE_URL}/api/orders/create`,
+    VERIFY: `${API_BASE_URL}/api/orders/verify`,
+    USER_ORDERS: `${API_BASE_URL}/api/orders/user`,
+  },
 };
 
 // Helper function for API requests

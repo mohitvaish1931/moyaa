@@ -23,7 +23,8 @@ const EditProduct = () => {
     images: [],
     videos: [],
     stock: 0,
-    sizes: ''
+    sizes: '',
+    shapes: ''
   });
   
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -68,6 +69,13 @@ const EditProduct = () => {
         stock: productAny.stock || 0,
         sizes: (() => {
           let s = productAny.sizes;
+          if (typeof s === 'string' && s.startsWith('[')) {
+            try { s = JSON.parse(s); } catch (e) { /* ignore */ }
+          }
+          return Array.isArray(s) ? s.join(', ') : (s || '');
+        })(),
+        shapes: (() => {
+          let s = productAny.shapes;
           if (typeof s === 'string' && s.startsWith('[')) {
             try { s = JSON.parse(s); } catch (e) { /* ignore */ }
           }
@@ -139,6 +147,17 @@ const EditProduct = () => {
           sizesArray = form.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
         }
         fd.append('sizes', JSON.stringify(sizesArray));
+      }
+
+      // Handle shapes array
+      if (form.shapes) {
+        let shapesArray = [];
+        if (Array.isArray(form.shapes)) {
+          shapesArray = form.shapes;
+        } else if (typeof form.shapes === 'string') {
+          shapesArray = form.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        }
+        fd.append('shapes', JSON.stringify(shapesArray));
       }
       
 
@@ -326,6 +345,16 @@ const EditProduct = () => {
                   onChange={e => setForm({ ...form, sizes: e.target.value })}
                   className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
                   placeholder="5, 6, 7"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Shapes (Comma separated)</label>
+                <input
+                  type="text"
+                  value={form.shapes || ''}
+                  onChange={e => setForm({ ...form, shapes: e.target.value })}
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  placeholder="Heart, Round, Oval"
                 />
               </div>
             </div>

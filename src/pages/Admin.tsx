@@ -108,6 +108,14 @@ const Admin = () => {
             fd.append('sizes', JSON.stringify(sizesArray));
           }
           fd.delete('sizes_raw');
+
+          // Handle shapes
+          const shapesRaw = fd.get('shapes_raw')?.toString() || '';
+          if (shapesRaw) {
+            const shapesArray = shapesRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            fd.append('shapes', JSON.stringify(shapesArray));
+          }
+          fd.delete('shapes_raw');
           
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
@@ -200,13 +208,23 @@ const Admin = () => {
               />
             </div>
             <div>
-              <label htmlFor="product-sizes" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Sizes (For rings, comma separated)</label>
+              <label htmlFor="product-sizes" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Sizes (Comma separated)</label>
               <input
                 id="product-sizes"
                 name="sizes_raw"
                 type="text"
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="5, 6, 7, 8, 9"
+              />
+            </div>
+            <div>
+              <label htmlFor="product-shapes" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Shapes (e.g. Heart, Round, Comma separated)</label>
+              <input
+                id="product-shapes"
+                name="shapes_raw"
+                type="text"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                placeholder="Heart, Round, Oval"
               />
             </div>
           </div>
@@ -494,6 +512,13 @@ const Admin = () => {
               try { s = JSON.parse(s); } catch (e) { /* ignore */ }
             }
             return Array.isArray(s) ? s.join(', ') : (s || '');
+          })(),
+          shapes: (() => {
+            let s = editProduct.shapes;
+            if (typeof s === 'string' && s.startsWith('[')) {
+              try { s = JSON.parse(s); } catch (e) { /* ignore */ }
+            }
+            return Array.isArray(s) ? s.join(', ') : (s || '');
           })()
         });
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
@@ -549,6 +574,17 @@ const Admin = () => {
             sizesArray = localForm.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
           }
           fd.append('sizes', JSON.stringify(sizesArray));
+        }
+
+        // Handle shapes array
+        if (localForm.shapes) {
+          let shapesArray: string[] = [];
+          if (Array.isArray(localForm.shapes)) {
+            shapesArray = localForm.shapes;
+          } else if (typeof localForm.shapes === 'string') {
+            shapesArray = localForm.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          }
+          fd.append('shapes', JSON.stringify(shapesArray));
         }
 
         // Handle video files
@@ -678,6 +714,16 @@ const Admin = () => {
                   value={localForm?.sizes || ''}
                   onChange={e => setLocalForm({ ...localForm, sizes: e.target.value })}
                   placeholder="5, 6, 7"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Shapes (Comma separated)</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
+                  type="text"
+                  value={localForm?.shapes || ''}
+                  onChange={e => setLocalForm({ ...localForm, shapes: e.target.value })}
+                  placeholder="Heart, Round, Oval"
                 />
               </div>
             </div>

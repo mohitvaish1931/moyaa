@@ -4,6 +4,7 @@ import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
 
 export interface Product {
   id: string | number;
+  _id?: string;
   name: string;
   price: number;
   originalPrice?: number;
@@ -25,6 +26,8 @@ export interface Product {
   stock?: number;
   sizes?: string[];
   selectedSize?: string;
+  shapes?: string[];
+  selectedShape?: string;
   quantity?: number;
 }
 
@@ -96,6 +99,7 @@ type AppAction =
   | { type: 'ADD_TO_CART'; payload: Product }
   | { type: 'REMOVE_FROM_CART'; payload: string | number }
   | { type: 'UPDATE_CART_QUANTITY'; payload: { id: string | number; quantity: number } }
+  | { type: 'UPDATE_CART_SHAPE'; payload: { id: string | number; shape: string } }
   | { type: 'CLEAR_CART' }
   | { type: 'ADD_TO_WISHLIST'; payload: Product }
   | { type: 'REMOVE_FROM_WISHLIST'; payload: string | number }
@@ -184,6 +188,16 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         cart: state.cart.map(item =>
           item.id === action.payload.id
             ? { ...item, quantity: action.payload.quantity }
+            : item
+        ),
+      };
+    
+    case 'UPDATE_CART_SHAPE':
+      return {
+        ...state,
+        cart: state.cart.map(item =>
+          item.id === action.payload.id
+            ? { ...item, selectedShape: action.payload.shape }
             : item
         ),
       };

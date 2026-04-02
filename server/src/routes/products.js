@@ -63,7 +63,7 @@ router.post('/', upload.array('image', 10), async (req, res) => {
     }
 
     // Parse array fields if they are sent as JSON strings
-    ['materials', 'specifications', 'sizes'].forEach(field => {
+    ['materials', 'specifications', 'sizes', 'shapes'].forEach(field => {
       if (typeof body[field] === 'string') {
         try {
           const parsed = JSON.parse(body[field]);
@@ -106,7 +106,7 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
     }
 
     // Parse array fields if they are sent as JSON strings
-    ['materials', 'specifications', 'sizes'].forEach(field => {
+    ['materials', 'specifications', 'sizes', 'shapes'].forEach(field => {
       if (typeof body[field] === 'string') {
         try {
           const parsed = JSON.parse(body[field]);

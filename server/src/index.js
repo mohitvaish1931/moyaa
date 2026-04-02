@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+const m = mongoose.default || mongoose;
+const { connect } = m;
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -29,6 +31,7 @@ import bannersRouter from './routes/banners.js';
 import couponsRouter from './routes/coupons.js';
 import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
+import ordersRouter from './routes/orders.js';
 import User from './models/User.js';
 import bcrypt from 'bcryptjs';
 
@@ -38,6 +41,7 @@ app.use('/api/banners', bannersRouter);
 app.use('/api/coupons', couponsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/orders', ordersRouter);
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
@@ -50,7 +54,7 @@ app.get('/api/health', (req, res) => res.json({ ok: true }));
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rrjewel', {
+connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rrjewel', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
