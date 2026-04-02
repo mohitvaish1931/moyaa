@@ -2,6 +2,7 @@ import React from 'react';
 import Hero from '../components/Hero';
 import ShopByCategory from '../components/ShopByCategory';
 import NewArrivals from '../components/NewArrivals';
+import PromoBanner from '../components/PromoBanner';
 import ShowcaseVideos from '../components/ShowcaseVideos';
 import Reviews from '../components/Reviews';
 import { useSEO } from '../utils/useSEO';
@@ -21,6 +22,7 @@ const Home = () => {
       <Hero />
       <ShopByCategory />
       <NewArrivals />
+      <PromoBanner />
       <ShowcaseVideos />
       <Reviews />
     </>
