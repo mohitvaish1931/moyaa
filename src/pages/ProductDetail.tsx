@@ -170,12 +170,54 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20">
           {/* Image Gallery */}
           <div className="space-y-6">
-            <div className="relative aspect-[4/5] bg-white rounded-3xl overflow-hidden shadow-2xl border border-gold-primary/10 group">
+            <div className="relative aspect-square w-full max-w-[500px] bg-white rounded-3xl overflow-hidden shadow-2xl border border-gold-primary/10 group mx-auto">
               <img
                 src={getImageUrl(productImages[selectedImage])}
                 alt={product.name}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
+              
+              {/* Navigation Arrows */}
+              {productImages.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedImage((prev) => (prev === 0 ? productImages.length - 1 : prev - 1));
+                    }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur-md text-luxury-dark shadow-xl hover:bg-gold-primary hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-10"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedImage((prev) => (prev === productImages.length - 1 ? 0 : prev + 1));
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur-md text-luxury-dark shadow-xl hover:bg-gold-primary hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-10"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </button>
+                </>
+              )}
+
+              {/* Dot Indicators */}
+              {productImages.length > 1 && (
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+                  {productImages.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedImage(idx)}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        selectedImage === idx ? 'w-6 bg-gold-primary' : 'w-1.5 bg-luxury-dark/30 hover:bg-gold-primary/50'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+
               {product.soldOut && (
                 <div className="absolute inset-0 bg-luxury-dark/40 backdrop-blur-[2px] flex items-center justify-center">
                   <span className="bg-ruby-luxury text-white px-8 py-3 rounded-full font-bold tracking-[0.3em] shadow-2xl animate-pulse">
@@ -186,13 +228,13 @@ const ProductDetail = () => {
             </div>
             
             {productImages.length > 1 && (
-              <div className="grid grid-cols-4 gap-4">
+              <div className="flex flex-wrap justify-center gap-4 max-w-[500px] mx-auto">
                 {productImages.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`relative aspect-[4/5] rounded-xl overflow-hidden border-2 transition-all ${
-                      selectedImage === idx ? 'border-gold-primary shadow-glow-gold' : 'border-transparent hover:border-gold-primary/30'
+                    className={`relative w-20 aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                      selectedImage === idx ? 'border-gold-primary shadow-glow-gold scale-105' : 'border-gold-primary/10 hover:border-gold-primary/40'
                     }`}
                   >
                     <img src={getImageUrl(img)} alt="" className="w-full h-full object-cover" />

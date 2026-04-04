@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, TrendingUp } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, TrendingUp, ArrowUp, ArrowDown } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
@@ -21,6 +21,37 @@ const Admin = () => {
   ];
 
   const recentOrders: any[] = [];
+  
+  const handleProductReorder = async (currentIndex: number, direction: 'up' | 'down') => {
+    const nextIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (nextIndex < 0 || nextIndex >= state.products.length) return;
+
+    const products = [...state.products];
+    const temp = products[currentIndex];
+    products[currentIndex] = products[nextIndex];
+    products[nextIndex] = temp;
+
+    // Update local state first for instant feedback
+    dispatch({ type: 'SET_PRODUCTS', payload: products });
+
+    // Prepare for backend update
+    const reorderPayload = products.map((p, idx) => ({
+      id: (p as any)._id || p.id,
+      displayOrder: idx,
+    }));
+
+    try {
+      const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/reorder`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products: reorderPayload }),
+      });
+      if (!res.ok) throw new Error('Reorder failed');
+    } catch (err) {
+      console.error('Reorder update failed:', err);
+      // Optionally revert state if it fails?
+    }
+  };
 
   const ProductForm = () => {
     const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -1331,6 +1362,24 @@ const Admin = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
+                            <div className="flex flex-col space-y-1 mr-2 border-r border-gold-primary/10 pr-2">
+                              <button
+                                onClick={() => handleProductReorder(i, 'up')}
+                                disabled={i === 0}
+                                className={`text-gold-primary hover:text-emerald-luxury transition-colors disabled:opacity-30 disabled:cursor-not-allowed`}
+                                title="Move Up"
+                              >
+                                <ArrowUp className="h-3.5 w-3.5" />
+                              </button>
+                              <button
+                                onClick={() => handleProductReorder(i, 'down')}
+                                disabled={i === state.products.length - 1}
+                                className={`text-gold-primary hover:text-emerald-luxury transition-colors disabled:opacity-30 disabled:cursor-not-allowed`}
+                                title="Move Down"
+                              >
+                                <ArrowDown className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
                             <button className="text-gold-primary hover:text-rose-gold transition-colors">
                               <Eye className="h-4 w-4" />
                             </button>

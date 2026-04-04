@@ -20,7 +20,8 @@ const ProductSchema = new Schema({
   specifications: [String],
   stock: { type: Number, default: 0 },
   sizes: [String],
-  shapes: [String]
+  shapes: [String],
+  displayOrder: { type: Number, default: 0 }
 }, { timestamps: true });
 
 const Product = model('Product', ProductSchema);

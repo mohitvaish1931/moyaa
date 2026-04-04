@@ -19,10 +19,32 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const items = await Product.find().sort({ createdAt: -1 });
+    const items = await Product.find().sort({ displayOrder: 1, createdAt: -1 });
     res.json(items);
   } catch (err) {
     console.error('GET /api/products error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/reorder', async (req, res) => {
+  try {
+    const { products } = req.body;
+    if (!Array.isArray(products)) {
+      return res.status(400).json({ error: 'products must be an array' });
+    }
+
+    const bulkOps = products.map((p) => ({
+      updateOne: {
+        filter: { _id: p.id },
+        update: { $set: { displayOrder: p.displayOrder } },
+      },
+    }));
+
+    await Product.bulkWrite(bulkOps);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('POST /api/products/reorder error:', err);
     res.status(500).json({ error: err.message });
   }
 });
