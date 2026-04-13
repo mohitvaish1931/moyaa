@@ -1,3 +1,4 @@
+import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
@@ -7,8 +8,22 @@ import { getImageUrl, handleImageError } from '../utils/mediaHelper';
 
 const Earrings = () => {
   const { state, dispatch } = useAppContext();
+  const [selectedSubcategory, setSelectedSubcategory] = React.useState<string>('all');
 
-  const earrings = state.products.filter(p => p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring');
+  const subcategories = ['Ear cuff', 'Stud', 'Hoop', 'C-Circle', 'Dangle', 'Tassel', 'Sets'];
+
+  const earrings = state.products.filter(p => {
+    const isEarring = p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring';
+    const isPublished = p.status !== 'pre-upload';
+    const matchesSubcategory = selectedSubcategory === 'all' || p.subcategory === selectedSubcategory.toLowerCase().replace(/\s+/g, '-');
+    return isEarring && isPublished && matchesSubcategory;
+  });
+
+  const allEarrings = state.products.filter(p => {
+    const isEarring = p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring';
+    const isPublished = p.status !== 'pre-upload';
+    return isEarring && isPublished;
+  });
 
   // Calculate price range for aggregate offer schema
   const prices = earrings.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);
@@ -22,7 +37,7 @@ const Earrings = () => {
     'https://moraajewles.com/logo.png',
     minPrice,
     maxPrice,
-    earrings.length,
+    allEarrings.length,
     'INR',
     'https://moraajewles.com/earrings'
   );
@@ -70,6 +85,33 @@ const Earrings = () => {
           <p className="text-gray-600 max-w-2xl mx-auto italic font-light">
             Discover our stunning collection of earrings, from elegant studs to statement drops.
           </p>
+        </div>
+
+        {/* Subcategory Filter */}
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <button
+            onClick={() => setSelectedSubcategory('all')}
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+              selectedSubcategory === 'all'
+                ? 'bg-gold-primary text-white border-gold-primary shadow-lg shadow-gold-primary/30'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-gold-primary hover:text-gold-primary'
+            }`}
+          >
+            All
+          </button>
+          {subcategories.map(sub => (
+            <button
+              key={sub}
+              onClick={() => setSelectedSubcategory(sub)}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+                selectedSubcategory === sub
+                  ? 'bg-gold-primary text-white border-gold-primary shadow-lg shadow-gold-primary/30'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-gold-primary hover:text-gold-primary'
+              }`}
+            >
+              {sub}
+            </button>
+          ))}
         </div>
 
         {/* Products Grid */}

@@ -8,11 +8,13 @@ import { getImageUrl, handleImageError } from '../utils/mediaHelper';
 const HandChains = () => {
   const { state, dispatch } = useAppContext();
 
-  const products = state.products.filter(p => 
-    p.category?.toLowerCase() === 'hand-chains' || 
-    p.category?.toLowerCase() === 'hand chain' || 
-    p.category?.toLowerCase() === 'hand chains'
-  );
+  const products = state.products.filter(p => {
+    const isMatched = p.category?.toLowerCase() === 'hand-chains' || 
+                      p.category?.toLowerCase() === 'hand chain' || 
+                      p.category?.toLowerCase() === 'hand chains';
+    const isPublished = p.status !== 'pre-upload';
+    return isMatched && isPublished;
+  });
 
   // Calculate price range for aggregate offer schema
   const prices = products.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);

@@ -32,16 +32,17 @@ const AllProducts = () => {
   const [isCollectionOpen, setIsCollectionOpen] = useState(false);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
 
-  const products = state.products;
+  const publishedProducts = state.products.filter(p => p.status !== 'pre-upload');
+  const products = publishedProducts;
 
   const collections = [
-    { name: 'All Products', count: state.products.length, path: '/products' },
-    { name: 'Earrings', count: state.products.filter(p => p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring').length, path: '/earrings' },
-    { name: 'Bracelets', count: state.products.filter(p => p.category?.toLowerCase() === 'bracelets' || p.category?.toLowerCase() === 'bracelet').length, path: '/bracelets' },
-    { name: 'Necklaces', count: state.products.filter(p => p.category?.toLowerCase() === 'necklaces' || p.category?.toLowerCase() === 'necklace').length, path: '/necklaces' },
-    { name: 'Rings', count: state.products.filter(p => p.category?.toLowerCase() === 'rings' || p.category?.toLowerCase() === 'ring').length, path: '/rings' },
-    { name: 'Hand Chains', count: state.products.filter(p => ['hand-chains', 'hand chains', 'hand chain'].includes(p.category?.toLowerCase() || '')).length, path: '/hand-chains' },
-    { name: 'Jewelry Sets', count: state.products.filter(p => ['sets', 'jewelry sets', 'set'].includes(p.category?.toLowerCase() || '')).length, path: '/sets' }
+    { name: 'All Products', count: publishedProducts.length, path: '/products' },
+    { name: 'Earrings', count: publishedProducts.filter(p => p.category?.toLowerCase() === 'earrings' || p.category?.toLowerCase() === 'earring').length, path: '/earrings' },
+    { name: 'Bracelets', count: publishedProducts.filter(p => p.category?.toLowerCase() === 'bracelets' || p.category?.toLowerCase() === 'bracelet').length, path: '/bracelets' },
+    { name: 'Necklaces', count: publishedProducts.filter(p => p.category?.toLowerCase() === 'necklaces' || p.category?.toLowerCase() === 'necklace').length, path: '/necklaces' },
+    { name: 'Rings', count: publishedProducts.filter(p => p.category?.toLowerCase() === 'rings' || p.category?.toLowerCase() === 'ring').length, path: '/rings' },
+    { name: 'Hand Chains', count: publishedProducts.filter(p => ['hand-chains', 'hand chains', 'hand chain'].includes(p.category?.toLowerCase() || '')).length, path: '/hand-chains' },
+    { name: 'Jewelry Sets', count: publishedProducts.filter(p => ['sets', 'jewelry sets', 'set'].includes(p.category?.toLowerCase() || '')).length, path: '/sets' }
   ];
 
   const toggleWishlist = (product: any) => {

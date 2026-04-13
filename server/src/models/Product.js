@@ -11,6 +11,7 @@ const ProductSchema = new Schema({
   sale: Boolean,
   soldOut: Boolean,
   category: String,
+  subcategory: String,
   description: String,
   features: [String],
   materials: [String],
@@ -20,7 +21,10 @@ const ProductSchema = new Schema({
   specifications: [String],
   stock: { type: Number, default: 0 },
   sizes: [String],
+  colors: [String],
   shapes: [String],
+  productLink: String,
+  status: { type: String, enum: ['published', 'pre-upload'], default: 'published' },
   displayOrder: { type: Number, default: 0 }
 }, { timestamps: true });
 

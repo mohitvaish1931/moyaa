@@ -8,10 +8,11 @@ import { getImageUrl, handleImageError } from '../utils/mediaHelper';
 const Rings = () => {
   const { state, dispatch } = useAppContext();
 
-  const products = state.products.filter(p => 
-    p.category?.toLowerCase() === 'ring' || 
-    p.category?.toLowerCase() === 'rings'
-  );
+  const products = state.products.filter(p => {
+    const isMatched = p.category?.toLowerCase() === 'ring' || p.category?.toLowerCase() === 'rings';
+    const isPublished = p.status !== 'pre-upload';
+    return isMatched && isPublished;
+  });
 
   // Calculate price range for aggregate offer schema
   const prices = products.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);

@@ -8,6 +8,7 @@ export interface Product {
   sale?: boolean;
   soldOut?: boolean;
   category: string;
+  subcategory?: string;
   description: string;
   features: string[];
   materials: string[];
@@ -16,6 +17,11 @@ export interface Product {
   careInstructions: string[];
   averageRating?: number;
   reviewCount?: number;
+  colors?: string[];
+  sizes?: string[];
+  productLink?: string;
+  status?: 'published' | 'pre-upload';
+  displayOrder?: number;
 }
 
 export const products: Product[] = [

@@ -14,6 +14,7 @@ export interface Product {
   sale?: boolean;
   soldOut?: boolean;
   category: string;
+  subcategory?: string;
   description?: string;
   features?: string[];
   materials?: string[];
@@ -24,10 +25,15 @@ export interface Product {
   averageRating?: number;
   reviewCount?: number;
   stock?: number;
+  colors?: string[];
   sizes?: string[];
   selectedSize?: string;
+  selectedColor?: string;
   shapes?: string[];
   selectedShape?: string;
+  productLink?: string;
+  status?: 'published' | 'pre-upload';
+  displayOrder?: number;
   quantity?: number;
 }
 

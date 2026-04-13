@@ -5,6 +5,15 @@ import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
 
+const SUBCATEGORIES: Record<string, string[]> = {
+  earrings: ['Ear cuff', 'Stud', 'Hoop', 'C-Circle', 'Dangle', 'Tassel', 'Sets'],
+  necklaces: ['Dainty', 'Layered', 'Pendant', 'Y-necklace', 'Choker'],
+  bracelets: ['Stackable', 'Tennis bracelets', 'Bangle & Cuff'],
+  rings: [],
+  'hand-chains': [],
+  sets: []
+};
+
 const Admin = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -58,6 +67,7 @@ const Admin = () => {
     const [previewImages, setPreviewImages] = useState<string[]>([]);
     const [videoFiles, setVideoFiles] = useState<File[]>([]);
     const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [soldOut, setSoldOut] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -147,6 +157,14 @@ const Admin = () => {
             fd.append('shapes', JSON.stringify(shapesArray));
           }
           fd.delete('shapes_raw');
+
+          // Handle colors
+          const colorsRaw = fd.get('colors_raw')?.toString() || '';
+          if (colorsRaw) {
+            const colorsArray = colorsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            fd.append('colors', JSON.stringify(colorsArray));
+          }
+          fd.delete('colors_raw');
           
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
@@ -192,7 +210,12 @@ const Admin = () => {
             </div>
             <div>
               <label htmlFor="product-category" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Category</label>
-              <select id="product-category" name="category" className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none">
+              <select 
+                id="product-category" 
+                name="category" 
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
                 <option value="">Select category</option>
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
@@ -202,6 +225,17 @@ const Admin = () => {
                 <option value="hand-chains">Hand Chains</option>
               </select>
             </div>
+            {selectedCategory && SUBCATEGORIES[selectedCategory]?.length > 0 && (
+              <div>
+                <label htmlFor="product-subcategory" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Subcategory</label>
+                <select id="product-subcategory" name="subcategory" className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none">
+                  <option value="">Select subcategory</option>
+                  {SUBCATEGORIES[selectedCategory].map(sub => (
+                    <option key={sub} value={sub.toLowerCase().replace(/\s+/g, '-')}>{sub}</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -257,6 +291,35 @@ const Admin = () => {
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="Heart, Round, Oval"
               />
+            </div>
+            <div>
+              <label htmlFor="product-colors" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Colors (Comma separated)</label>
+              <input
+                id="product-colors"
+                name="colors_raw"
+                type="text"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                placeholder="Gold, Rose Gold, Silver"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label htmlFor="product-link" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Product External Link (Optional)</label>
+              <input
+                id="product-link"
+                name="productLink"
+                type="text"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                placeholder="https://instagram.com/p/..."
+              />
+            </div>
+            <div>
+              <label htmlFor="product-status" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Publishing Status</label>
+              <select id="product-status" name="status" className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none">
+                <option value="published">Published</option>
+                <option value="pre-upload">Pre-upload (Draft)</option>
+              </select>
             </div>
           </div>
           <div>
@@ -550,6 +613,16 @@ const Admin = () => {
               try { s = JSON.parse(s); } catch (e) { /* ignore */ }
             }
             return Array.isArray(s) ? s.join(', ') : (s || '');
+          })(),
+          subcategory: editProduct.subcategory || '',
+          productLink: editProduct.productLink || '',
+          status: editProduct.status || 'published',
+          colors: (() => {
+            let c = editProduct.colors;
+            if (typeof c === 'string' && c.startsWith('[')) {
+              try { c = JSON.parse(c); } catch (e) { /* ignore */ }
+            }
+            return Array.isArray(c) ? c.join(', ') : (c || '');
           })()
         });
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
@@ -579,7 +652,10 @@ const Admin = () => {
         const fd = new FormData();
         // include fields from form state
         Object.keys(localForm).forEach(k => {
-          if (localForm[k] !== undefined && localForm[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'specifications' && k !== 'materials') {
+          if (localForm[k] !== undefined && localForm[k] !== null && 
+              k !== 'images' && k !== 'image' && k !== 'videos' && 
+              k !== 'specifications' && k !== 'materials' && 
+              k !== 'sizes' && k !== 'shapes' && k !== 'colors') {
             fd.append(k, localForm[k]);
           }
         });
@@ -616,6 +692,17 @@ const Admin = () => {
             shapesArray = localForm.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
           }
           fd.append('shapes', JSON.stringify(shapesArray));
+        }
+
+        // Handle colors array
+        if (localForm.colors) {
+          let colorsArray: string[] = [];
+          if (Array.isArray(localForm.colors)) {
+            colorsArray = localForm.colors;
+          } else if (typeof localForm.colors === 'string') {
+            colorsArray = localForm.colors.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          }
+          fd.append('colors', JSON.stringify(colorsArray));
         }
 
         // Handle video files
@@ -700,6 +787,21 @@ const Admin = () => {
                   <option value="hand-chains">Hand Chains</option>
                 </select>
               </div>
+              {localForm?.category && SUBCATEGORIES[localForm.category]?.length > 0 && (
+                <div>
+                  <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Subcategory</label>
+                  <select
+                    className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                    value={localForm?.subcategory || ''}
+                    onChange={e => setLocalForm({ ...localForm, subcategory: e.target.value })}
+                  >
+                    <option value="">Select subcategory</option>
+                    {SUBCATEGORIES[localForm.category].map(sub => (
+                      <option key={sub} value={sub.toLowerCase().replace(/\s+/g, '-')}>{sub}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -756,6 +858,38 @@ const Admin = () => {
                   onChange={e => setLocalForm({ ...localForm, shapes: e.target.value })}
                   placeholder="Heart, Round, Oval"
                 />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Colors (Comma separated)</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
+                  type="text"
+                  value={localForm?.colors || ''}
+                  onChange={e => setLocalForm({ ...localForm, colors: e.target.value })}
+                  placeholder="Gold, Rose Gold, Silver"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Product External Link (Optional)</label>
+                <input
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.productLink || ''}
+                  onChange={e => setLocalForm({ ...localForm, productLink: e.target.value })}
+                  placeholder="https://instagram.com/p/..."
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Publishing Status</label>
+                <select
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.status || 'published'}
+                  onChange={e => setLocalForm({ ...localForm, status: e.target.value })}
+                >
+                  <option value="published">Published</option>
+                  <option value="pre-upload">Pre-upload (Draft)</option>
+                </select>
               </div>
             </div>
             <div>

@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Heart, ChevronLeft, ChevronRight, Star, Truck, Shield, RotateCcw, PlayCircle } from 'lucide-react';
+import { ShoppingBag, Heart, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
-import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
+import { API_ENDPOINTS } from '../utils/api';
 import { useSEO } from '../utils/useSEO';
 import { parseList } from '../utils/dataHelper';
-import { generateProductSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
 import ProductReviews from '../components/ProductReviews';
-import { getImageUrl, handleImageError, handleVideoError } from '../utils/mediaHelper';
+import { getImageUrl, handleVideoError as mediaHandleVideoError } from '../utils/mediaHelper';
+import { Product } from '../context/AppContext';
 
-interface Product {
-  id: string | number;
-  _id?: string;
-  name: string;
-  price: number;
-  originalPrice: number;
-  description: string;
-  category: string;
-  image: string;
-  images: string[];
-  materials: string[];
-  specifications: string[];
-  dimensions?: string;
-  weight?: string;
-  stock: number;
-  soldOut?: boolean;
-}
+// Local interface for any additional frontend-only fields if needed, 
+// though we've added most to the global interface now.
+// interface LocalProduct extends Product { ... }
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -37,11 +23,13 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedShape, setSelectedShape] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>('');
 
 
 
-  const allSizes = product ? parseList((product as any).sizes) : [];
-  const allShapes = product ? parseList((product as any).shapes) : [];
+  const allSizes = useMemo(() => product ? parseList((product as any).sizes) : [], [product]);
+  const allShapes = useMemo(() => product ? parseList((product as any).shapes) : [], [product]);
+  const allColors = useMemo(() => product ? parseList((product as any).colors) : [], [product]);
 
   // Hook for SEO - must be top level
   useSEO({
@@ -65,6 +53,12 @@ const ProductDetail = () => {
       setSelectedShape(allShapes[0]);
     }
   }, [allShapes, selectedShape]);
+
+  useEffect(() => {
+    if (allColors.length > 0 && !selectedColor) {
+      setSelectedColor(allColors[0]);
+    }
+  }, [allColors, selectedColor]);
 
   useEffect(() => {
     if (id) {
@@ -95,7 +89,8 @@ const ProductDetail = () => {
         ...product, 
         quantity, 
         selectedSize: product.category.toLowerCase() === 'rings' ? selectedSize : undefined,
-        selectedShape: selectedShape || undefined
+        selectedShape: selectedShape || undefined,
+        selectedColor: selectedColor || undefined
       }
     });
     // Visual feedback could be added here
@@ -112,8 +107,8 @@ const ProductDetail = () => {
   };
 
   const handleVideoError = (e: any) => {
-    console.warn('Video failed to load:', e);
-    e.target.style.display = 'none';
+    mediaHandleVideoError(e);
+    e.currentTarget.style.display = 'none';
   };
 
   if (loading) {
@@ -256,10 +251,10 @@ const ProductDetail = () => {
               
               <div className="flex items-baseline space-x-4 mb-6">
                 <span className="text-3xl font-bold text-ruby-luxury luxury-serif">₹{product.price}</span>
-                {product.originalPrice > product.price && (
+                {product.originalPrice && product.originalPrice > product.price && (
                   <span className="text-lg text-text-muted line-through">₹{product.originalPrice}</span>
                 )}
-                {product.originalPrice > product.price && (
+                {product.originalPrice && product.originalPrice > product.price && (
                   <span className="text-xs font-bold text-teal-600 tracking-widest bg-teal-50 px-2 py-1 rounded">
                     {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
                   </span>
@@ -380,6 +375,30 @@ const ProductDetail = () => {
                 </div>
               )}
 
+              {/* Color Selection */}
+              {allColors.length > 0 && (
+                <div className="flex flex-col space-y-2">
+                  <label className="text-sm font-medium text-gray-900">Choose Color:</label>
+                  <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {allColors.map((color: string, idx: number) => (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedColor(color)}
+                            className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest ${
+                              selectedColor === color
+                                ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105'
+                                : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary'
+                            }`}
+                          >
+                            {color}
+                          </button>
+                        ))}
+                      </div>
+                  </div>
+                </div>
+              )}
+
               {/* Ring Size Selection */}
               {product.category.toLowerCase() === 'rings' && (
                 <div className="flex flex-col space-y-2">
@@ -452,6 +471,20 @@ const ProductDetail = () => {
                   }`} />
                 </button>
               </div>
+
+              {/* External Product Link */}
+              {product.productLink && (
+                <div className="pt-2">
+                  <a
+                    href={product.productLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium border border-gold-primary text-gold-primary hover:bg-gold-primary hover:text-white transition-all w-full"
+                  >
+                    <span>View More Details / Visit Store</span>
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Service Features */}

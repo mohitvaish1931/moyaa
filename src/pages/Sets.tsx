@@ -8,11 +8,13 @@ import { getImageUrl, handleImageError } from '../utils/mediaHelper';
 const Sets = () => {
   const { state, dispatch } = useAppContext();
 
-  const products = state.products.filter(p => 
-    p.category?.toLowerCase() === 'sets' || 
-    p.category?.toLowerCase() === 'set' || 
-    p.category?.toLowerCase() === 'combo'
-  );
+  const products = state.products.filter(p => {
+    const isMatched = p.category?.toLowerCase() === 'sets' || 
+                      p.category?.toLowerCase() === 'set' || 
+                      p.category?.toLowerCase() === 'combo';
+    const isPublished = p.status !== 'pre-upload';
+    return isMatched && isPublished;
+  });
 
   // Calculate price range for aggregate offer schema
   const prices = products.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);
