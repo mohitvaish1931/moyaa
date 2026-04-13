@@ -3,67 +3,53 @@
  */
 export const parseList = (raw: any): string[] => {
   if (!raw) return [];
-  let items: any[] = [];
-  
-  if (Array.isArray(raw)) {
-    items = raw;
-  } else if (typeof raw === 'string') {
-    const trimmed = raw.trim();
-    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-      try { 
-        items = JSON.parse(trimmed); 
-      } catch (e) { 
-        items = trimmed.split(','); 
-      }
-    } else { 
-      items = trimmed.split(','); 
-    }
-  } else { 
-    items = [raw]; 
-  }
-  
   const result: string[] = [];
-  items.forEach(item => {
-    if (!item) return;
+
+  const processItem = (item: any) => {
+    if (item === null || item === undefined) return;
+    
     if (typeof item === 'string') {
-      const trimmedItem = item.trim();
-      // Nested array in string form - common in malformed MongoDB data
-      if (trimmedItem.startsWith('[') && trimmedItem.endsWith(']')) {
-        try { 
-          const parsed = JSON.parse(trimmedItem);
+      let trimmed = item.trim();
+      
+      // If it looks like a JSON array, try parsing it
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          const parsed = JSON.parse(trimmed);
           if (Array.isArray(parsed)) {
-            parsed.forEach(p => {
-              if (typeof p === 'string') {
-                result.push(...p.split(',').map(s => s.trim()).filter(Boolean));
-              } else {
-                result.push(String(p));
-              }
-            });
-          } else {
-            result.push(String(parsed));
+            parsed.forEach(processItem);
+            return;
           }
-        } catch (e) { 
-          result.push(...trimmedItem.split(',').map(s => s.trim()).filter(Boolean));
-        }
-      } else {
-        result.push(...trimmedItem.split(',').map(s => s.trim()).filter(Boolean));
+        } catch (e) { /* ignore and treat as string */ }
       }
+      
+      // Split by comma and clean up each fragment
+      trimmed.split(',').forEach(fragment => {
+        const clean = fragment.trim()
+          .replace(/^["'\[]+|["'\]]+$/g, '') // Strip leading/trailing quotes and brackets
+          .replace(/\\"/g, '"')               // Unescape quotes
+          .replace(/^"/, '').replace(/"$/, '') // Strip one more layer of quotes if needed
+          .trim();
+        
+        if (clean && clean !== 'null' && clean !== 'undefined') {
+          result.push(clean);
+        }
+      });
     } else if (Array.isArray(item)) {
-       // Nested actual array
-       item.forEach(subItem => {
-          if (typeof subItem === 'string') {
-            result.push(...subItem.split(',').map(s => s.trim()).filter(Boolean));
-          } else {
-            result.push(String(subItem));
-          }
-       });
+      item.forEach(processItem);
     } else {
-      result.push(String(item));
+      const s = String(item).trim();
+      if (s && s !== 'null' && s !== 'undefined') {
+        result.push(s);
+      }
     }
-  });
-  
-  // Final cleanup: unique values, non-empty, and no null/undefined as strings
-  return [...new Set(result
-    .map(s => s.trim())
-    .filter(s => s && s !== 'null' && s !== 'undefined' && s !== ''))];
+  };
+
+  if (Array.isArray(raw)) {
+    raw.forEach(processItem);
+  } else {
+    processItem(raw);
+  }
+
+  // Final cleanup: unique values and non-empty
+  return [...new Set(result.filter(s => s && s.length > 0))];
 };
