@@ -1,32 +1,34 @@
 import mongoose from 'mongoose';
-const m = mongoose.default || mongoose;
-const { Schema, model } = m;
 
-const ProductSchema = new Schema({
+const ProductSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   originalPrice: Number,
   image: String,
   images: [String],
+  videos: [String],
   sale: Boolean,
-  soldOut: Boolean,
+  soldOut: { type: Boolean, default: false },
   category: String,
-  subcategory: String,
   description: String,
   features: [String],
   materials: [String],
   dimensions: String,
   weight: String,
   careInstructions: [String],
-  specifications: [String],
-  stock: { type: Number, default: 0 },
-  sizes: [String],
-  colors: [String],
-  shapes: [String],
-  productLink: String,
-  status: { type: String, enum: ['published', 'pre-upload'], default: 'published' },
-  displayOrder: { type: Number, default: 0 }
+  stock: { type: Number, default: 999, min: 0 },
+  sku: { type: String, unique: true, sparse: true },
+  averageRating: { type: Number, default: 0, min: 0, max: 5 },
+  reviewCount: { type: Number, default: 0, min: 0 }
 }, { timestamps: true });
 
-const Product = model('Product', ProductSchema);
+// Transform _id to id when converting to JSON
+ProductSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    ret.id = ret._id;
+    return ret;
+  }
+});
+
+const Product = mongoose.model('Product', ProductSchema);
 export default Product;

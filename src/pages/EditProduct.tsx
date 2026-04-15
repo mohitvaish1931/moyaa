@@ -4,6 +4,15 @@ import { ChevronLeft } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 
+const SUBCATEGORIES: Record<string, string[]> = {
+  earrings: ['Ear cuff', 'Stud', 'Hoop', 'C-Circle', 'Dangle', 'Tassel', 'Sets'],
+  necklaces: ['Dainty', 'Layered', 'Pendant', 'Y-necklace', 'Choker'],
+  bracelets: ['Stackable', 'Tennis bracelets', 'Bangle & Cuff'],
+  rings: [],
+  'hand-chains': [],
+  sets: []
+};
+
 const EditProduct = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -12,6 +21,7 @@ const EditProduct = () => {
   const [form, setForm] = useState<any>({
     name: '',
     category: '',
+    subcategory: '',
     price: 0,
     originalPrice: '',
     description: '',
@@ -24,7 +34,8 @@ const EditProduct = () => {
     videos: [],
     stock: 0,
     sizes: '',
-    shapes: ''
+    shapes: '',
+    colors: ''
   });
   
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -44,6 +55,7 @@ const EditProduct = () => {
         id: product.id || productAny._id,
         name: product.name || '',
         category: product.category || '',
+        subcategory: product.subcategory || '',
         price: product.price || 0,
         originalPrice: product.originalPrice || '',
         description: product.description || '',
@@ -80,6 +92,13 @@ const EditProduct = () => {
             try { s = JSON.parse(s); } catch (e) { /* ignore */ }
           }
           return Array.isArray(s) ? s.join(', ') : (s || '');
+        })(),
+        colors: (() => {
+          let c = productAny.colors;
+          if (typeof c === 'string' && c.startsWith('[')) {
+            try { c = JSON.parse(c); } catch (e) { /* ignore */ }
+          }
+          return Array.isArray(c) ? c.join(', ') : (c || '');
         })()
       });
       setVideoUrls((productAny.videos && productAny.videos.length > 0) ? productAny.videos : ['', '']);
@@ -111,7 +130,8 @@ const EditProduct = () => {
       Object.keys(form).forEach(k => {
         if (form[k] !== undefined && form[k] !== null && 
             k !== 'images' && k !== 'image' && k !== 'videos' && 
-            k !== 'specifications' && k !== 'materials' && k !== 'sizes') {
+            k !== 'specifications' && k !== 'materials' && 
+            k !== 'sizes' && k !== 'shapes' && k !== 'colors') {
           fd.append(k, form[k]);
         }
       });
@@ -158,6 +178,17 @@ const EditProduct = () => {
           shapesArray = form.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
         }
         fd.append('shapes', JSON.stringify(shapesArray));
+      }
+
+      // Handle colors array
+      if (form.colors) {
+        let colorsArray = [];
+        if (Array.isArray(form.colors)) {
+          colorsArray = form.colors;
+        } else if (typeof form.colors === 'string') {
+          colorsArray = form.colors.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        }
+        fd.append('colors', JSON.stringify(colorsArray));
       }
       
 
@@ -290,6 +321,21 @@ const EditProduct = () => {
                   <option value="hand-chains">Hand Chains</option>
                 </select>
               </div>
+              {form.category && SUBCATEGORIES[form.category]?.length > 0 && (
+                <div>
+                  <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Subcategory</label>
+                  <select 
+                    value={form.subcategory || ''} 
+                    onChange={e => setForm({ ...form, subcategory: e.target.value })}
+                    className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  >
+                    <option value="">Select subcategory</option>
+                    {SUBCATEGORIES[form.category].map(sub => (
+                      <option key={sub} value={sub.toLowerCase().replace(/\s+/g, '-')}>{sub}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           </div>
 
@@ -355,6 +401,16 @@ const EditProduct = () => {
                   onChange={e => setForm({ ...form, shapes: e.target.value })}
                   className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
                   placeholder="Heart, Round, Oval"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Colors (Comma separated)</label>
+                <input
+                  type="text"
+                  value={form.colors || ''}
+                  onChange={e => setForm({ ...form, colors: e.target.value })}
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  placeholder="Gold, Rose Gold, Silver"
                 />
               </div>
             </div>

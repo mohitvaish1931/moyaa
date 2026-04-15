@@ -1373,7 +1373,7 @@ const Admin = () => {
                     <tr>
                       <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Product</th>
                       <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Category</th>
-                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest text-center">In Stock</th>
+                      <th className="px-8 py-4 text-center text-[10px] font-bold text-text-muted uppercase tracking-widest">In Stock</th>
                       <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Status</th>
                       <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Actions</th>
                     </tr>
