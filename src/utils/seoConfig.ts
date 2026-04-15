@@ -105,7 +105,7 @@ export const SEO_CONFIG = {
 
   // Verification Codes (Update with your actual codes)
   verification: {
-    google: '', // Add your Google verification code
+    google: '498e7d065d63f257', // Added Google verification ID
     bing: '', // Add your Bing verification code
     pinterest: '', // Add your Pinterest verification code
   },
@@ -133,7 +133,7 @@ export const SEO_CONFIG = {
   // Analytics
   analytics: {
     googleAnalyticsId: 'G-XXXXXXXXXX', // Update with your GA4 ID
-    googleSearchConsoleId: '', // Add your GSC property ID
+    googleSearchConsoleId: '498e7d065d63f257', // Added GSC property ID
   },
 
   // Canonical Base URL

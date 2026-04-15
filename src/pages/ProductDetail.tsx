@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Heart, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
+import { ShoppingBag, Heart, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw, Share2 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 import { useSEO } from '../utils/useSEO';
@@ -24,6 +24,7 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedShape, setSelectedShape] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
+  const [copied, setCopied] = useState(false);
 
 
 
@@ -109,6 +110,32 @@ const ProductDetail = () => {
   const handleVideoError = (e: any) => {
     mediaHandleVideoError(e);
     e.currentTarget.style.display = 'none';
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: product?.name || 'Moraa Jewels',
+      text: product?.description || 'Check out this beautiful jewelry!',
+      url: window.location.href,
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          console.error('Error sharing:', err);
+        }
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
   };
 
   if (loading) {
@@ -465,11 +492,26 @@ const ProductDetail = () => {
                 <button
                   onClick={toggleWishlist}
                   className="p-3 bg-gray-50 border border-gray-300 rounded-lg hover:border-gold-primary/50 transition-all"
+                  title={isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
                 >
                   <Heart className={`h-5 w-5 ${
                     isInWishlist ? 'text-gold-primary fill-current' : 'text-gray-400'
                   }`} />
                 </button>
+                <div className="relative">
+                  <button
+                    onClick={handleShare}
+                    className="p-3 bg-gray-50 border border-gray-300 rounded-lg hover:border-gold-primary/50 transition-all"
+                    title="Share Product"
+                  >
+                    <Share2 className="h-5 w-5 text-gray-400 hover:text-gold-primary transition-colors" />
+                  </button>
+                  {copied && (
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-luxury-dark text-white text-[10px] px-3 py-1.5 rounded-full shadow-glow-gold animate-fade-in-down font-bold tracking-widest whitespace-nowrap z-20">
+                      LINK COPIED!
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* External Product Link */}

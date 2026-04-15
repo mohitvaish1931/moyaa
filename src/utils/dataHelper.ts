@@ -25,7 +25,7 @@ export const parseList = (raw: any): string[] => {
       // Split by comma and clean up each fragment
       trimmed.split(',').forEach(fragment => {
         const clean = fragment.trim()
-          .replace(/^["'\[]+|["'\]]+$/g, '') // Strip leading/trailing quotes and brackets
+          .replace(/^["'\[\\]+|["'\]\\]+$/g, '') // Strip leading/trailing quotes, brackets, and backslashes
           .replace(/\\"/g, '"')               // Unescape quotes
           .replace(/^"/, '').replace(/"$/, '') // Strip one more layer of quotes if needed
           .trim();
@@ -37,7 +37,7 @@ export const parseList = (raw: any): string[] => {
     } else if (Array.isArray(item)) {
       item.forEach(processItem);
     } else {
-      const s = String(item).trim();
+      const s = String(item).trim().replace(/\\$/, '');
       if (s && s !== 'null' && s !== 'undefined') {
         result.push(s);
       }
@@ -50,6 +50,12 @@ export const parseList = (raw: any): string[] => {
     processItem(raw);
   }
 
-  // Final cleanup: unique values and non-empty
-  return [...new Set(result.filter(s => s && s.length > 0))];
+  // Final cleanup: lowercase comparison for deduplication, keep original case for display if possible
+  const seen = new Set();
+  return result.filter(item => {
+    const lower = item.toLowerCase();
+    if (seen.has(lower)) return false;
+    seen.add(lower);
+    return true;
+  });
 };

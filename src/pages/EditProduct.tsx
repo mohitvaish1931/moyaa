@@ -8,9 +8,9 @@ const SUBCATEGORIES: Record<string, string[]> = {
   earrings: ['Ear cuff', 'Stud', 'Hoop', 'C-Circle', 'Dangle', 'Tassel', 'Sets'],
   necklaces: ['Dainty', 'Layered', 'Pendant', 'Y-necklace', 'Choker'],
   bracelets: ['Stackable', 'Tennis bracelets', 'Bangle & Cuff'],
-  rings: [],
-  'hand-chains': [],
-  sets: []
+  rings: ['Adjustable', 'Band', 'Statement', 'Stackable'],
+  'hand-chains': ['Dainty', 'Statement', 'Layered'],
+  sets: ['Bridal Sets', 'Daily Wear', 'Gift Sets']
 };
 
 const EditProduct = () => {
@@ -35,7 +35,9 @@ const EditProduct = () => {
     stock: 0,
     sizes: '',
     shapes: '',
-    colors: ''
+    colors: '',
+    careInstructions: '',
+    displayOrder: 0
   });
   
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -99,7 +101,15 @@ const EditProduct = () => {
             try { c = JSON.parse(c); } catch (e) { /* ignore */ }
           }
           return Array.isArray(c) ? c.join(', ') : (c || '');
-        })()
+        })(),
+        careInstructions: (() => {
+          let ci = productAny.careInstructions;
+          if (typeof ci === 'string' && ci.startsWith('[')) {
+            try { ci = JSON.parse(ci); } catch (e) { /* ignore */ }
+          }
+          return Array.isArray(ci) ? ci.join('\n') : (ci || '');
+        })(),
+        displayOrder: productAny.displayOrder || 0
       });
       setVideoUrls((productAny.videos && productAny.videos.length > 0) ? productAny.videos : ['', '']);
     }
@@ -160,35 +170,46 @@ const EditProduct = () => {
 
       // Handle sizes array
       if (form.sizes) {
-        let sizesArray = [];
+        let sizesArray: string[] = [];
         if (Array.isArray(form.sizes)) {
           sizesArray = form.sizes;
         } else if (typeof form.sizes === 'string') {
-          sizesArray = form.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          sizesArray = [...new Set(form.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0))] as string[];
         }
         fd.append('sizes', JSON.stringify(sizesArray));
       }
 
       // Handle shapes array
       if (form.shapes) {
-        let shapesArray = [];
+        let shapesArray: string[] = [];
         if (Array.isArray(form.shapes)) {
           shapesArray = form.shapes;
         } else if (typeof form.shapes === 'string') {
-          shapesArray = form.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          shapesArray = [...new Set(form.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0))] as string[];
         }
         fd.append('shapes', JSON.stringify(shapesArray));
       }
 
       // Handle colors array
       if (form.colors) {
-        let colorsArray = [];
+        let colorsArray: string[] = [];
         if (Array.isArray(form.colors)) {
           colorsArray = form.colors;
         } else if (typeof form.colors === 'string') {
-          colorsArray = form.colors.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          colorsArray = [...new Set(form.colors.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0))] as string[];
         }
         fd.append('colors', JSON.stringify(colorsArray));
+      }
+
+      // Handle careInstructions array
+      if (form.careInstructions) {
+        let careArray = [];
+        if (Array.isArray(form.careInstructions)) {
+          careArray = form.careInstructions;
+        } else if (typeof form.careInstructions === 'string') {
+          careArray = form.careInstructions.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+        }
+        fd.append('careInstructions', JSON.stringify(careArray));
       }
       
 
@@ -320,6 +341,16 @@ const EditProduct = () => {
                   <option value="sets">Jewelry Sets</option>
                   <option value="hand-chains">Hand Chains</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Display Order (Numbering)</label>
+                <input
+                  type="number"
+                  value={form.displayOrder || 0}
+                  onChange={e => setForm({ ...form, displayOrder: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  placeholder="0"
+                />
               </div>
               {form.category && SUBCATEGORIES[form.category]?.length > 0 && (
                 <div>
@@ -472,6 +503,16 @@ const EditProduct = () => {
                 rows={3}
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
                 placeholder="18k Gold Finish&#10;Waterproof&#10;Hypoallergenic"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Care Instructions (One per line)</label>
+              <textarea
+                value={form.careInstructions || ''}
+                onChange={e => setForm({ ...form, careInstructions: e.target.value })}
+                rows={3}
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                placeholder="Waterproof and Sweatproof&#10;Chlorine and Sea water safe"
               />
             </div>
           </div>

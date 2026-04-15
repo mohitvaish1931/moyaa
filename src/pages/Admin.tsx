@@ -9,9 +9,9 @@ const SUBCATEGORIES: Record<string, string[]> = {
   earrings: ['Ear cuff', 'Stud', 'Hoop', 'C-Circle', 'Dangle', 'Tassel', 'Sets'],
   necklaces: ['Dainty', 'Layered', 'Pendant', 'Y-necklace', 'Choker'],
   bracelets: ['Stackable', 'Tennis bracelets', 'Bangle & Cuff'],
-  rings: [],
-  'hand-chains': [],
-  sets: []
+  rings: ['Adjustable', 'Band', 'Statement', 'Stackable'],
+  'hand-chains': ['Dainty', 'Statement', 'Layered'],
+  sets: ['Bridal Sets', 'Daily Wear', 'Gift Sets']
 };
 
 const Admin = () => {
@@ -145,7 +145,7 @@ const Admin = () => {
           // Handle sizes
           const sizesRaw = fd.get('sizes_raw')?.toString() || '';
           if (sizesRaw) {
-            const sizesArray = sizesRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            const sizesArray = [...new Set(sizesRaw.split(',').map(s => s.trim()).filter(s => s.length > 0))];
             fd.append('sizes', JSON.stringify(sizesArray));
           }
           fd.delete('sizes_raw');
@@ -153,7 +153,7 @@ const Admin = () => {
           // Handle shapes
           const shapesRaw = fd.get('shapes_raw')?.toString() || '';
           if (shapesRaw) {
-            const shapesArray = shapesRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            const shapesArray = [...new Set(shapesRaw.split(',').map(s => s.trim()).filter(s => s.length > 0))];
             fd.append('shapes', JSON.stringify(shapesArray));
           }
           fd.delete('shapes_raw');
@@ -161,10 +161,18 @@ const Admin = () => {
           // Handle colors
           const colorsRaw = fd.get('colors_raw')?.toString() || '';
           if (colorsRaw) {
-            const colorsArray = colorsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            const colorsArray = [...new Set(colorsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0))];
             fd.append('colors', JSON.stringify(colorsArray));
           }
           fd.delete('colors_raw');
+
+          // Handle care instructions
+          const careRaw = fd.get('careInstructions_raw')?.toString() || '';
+          if (careRaw) {
+            const careArray = careRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+            fd.append('careInstructions', JSON.stringify(careArray));
+          }
+          fd.delete('careInstructions_raw');
           
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
@@ -321,6 +329,17 @@ const Admin = () => {
                 <option value="pre-upload">Pre-upload (Draft)</option>
               </select>
             </div>
+            <div>
+              <label htmlFor="product-order" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Display Order (Numbering)</label>
+              <input
+                id="product-order"
+                name="displayOrder"
+                type="number"
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                placeholder="0"
+                defaultValue="0"
+              />
+            </div>
           </div>
           <div>
             <label htmlFor="product-description" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Description</label>
@@ -374,6 +393,16 @@ const Admin = () => {
               rows={3}
               className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
               placeholder="Waterproof&#10;Anti-Tarnish&#10;Hypoallergenic"
+            />
+          </div>
+          <div>
+            <label htmlFor="product-care" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Care Instructions (One per line)</label>
+            <textarea
+              id="product-care"
+              name="careInstructions_raw"
+              rows={3}
+              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+              placeholder="Waterproof and Sweatproof&#10;Chlorine and Sea water safe"
             />
           </div>
           <div>
@@ -617,12 +646,20 @@ const Admin = () => {
           subcategory: editProduct.subcategory || '',
           productLink: editProduct.productLink || '',
           status: editProduct.status || 'published',
+          displayOrder: editProduct.displayOrder || 0,
           colors: (() => {
             let c = editProduct.colors;
             if (typeof c === 'string' && c.startsWith('[')) {
               try { c = JSON.parse(c); } catch (e) { /* ignore */ }
             }
             return Array.isArray(c) ? c.join(', ') : (c || '');
+          })(),
+          careInstructions: (() => {
+            let ci = editProduct.careInstructions;
+            if (typeof ci === 'string' && ci.startsWith('[')) {
+              try { ci = JSON.parse(ci); } catch (e) { /* ignore */ }
+            }
+            return Array.isArray(ci) ? ci.join('\n') : (ci || '');
           })()
         });
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
@@ -678,7 +715,7 @@ const Admin = () => {
           if (Array.isArray(localForm.sizes)) {
             sizesArray = localForm.sizes;
           } else if (typeof localForm.sizes === 'string') {
-            sizesArray = localForm.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+            sizesArray = [...new Set(localForm.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0))] as string[];
           }
           fd.append('sizes', JSON.stringify(sizesArray));
         }
@@ -689,7 +726,7 @@ const Admin = () => {
           if (Array.isArray(localForm.shapes)) {
             shapesArray = localForm.shapes;
           } else if (typeof localForm.shapes === 'string') {
-            shapesArray = localForm.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+            shapesArray = [...new Set(localForm.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0))] as string[];
           }
           fd.append('shapes', JSON.stringify(shapesArray));
         }
@@ -700,9 +737,20 @@ const Admin = () => {
           if (Array.isArray(localForm.colors)) {
             colorsArray = localForm.colors;
           } else if (typeof localForm.colors === 'string') {
-            colorsArray = localForm.colors.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+            colorsArray = [...new Set(localForm.colors.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0))] as string[];
           }
           fd.append('colors', JSON.stringify(colorsArray));
+        }
+
+        // Handle care instructions array
+        if (localForm.careInstructions) {
+          let careArray: string[] = [];
+          if (Array.isArray(localForm.careInstructions)) {
+            careArray = localForm.careInstructions;
+          } else if (typeof localForm.careInstructions === 'string') {
+            careArray = localForm.careInstructions.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+          }
+          fd.append('careInstructions', JSON.stringify(careArray));
         }
 
         // Handle video files
@@ -891,6 +939,16 @@ const Admin = () => {
                   <option value="pre-upload">Pre-upload (Draft)</option>
                 </select>
               </div>
+              <div>
+                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Display Order (Numbering)</label>
+                <input
+                  type="number"
+                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  value={localForm?.displayOrder || 0}
+                  onChange={e => setLocalForm({ ...localForm, displayOrder: parseInt(e.target.value, 10) || 0 })}
+                  placeholder="0"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Description</label>
@@ -940,6 +998,16 @@ const Admin = () => {
                 value={localForm?.specifications || ''}
                 onChange={e => setLocalForm({ ...localForm, specifications: e.target.value })}
                 placeholder="Stainless Steel&#10;18k Gold Finish"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Care Instructions (One per line)</label>
+              <textarea
+                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                rows={3}
+                value={localForm?.careInstructions || ''}
+                onChange={e => setLocalForm({ ...localForm, careInstructions: e.target.value })}
+                placeholder="Waterproof and Sweatproof&#10;Chlorine and Sea water safe"
               />
             </div>
             <div>
@@ -1461,6 +1529,9 @@ const Admin = () => {
                         Price
                       </th>
                       <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                        Options
+                      </th>
+                      <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Status
                       </th>
                       <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
@@ -1488,6 +1559,26 @@ const Admin = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gold-primary font-medium">
                           ₹{product.price.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex flex-col space-y-1">
+                            {product.colors && product.colors.length > 0 && (
+                              <div className="flex items-center space-x-1">
+                                <span className="text-[8px] font-bold text-text-muted uppercase tracking-tighter">Colors:</span>
+                                <div className="flex gap-0.5">
+                                  {product.colors.map((c, idx) => (
+                                    <span key={idx} className="w-2 h-2 rounded-full border border-gold-primary/20 bg-gray-100" title={c}></span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {product.sizes && product.sizes.length > 0 && (
+                              <div className="flex items-center space-x-1">
+                                <span className="text-[8px] font-bold text-text-muted uppercase tracking-tighter">Sizes:</span>
+                                <span className="text-[9px] text-text-primary truncate max-w-[60px]">{product.sizes.join(', ')}</span>
+                              </div>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${product.soldOut ? 'bg-red-500/20 text-red-300 border border-red-500/50' : 'bg-emerald-luxury/20 text-emerald-luxury border border-emerald-luxury/50'}`}>

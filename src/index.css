@@ -299,3 +299,18 @@ html {
     background-position: -200% center;
   }
 }
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.3s ease-out forwards;
+}
