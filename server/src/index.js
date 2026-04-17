@@ -14,14 +14,39 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173','https://moraajewles.com'],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'https://moraajewles.com',
+      'https://www.moraajewles.com',
+      'https://moraajewels.com',
+      'https://www.moraajewels.com'
+    ];
+    
+    const isAllowed = allowedOrigins.includes(origin) || 
+                     origin.includes('vercel.app') || 
+                     origin.includes('moraajewles.com') || 
+                     origin.includes('moraajewels.com');
+                     
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
 app.use(express.json());
 
 // Basic CSP header to mirror the meta tag in index.html. Adjust for production tighter rules.
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "default-src 'self' data: blob: https:; connect-src 'self' http://localhost:5000 ws://localhost:5173 ws://localhost:5000 https:; img-src 'self' data: blob: https:; media-src 'self' https:; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:; frame-src https:; worker-src 'self' blob:;");
+  res.setHeader('Content-Security-Policy', "default-src 'self' data: blob: https:; connect-src 'self' http://localhost:5000 ws://localhost:5173 ws://localhost:5000 https://moyaalatest.onrender.com https://moyaa.onrender.com https:; img-src 'self' data: blob: https:; media-src 'self' https:; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:; frame-src https:; worker-src 'self' blob:;");
   next();
 });
 
