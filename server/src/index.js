@@ -24,7 +24,8 @@ app.use(cors({
       'https://moraajewles.com',
       'https://www.moraajewles.com',
       'https://moraajewels.com',
-      'https://www.moraajewels.com'
+      'https://www.moraajewels.com',
+      'https://moraajewles.com/'
     ];
     
     const isAllowed = allowedOrigins.includes(origin) || 
