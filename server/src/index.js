@@ -46,7 +46,7 @@ app.use(express.json());
 
 // Basic CSP header to mirror the meta tag in index.html. Adjust for production tighter rules.
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "default-src 'self' data: blob: https:; connect-src 'self' http://localhost:5000 ws://localhost:5173 ws://localhost:5000 https://moyaa-3kxy.onrender.com https://moyaalatest.onrender.com https://moyaa.onrender.com https:; img-src 'self' data: blob: https:; media-src 'self' https:; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:; frame-src https:; worker-src 'self' blob:;");
+  res.setHeader('Content-Security-Policy', "default-src 'self' data: blob: https:; connect-src 'self' http://localhost:5000 ws://localhost:5173 ws://localhost:5000 https://moyaa-3kxy.onrender.com https://moyaalatest.onrender.com https://moyaa.onrender.com https:; img-src 'self' data: blob: https:; media-src 'self' https:; script-src 'self' 'unsafe-eval' 'unsafe-inline' https: blob:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:; frame-src https:; worker-src 'self' blob:;");
   next();
 });
 
