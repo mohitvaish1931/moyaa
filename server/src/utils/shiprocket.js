@@ -60,7 +60,7 @@ export const createShiprocketOrder = async (order, userEmail) => {
       billing_pincode: order.shippingAddress.pincode,
       billing_state: order.shippingAddress.state,
       billing_country: "India",
-      billing_email: userEmail || "customer@rrjewel.com",
+      billing_email: userEmail || "moraajewels@gmail.com",
       billing_phone: order.shippingAddress.phone,
       shipping_is_billing: true,
       order_items: order.items.map(item => ({
