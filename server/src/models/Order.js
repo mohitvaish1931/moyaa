@@ -28,6 +28,10 @@ const OrderSchema = new Schema({
   razorpaySignature: String,
   shiprocketOrderId: String,
   shiprocketShipmentId: String,
+  awbNumber: String,
+  courierName: String,
+  trackingUrl: String,
+  trackingStatus: String,
   status: { type: String, enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], default: 'Processing' }
 }, { timestamps: true });
 

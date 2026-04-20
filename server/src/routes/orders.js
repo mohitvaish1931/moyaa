@@ -2,7 +2,8 @@ import express from 'express';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import Order from '../models/Order.js';
-import { getShiprocketToken } from '../utils/shiprocket.js';
+import { getShiprocketToken, createShiprocketOrder, trackShipment } from '../utils/shiprocket.js';
+import User from '../models/User.js';
 import axios from 'axios';
 import dotenv from 'dotenv';
 
@@ -85,50 +86,18 @@ router.post('/verify', async (req, res) => {
     order.status = 'Processing';
     await order.save();
 
-    // Trigger Shiprocket shipment creation (asynchronously or after verification)
+    // Trigger Shiprocket shipment creation
     try {
-      const token = await getShiprocketToken();
-      if (token) {
-        const shiprocketOrderData = {
-          order_id: String(order._id),
-          order_date: new Date().toISOString().split('T')[0],
-          pickup_location: "Primary", // This should match a location in Shiprocket panel
-          billing_customer_name: order.shippingAddress.name.split(' ')[0],
-          billing_last_name: order.shippingAddress.name.split(' ').slice(1).join(' ') || ' ',
-          billing_address: order.shippingAddress.address,
-          billing_city: order.shippingAddress.city,
-          billing_pincode: order.shippingAddress.pincode,
-          billing_state: order.shippingAddress.state,
-          billing_country: "India",
-          billing_email: "customer@example.com", // You might want to get this from User model
-          billing_phone: order.shippingAddress.phone,
-          shipping_is_billing: true,
-          order_items: order.items.map(item => ({
-            name: item.name,
-            sku: item.product?._id || item.product?.id || 'sku-unknown',
-            units: item.quantity,
-            selling_price: item.price
-          })),
-          payment_method: "Prepaid",
-          sub_total: order.totalAmount,
-          length: 10, // Default dimensions
-          width: 10,
-          height: 10,
-          weight: 0.5
-        };
+      const user = await User.findById(order.user);
+      const srData = await createShiprocketOrder(order, user?.email);
 
-        const srRes = await axios.post('https://apiv2.shiprocket.in/v1/external/orders/create/adhoc', shiprocketOrderData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (srRes.data && srRes.data.order_id) {
-          order.shiprocketOrderId = String(srRes.data.order_id);
-          order.shiprocketShipmentId = String(srRes.data.shipment_id);
-          await order.save();
-        }
+      if (srData && srData.order_id) {
+        order.shiprocketOrderId = String(srData.order_id);
+        order.shiprocketShipmentId = String(srData.shipment_id);
+        await order.save();
       }
     } catch (srError) {
-      console.error('Shiprocket creation error (ignored to confirm payment):', srError.response?.data || srError.message);
+      console.error('Shiprocket creation error (payment confirmed, fulfillment failed):', srError.message);
     }
 
     res.json({ success: true, order });
@@ -138,11 +107,35 @@ router.post('/verify', async (req, res) => {
   }
 });
 
-// 3. Get User Orders
-router.get('/user/:userId', async (req, res) => {
+// 4. Get Tracking Info
+router.get('/:orderId/tracking', async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.params.userId }).sort({ createdAt: -1 });
-    res.json(orders);
+    const order = await Order.findById(req.params.orderId);
+    if (!order || !order.shiprocketShipmentId) {
+      return res.status(404).json({ error: 'Tracking info not available for this order' });
+    }
+
+    const trackingData = await trackShipment(order.shiprocketShipmentId);
+    
+    // Update local order tracking info if available
+    if (trackingData && trackingData.tracking_data) {
+      const info = trackingData.tracking_data;
+      const shipment = info.shipment_track?.[0];
+      
+      if (shipment) {
+        order.awbNumber = shipment.awb_code;
+        order.courierName = shipment.courier_name;
+        order.trackingStatus = shipment.current_status;
+        
+        // Map status to our order status
+        if (shipment.current_status === 'Delivered') order.status = 'Delivered';
+        else if (shipment.current_status === 'In Transit') order.status = 'Shipped';
+        
+        await order.save();
+      }
+    }
+
+    res.json(trackingData);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
