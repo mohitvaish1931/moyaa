@@ -8,7 +8,7 @@ import { getImageUrl } from '../utils/mediaHelper';
 const NewArrivals = () => {
   const { state, dispatch } = useAppContext();
 
-  const products = state.products.slice(0, 5);
+  const products = state.products.filter(p => p.status === 'published' || p.status !== 'pre-upload').slice(0, 5);
 
   const toggleWishlist = (product: any) => {
     const isInWishlist = state.wishlist.find(item => item.id === product.id);

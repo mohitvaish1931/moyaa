@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, TrendingUp, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, Package, Users, ShoppingBag, TrendingUp, ArrowUp, ArrowDown } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
@@ -21,6 +21,8 @@ const Admin = () => {
   const { state, dispatch } = useAppContext();
   const [editProduct, setEditProduct] = useState<any>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [draggedProductIndex, setDraggedProductIndex] = useState<number | null>(null);
+  const [dragOverProductIndex, setDragOverProductIndex] = useState<number | null>(null);
 
   const stats = [
     { name: 'Total Products', value: state.products.length, icon: Package, color: 'bg-blue-500' },
@@ -31,6 +33,48 @@ const Admin = () => {
 
   const recentOrders: any[] = [];
   
+  const handleDragStartProduct = (e: React.DragEvent, index: number) => {
+    setDraggedProductIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragEnterProduct = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    setDragOverProductIndex(index);
+  };
+
+  const handleDragOverProduct = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDragEndProduct = async () => {
+    if (draggedProductIndex !== null && dragOverProductIndex !== null && draggedProductIndex !== dragOverProductIndex) {
+      const products = [...state.products];
+      const item = products.splice(draggedProductIndex, 1)[0];
+      products.splice(dragOverProductIndex, 0, item);
+
+      dispatch({ type: 'SET_PRODUCTS', payload: products });
+
+      const reorderPayload = products.map((p, idx) => ({
+        id: (p as any)._id || p.id,
+        displayOrder: idx,
+      }));
+
+      try {
+        const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/reorder`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ products: reorderPayload }),
+        });
+        if (!res.ok) throw new Error('Drag reorder failed');
+      } catch (err) {
+        console.error('Drag reorder update failed:', err);
+      }
+    }
+    setDraggedProductIndex(null);
+    setDragOverProductIndex(null);
+  };
+
   const handleProductReorder = async (currentIndex: number, direction: 'up' | 'down') => {
     const nextIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
     if (nextIndex < 0 || nextIndex >= state.products.length) return;
@@ -1541,7 +1585,16 @@ const Admin = () => {
                   </thead>
                   <tbody className="divide-y divide-sapphire-luxury/20">
                     {state.products.map((product, i) => (
-                      <tr key={(product as any)._id || product.id || i}>
+                      <tr 
+                        key={(product as any)._id || product.id || i}
+                        draggable
+                        onDragStart={(e) => handleDragStartProduct(e, i)}
+                        onDragEnter={(e) => handleDragEnterProduct(e, i)}
+                        onDragOver={handleDragOverProduct}
+                        onDragEnd={handleDragEndProduct}
+                        className={`cursor-move transition-colors ${draggedProductIndex === i ? 'opacity-50' : dragOverProductIndex === i ? 'bg-gold-primary/10' : ''}`}
+                        title="Drag to reorder"
+                      >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <img
@@ -1605,8 +1658,29 @@ const Admin = () => {
                                 <ArrowDown className="h-3.5 w-3.5" />
                               </button>
                             </div>
-                            <button className="text-gold-primary hover:text-rose-gold transition-colors">
-                              <Eye className="h-4 w-4" />
+                            <button 
+                              onClick={async () => {
+                                const newStatus = product.status === 'published' ? 'pre-upload' : 'published';
+                                try {
+                                  const productAny = product as any;
+                                  const fd = new FormData();
+                                  fd.append('status', newStatus);
+                                  const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${productAny._id || product.id}`, {
+                                    method: 'PUT',
+                                    body: fd
+                                  });
+                                  if (!res.ok) throw new Error('Toggle failed');
+                                  const updated = await res.json();
+                                  dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
+                                } catch (e) {
+                                  console.error('Toggle visibility failed:', e);
+                                  dispatch({ type: 'UPDATE_PRODUCT', payload: { ...product, status: newStatus } });
+                                }
+                              }}
+                              className={`${product.status === 'published' ? 'text-gold-primary hover:text-rose-gold' : 'text-text-muted hover:text-text-primary'} transition-colors`}
+                              title={product.status === 'published' ? 'Hide Product' : 'Show Product'}
+                            >
+                              {product.status === 'published' ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                             </button>
                             <button
                               onClick={() => {
