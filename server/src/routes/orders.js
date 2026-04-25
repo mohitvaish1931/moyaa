@@ -141,4 +141,34 @@ router.get('/:orderId/tracking', async (req, res) => {
   }
 });
 
+// 5. Get all orders (Admin)
+router.get('/', async (req, res) => {
+  try {
+    const orders = await Order.find().populate('user').populate('items.product').sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 6. Update order status (Admin)
+router.put('/:orderId', async (req, res) => {
+  try {
+    const { status, paymentStatus } = req.body;
+    const order = await Order.findById(req.params.orderId);
+    
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    if (status) order.status = status;
+    if (paymentStatus) order.paymentStatus = paymentStatus;
+
+    await order.save();
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;

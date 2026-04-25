@@ -23,15 +23,49 @@ const Admin = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [draggedProductIndex, setDraggedProductIndex] = useState<number | null>(null);
   const [dragOverProductIndex, setDragOverProductIndex] = useState<number | null>(null);
+  
+  const [orders, setOrders] = useState<any[]>([]);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+
+  React.useEffect(() => {
+    const fetchOrders = async () => {
+      setIsLoadingOrders(true);
+      try {
+        const res = await fetch(API_ENDPOINTS.ORDERS.BASE);
+        if (res.ok) {
+          const data = await res.json();
+          setOrders(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch orders:', err);
+      } finally {
+        setIsLoadingOrders(false);
+      }
+    };
+    fetchOrders();
+  }, []);
+
+  const totalRevenue = orders.reduce((sum, order) => {
+    if (order.paymentStatus === 'Paid') {
+      return sum + (order.totalAmount || 0);
+    }
+    return sum;
+  }, 0);
 
   const stats = [
     { name: 'Total Products', value: state.products.length, icon: Package, color: 'bg-blue-500' },
-    { name: 'Total Orders', value: '0', icon: ShoppingBag, color: 'bg-green-500' },
-    { name: 'Total Customers', value: '0', icon: Users, color: 'bg-purple-500' },
-    { name: 'Revenue', value: '₹0', icon: TrendingUp, color: 'bg-brand' },
+    { name: 'Total Orders', value: orders.length.toString(), icon: ShoppingBag, color: 'bg-green-500' },
+    { name: 'Total Customers', value: new Set(orders.map(o => o.user?._id || o.user)).size.toString(), icon: Users, color: 'bg-purple-500' },
+    { name: 'Revenue', value: `₹${totalRevenue.toLocaleString()}`, icon: TrendingUp, color: 'bg-brand' },
   ];
 
-  const recentOrders: any[] = [];
+  const recentOrders = orders.slice(0, 5).map(order => ({
+    id: order.razorpayOrderId || (order._id ? order._id.substring(0, 8) : 'N/A'),
+    customer: order.shippingAddress?.name || order.user?.name || 'Guest',
+    product: order.items?.[0]?.name + (order.items?.length > 1 ? ` +${order.items.length - 1}` : ''),
+    amount: `₹${order.totalAmount?.toLocaleString()}`,
+    status: order.status || 'Processing'
+  }));
   
   const handleDragStartProduct = (e: React.DragEvent, index: number) => {
     setDraggedProductIndex(index);
@@ -1778,41 +1812,92 @@ const Admin = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-sapphire-luxury/20">
-                  {recentOrders.map((order) => (
-                    <tr key={order.id}>
+                  {orders.map((order) => (
+                    <tr key={order._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
-                        {order.id}
+                        {order.razorpayOrderId || (order._id ? order._id.substring(0, 10) : 'N/A')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
-                        {order.customer}
+                        {order.shippingAddress?.name || order.user?.name || 'Guest'}
+                        <div className="text-[10px] text-text-muted">{order.shippingAddress?.phone}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
-                        {order.product}
+                        <div className="max-w-xs truncate">
+                          {order.items?.map((it: any) => it.name).join(', ')}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
-                        {order.amount}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70 font-bold">
+                        ₹{order.totalAmount?.toLocaleString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-text-primary' :
-                            order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
-                              order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-text-primary' :
-                                'bg-white text-text-primary/70'
-                          }`}>
-                          {order.status}
+                        <span className={`inline-flex px-2 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full ${
+                          order.status === 'Delivered' ? 'bg-emerald-luxury/20 text-emerald-luxury' :
+                          order.status === 'Shipped' ? 'bg-sapphire-luxury/20 text-sapphire-luxury' :
+                          order.status === 'Processing' ? 'bg-gold-primary/20 text-gold-primary' :
+                          'bg-gray-100 text-gray-700'
+                        }`}>
+                          {order.status || 'Processing'}
                         </span>
+                        <div className="text-[10px] mt-1 text-text-muted">
+                          {order.paymentStatus === 'Paid' ? '✅ Paid' : '⏳ Pending'}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button className="text-gold-primary hover:text-rose-gold transition-colors">
+                        <div className="flex space-x-2 items-center">
+                          <button 
+                            onClick={() => {
+                              console.log('Order Details:', order);
+                              alert(`Order Details:\n\nCustomer: ${order.shippingAddress?.name}\nAddress: ${order.shippingAddress?.address}, ${order.shippingAddress?.city}\nPhone: ${order.shippingAddress?.phone}\n\nItems: ${order.items?.map((it:any)=>`${it.name} (x${it.quantity})`).join(', ')}`);
+                            }}
+                            className="text-gold-primary hover:text-rose-gold transition-colors p-1"
+                            title="View Details"
+                          >
                             <Eye className="h-4 w-4" />
                           </button>
-                          <button className="text-sapphire-luxury hover:text-emerald-luxury transition-colors">
-                            <Edit className="h-4 w-4" />
-                          </button>
+                          
+                          <select
+                            value={order.status || 'Processing'}
+                            onChange={async (e) => {
+                              const newStatus = e.target.value;
+                              try {
+                                const res = await fetch(`${API_ENDPOINTS.ORDERS.BASE}/${order._id}`, {
+                                  method: 'PUT',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ status: newStatus })
+                                });
+                                if (res.ok) {
+                                  const updatedOrder = await res.json();
+                                  setOrders(orders.map(o => o._id === updatedOrder._id ? updatedOrder : o));
+                                }
+                              } catch (err) {
+                                console.error('Failed to update order status:', err);
+                              }
+                            }}
+                            className="text-[10px] bg-luxury-dark/5 border border-gold-primary/10 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-gold-primary"
+                          >
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                          </select>
                         </div>
                       </td>
                     </tr>
                   ))}
+                  {orders.length === 0 && !isLoadingOrders && (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-12 text-center text-text-muted">
+                        No orders found.
+                      </td>
+                    </tr>
+                  )}
+                  {isLoadingOrders && (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-12 text-center text-text-muted">
+                        Loading orders...
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
