@@ -59,6 +59,8 @@ import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
 import ordersRouter from './routes/orders.js';
 import shiprocketRouter from './routes/shiprocket.js';
+import reviewsRouter from './routes/reviews.js';
+import inventoryRouter from './routes/inventory.js';
 import User from './models/User.js';
 import bcrypt from 'bcryptjs';
 
@@ -70,6 +72,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/shiprocket', shiprocketRouter);
+app.use('/api/reviews', reviewsRouter);
+app.use('/api/inventory', inventoryRouter);
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
