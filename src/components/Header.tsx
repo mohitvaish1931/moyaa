@@ -33,6 +33,7 @@ const Header = () => {
     { label: 'HOME', path: '/' },
     { label: 'COLLECTIONS', path: '/products' },
     { label: 'TRACK ORDER', path: '/track-order' },
+    { label: 'BUY 1 GET 1', path: '/bogo' },
     { label: 'CONTACT', path: '/contact' },
     ...(state.user?.isAdmin === true ? [{ label: 'ADMIN', path: '/admin' }] : []),
   ];
@@ -79,6 +80,7 @@ const Header = () => {
                     <div className="grid grid-cols-1 gap-1 px-4">
                       {[
                         { label: 'ALL PRODUCTS', path: '/products' },
+                        { label: 'BUY 1 GET 1', path: '/bogo' },
                         { label: 'EARRINGS', path: '/earrings' },
                         { label: 'BRACELETS', path: '/bracelets' },
                         { label: 'RINGS', path: '/rings' },
@@ -174,9 +176,10 @@ const Header = () => {
                 </Link>
               ))}
               <div className="pl-4 pt-2 space-y-4 border-l border-gold-primary/20">
-                 {[
-                   { n: 'ALL PRODUCTS', p: '/products' },
-                   { n: 'EARRINGS', p: '/earrings' },
+                   {[
+                    { n: 'ALL PRODUCTS', p: '/products' },
+                    { n: 'BUY 1 GET 1', p: '/bogo' },
+                    { n: 'EARRINGS', p: '/earrings' },
                    { n: 'BRACELETS', p: '/bracelets' },
                    { n: 'RINGS', p: '/rings' },
                    { n: 'NECKLACES', p: '/necklaces' },

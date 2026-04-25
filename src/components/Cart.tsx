@@ -40,8 +40,35 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
     dispatch({ type: 'REMOVE_FROM_CART', payload: id });
   };
 
-  const getTotalPrice = () => {
+  const getBogoDiscount = () => {
+    // 1. Get all BOGO-eligible items and flatten them into individual units
+    const bogoUnits: number[] = [];
+    state.cart.forEach(item => {
+      if (item.isBOGO) {
+        for (let i = 0; i < item.quantity; i++) {
+          bogoUnits.push(item.price);
+        }
+      }
+    });
+
+    // 2. Sort prices descending so we pair the most expensive with the next most expensive, etc.
+    // The rule is "Buy one, get one of equal or lesser value free"
+    bogoUnits.sort((a, b) => b - a);
+
+    // 3. For every pair, the second item is free
+    let discount = 0;
+    for (let i = 1; i < bogoUnits.length; i += 2) {
+      discount += bogoUnits[i];
+    }
+    return discount;
+  };
+
+  const getSubtotal = () => {
     return state.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
+  const getTotalPrice = () => {
+    return getSubtotal() - getBogoDiscount();
   };
 
   const handleCheckout = () => {
@@ -214,6 +241,9 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                         )}
                       </div>
                       <p className="text-gold-primary font-bold">Rs. {item.price.toLocaleString()}.00</p>
+                      {item.isBOGO && (
+                        <span className="inline-block mt-1 px-2 py-0.5 bg-primary-red/20 text-primary-red text-[8px] font-black tracking-widest uppercase rounded">BOGO ELIGIBLE</span>
+                      )}
                     </div>
                     <div className="flex items-center space-x-2">
                       <button
@@ -338,9 +368,20 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
 
         {/* Footer */}
         {state.cart.length > 0 && view === 'cart' && (
-          <div className="border-t border-gold-primary/30 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-lg font-bold text-platinum">Total: <span className="text-gold-primary">Rs. {getTotalPrice().toLocaleString()}.00</span></span>
+          <div className="border-t border-gold-primary/30 p-6 space-y-3">
+            <div className="flex items-center justify-between text-platinum/70 text-sm">
+              <span>Subtotal</span>
+              <span>Rs. {getSubtotal().toLocaleString()}.00</span>
+            </div>
+            {getBogoDiscount() > 0 && (
+              <div className="flex items-center justify-between text-primary-red text-sm font-bold animate-pulse">
+                <span>BOGO Discount</span>
+                <span>- Rs. {getBogoDiscount().toLocaleString()}.00</span>
+              </div>
+            )}
+            <div className="flex items-center justify-between pt-2 border-t border-gold-primary/10">
+              <span className="text-xl font-black text-platinum uppercase tracking-widest luxury-serif">Total</span>
+              <span className="text-xl font-black text-gold-primary">Rs. {getTotalPrice().toLocaleString()}.00</span>
             </div>
             <button
               onClick={handleCheckout}

@@ -147,6 +147,7 @@ const Admin = () => {
     const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [soldOut, setSoldOut] = useState(false);
+    const [isBOGO, setIsBOGO] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -201,8 +202,9 @@ const Admin = () => {
             fd.append('videos', JSON.stringify(finalVideos));
           }
 
-          // Add soldOut status
+          // Add status and BOGO
           fd.append('soldOut', String(soldOut));
+          fd.append('isBOGO', String(isBOGO));
 
           // Parse specifications from raw text
           const specsRaw = fd.get('specifications_raw')?.toString() || '';
@@ -554,7 +556,7 @@ const Admin = () => {
               />
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-8">
             <label className="flex items-center space-x-2 text-text-primary cursor-pointer">
               <input
                 type="checkbox"
@@ -562,7 +564,16 @@ const Admin = () => {
                 onChange={e => setSoldOut(e.target.checked)}
                 className="rounded border-sapphire-luxury accent-gold-primary"
               />
-              <span>Sold Out</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">Sold Out</span>
+            </label>
+            <label className="flex items-center space-x-2 text-text-primary cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isBOGO}
+                onChange={e => setIsBOGO(e.target.checked)}
+                className="rounded border-sapphire-luxury accent-gold-primary"
+              />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary-red">Buy 1 Get 1 (BOGO)</span>
             </label>
           </div>
           <div className="flex space-x-4">
@@ -738,7 +749,8 @@ const Admin = () => {
               try { ci = JSON.parse(ci); } catch (e) { /* ignore */ }
             }
             return Array.isArray(ci) ? ci.join('\n') : (ci || '');
-          })()
+          })(),
+          isBOGO: editProduct.isBOGO || false,
         });
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
       } else {
@@ -1182,7 +1194,7 @@ const Admin = () => {
                 />
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-8">
               <label className="flex items-center space-x-2 text-text-primary cursor-pointer">
                 <input
                   type="checkbox"
@@ -1190,7 +1202,16 @@ const Admin = () => {
                   onChange={e => setLocalForm({ ...localForm, soldOut: e.target.checked })}
                   className="rounded border-teal-luxury accent-gold-primary"
                 />
-                <span>Sold Out</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest">Sold Out</span>
+              </label>
+              <label className="flex items-center space-x-2 text-text-primary cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={!!localForm?.isBOGO}
+                  onChange={e => setLocalForm({ ...localForm, isBOGO: e.target.checked })}
+                  className="rounded border-teal-luxury accent-gold-primary"
+                />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-primary-red">Buy 1 Get 1 (BOGO)</span>
               </label>
             </div>
             <div className="flex justify-end space-x-2">

@@ -25,6 +25,8 @@ const ProductDetail = () => {
   const [selectedShape, setSelectedShape] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [copied, setCopied] = useState(false);
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+  const [isQualityInfoOpen, setIsQualityInfoOpen] = useState(false);
 
 
 
@@ -451,6 +453,29 @@ const ProductDetail = () => {
                       <p className="text-[10px] text-text-muted italic">Standard Ring Size</p>
                     )}
                   </div>
+                  
+                  {/* Helpful Links Section */}
+                  <div className="flex flex-col space-y-3 pt-4 border-t border-gold-primary/5 mt-4">
+                    <button 
+                      onClick={() => setIsSizeGuideOpen(true)}
+                      className="flex items-center space-x-3 text-text-secondary hover:text-gold-primary transition-colors group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gold-primary/10 flex items-center justify-center group-hover:bg-gold-primary group-hover:text-white transition-all">
+                        <img src="/ring-size-guide.png" alt="" className="w-5 h-5 object-cover rounded-[2px]" />
+                      </div>
+                      <span className="text-[11px] font-bold tracking-[0.1em] uppercase underline underline-offset-4">Ring size help</span>
+                    </button>
+                    
+                    <button 
+                      onClick={() => setIsQualityInfoOpen(true)}
+                      className="flex items-center space-x-3 text-text-secondary hover:text-gold-primary transition-colors group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gold-primary/10 flex items-center justify-center group-hover:bg-gold-primary group-hover:text-white transition-all">
+                        <Shield className="w-4 h-4" />
+                      </div>
+                      <span className="text-[11px] font-bold tracking-[0.1em] uppercase underline underline-offset-4">Why Choose MORAA? Click here to know!</span>
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -527,6 +552,24 @@ const ProductDetail = () => {
                   </a>
                 </div>
               )}
+
+              {/* Guaranteed Checkout Section */}
+              <div className="pt-6 mt-6 border-t border-gold-primary/10">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <div className="h-px w-8 bg-gold-primary/20"></div>
+                    <span className="text-[9px] font-bold tracking-[0.3em] text-text-muted uppercase">Guaranteed Checkout</span>
+                    <div className="h-px w-8 bg-gold-primary/20"></div>
+                  </div>
+                  <div className="flex flex-wrap justify-center gap-4 opacity-80 grayscale hover:grayscale-0 transition-all">
+                    <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" className="h-6" />
+                    <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard" className="h-6" />
+                    <img src="https://img.icons8.com/color/48/000000/google-pay.png" alt="GPay" className="h-6" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo.png/640px-UPI-Logo.png" alt="UPI" className="h-4 mt-1" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/1200px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" className="h-3 mt-1.5" />
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Service Features */}
@@ -611,6 +654,103 @@ const ProductDetail = () => {
         {/* Customer Reviews Section */}
         {id && <ProductReviews productId={id} />}
       </div>
+
+      {/* Ring Size Guide Modal */}
+      {isSizeGuideOpen && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-luxury-dark/60 backdrop-blur-sm animate-fade-in"
+          onClick={() => setIsSizeGuideOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl animate-scale-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setIsSizeGuideOpen(false)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-gold-primary hover:text-white transition-all z-10"
+            >
+              <ChevronLeft className="h-5 w-5 rotate-180" />
+            </button>
+            <div className="p-8">
+              <h2 className="text-2xl font-bold luxury-serif text-luxury-dark mb-6 text-center uppercase tracking-wider">Ring Size Guide</h2>
+              <div className="rounded-2xl overflow-hidden border border-gold-primary/10">
+                <img src="/ring-size-guide.png" alt="Moraa Ring Size Guide" className="w-full h-auto" />
+              </div>
+              <div className="mt-8 text-center">
+                <button 
+                  onClick={() => setIsSizeGuideOpen(false)}
+                  className="btn-premium-gold px-8 py-3 rounded-full text-xs font-bold tracking-widest text-luxury-dark"
+                >
+                  GOT IT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quality Info Modal */}
+      {isQualityInfoOpen && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-luxury-dark/60 backdrop-blur-sm animate-fade-in"
+          onClick={() => setIsQualityInfoOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl animate-scale-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setIsQualityInfoOpen(false)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-gold-primary hover:text-white transition-all z-10"
+            >
+              <ChevronLeft className="h-5 w-5 rotate-180" />
+            </button>
+            <div className="p-10 text-center">
+              <div className="w-20 h-20 bg-gold-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="h-10 w-10 text-gold-primary" />
+              </div>
+              <h2 className="text-3xl font-bold luxury-serif text-luxury-dark mb-4 uppercase tracking-wider">The MORAA Quality</h2>
+              <div className="space-y-6 text-left mt-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-6 h-6 rounded-full bg-gold-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-gold-primary text-[10px]">✦</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-luxury-dark text-sm uppercase tracking-wide">Premium Materials</h4>
+                    <p className="text-text-secondary text-sm leading-relaxed">We use only high-grade materials, including 18K Gold Paving and 925 Sterling Silver base, ensuring longevity and a brilliant finish.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-6 h-6 rounded-full bg-gold-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-gold-primary text-[10px]">✦</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-luxury-dark text-sm uppercase tracking-wide">Waterproof & Durable</h4>
+                    <p className="text-text-secondary text-sm leading-relaxed">Our pieces are designed for everyday wear—sweatproof, waterproof, and tarnish-resistant for up to 2 years.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-6 h-6 rounded-full bg-gold-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-gold-primary text-[10px]">✦</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-luxury-dark text-sm uppercase tracking-wide">Ethically Sourced</h4>
+                    <p className="text-text-secondary text-sm leading-relaxed">Every MORAA piece is crafted with ethical standards, supporting sustainable practices in the jewelry industry.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-10">
+                <button 
+                  onClick={() => setIsQualityInfoOpen(false)}
+                  className="btn-premium-gold px-12 py-4 rounded-full text-xs font-bold tracking-widest text-luxury-dark hover:shadow-glow-gold transition-all"
+                >
+                  DISCOVER MORE
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

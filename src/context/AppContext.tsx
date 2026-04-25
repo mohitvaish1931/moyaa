@@ -35,6 +35,7 @@ export interface Product {
   status?: 'published' | 'pre-upload';
   displayOrder?: number;
   quantity?: number;
+  isBOGO?: boolean;
 }
 
 export interface Video {

@@ -13,6 +13,7 @@ import Necklaces from './pages/Necklaces';
 import HandChains from './pages/HandChains';
 import Sets from './pages/Sets';
 import Rings from './pages/Rings';
+import BogoProducts from './pages/BogoProducts';
 import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
 import ProductDetail from './pages/ProductDetail';
@@ -41,6 +42,7 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<AllProducts />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/bogo" element={<BogoProducts />} />
           <Route path="/earrings" element={<Earrings />} />
           <Route path="/bracelets" element={<Bracelets />} />
           <Route path="/necklaces" element={<Necklaces />} />

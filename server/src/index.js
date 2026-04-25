@@ -17,7 +17,7 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
+
     const allowedOrigins = [
       'http://localhost:5173',
       'http://127.0.0.1:5173',
@@ -27,12 +27,12 @@ app.use(cors({
       'https://www.moraajewels.com',
       'https://moraajewles.com/'
     ];
-    
-    const isAllowed = allowedOrigins.includes(origin) || 
-                     origin.includes('vercel.app') || 
-                     origin.includes('moraajewles.com') || 
-                     origin.includes('moraajewels.com');
-                     
+
+    const isAllowed = allowedOrigins.includes(origin) ||
+      origin.includes('vercel.app') ||
+      origin.includes('moraajewles.com') ||
+      origin.includes('moraajewels.com');
+
     if (isAllowed) {
       callback(null, true);
     } else {
@@ -59,8 +59,6 @@ import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
 import ordersRouter from './routes/orders.js';
 import shiprocketRouter from './routes/shiprocket.js';
-import reviewsRouter from './routes/reviews.js';
-import inventoryRouter from './routes/inventory.js';
 import User from './models/User.js';
 import bcrypt from 'bcryptjs';
 
@@ -72,8 +70,6 @@ app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/shiprocket', shiprocketRouter);
-app.use('/api/reviews', reviewsRouter);
-app.use('/api/inventory', inventoryRouter);
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));

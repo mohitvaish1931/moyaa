@@ -27,7 +27,8 @@ const ProductSchema = new mongoose.Schema({
   sku: { type: String, unique: true, sparse: true },
   soldOut: { type: Boolean, default: false },
   averageRating: { type: Number, default: 0, min: 0, max: 5 },
-  reviewCount: { type: Number, default: 0, min: 0 }
+  reviewCount: { type: Number, default: 0, min: 0 },
+  isBOGO: { type: Boolean, default: false }
 }, { timestamps: true });
 
 // Transform _id to id when converting to JSON
