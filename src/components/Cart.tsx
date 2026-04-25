@@ -13,6 +13,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
   const { state, dispatch } = useAppContext();
   const [view, setView] = useState<'cart' | 'checkout'>('cart');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'Prepaid' | 'COD'>('Prepaid');
   
   const [shippingInfo, setShippingInfo] = useState({
     name: state.user?.name || '',
@@ -74,12 +75,21 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
             image: item.image
           })),
           totalAmount: getTotalPrice(),
-          shippingAddress: shippingInfo
+          shippingAddress: shippingInfo,
+          paymentMethod: paymentMethod
         })
       });
 
       const orderData = await orderRes.json();
       if (!orderRes.ok) throw new Error(orderData.error || 'Failed to create order');
+
+      if (paymentMethod === 'COD') {
+        alert('✅ Order Placed Successfully! You have selected Cash on Delivery.');
+        dispatch({ type: 'CLEAR_CART' });
+        onClose();
+        setView('cart');
+        return;
+      }
 
       // 2. Open Razorpay Modal
       const options = {
@@ -286,6 +296,28 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 </div>
                 <p className="text-[10px] text-platinum/70">Standard Shipping (Shiprocket Integrated)</p>
               </div>
+
+              <div className="space-y-3">
+                <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Select Payment Method</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('Prepaid')}
+                    className={`p-3 rounded-lg border flex flex-col items-center justify-center space-y-1 transition-all ${paymentMethod === 'Prepaid' ? 'border-gold-primary bg-gold-primary/10' : 'border-gold-primary/20 bg-luxury-dark/30'}`}
+                  >
+                    <CreditCard className={`h-5 w-5 ${paymentMethod === 'Prepaid' ? 'text-gold-primary' : 'text-platinum/40'}`} />
+                    <span className={`text-[10px] font-bold ${paymentMethod === 'Prepaid' ? 'text-platinum' : 'text-platinum/40'}`}>ONLINE PAYMENT</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('COD')}
+                    className={`p-3 rounded-lg border flex flex-col items-center justify-center space-y-1 transition-all ${paymentMethod === 'COD' ? 'border-gold-primary bg-gold-primary/10' : 'border-gold-primary/20 bg-luxury-dark/30'}`}
+                  >
+                    <Truck className={`h-5 w-5 ${paymentMethod === 'COD' ? 'text-gold-primary' : 'text-platinum/40'}`} />
+                    <span className={`text-[10px] font-bold ${paymentMethod === 'COD' ? 'text-platinum' : 'text-platinum/40'}`}>CASH ON DELIVERY</span>
+                  </button>
+                </div>
+              </div>
               <button
                 type="submit"
                 disabled={isProcessing}
@@ -295,8 +327,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                   <span>Processing...</span>
                 ) : (
                   <>
-                    <CreditCard className="h-5 w-5" />
-                    <span>Pay Now (Razorpay)</span>
+                    {paymentMethod === 'Prepaid' ? <CreditCard className="h-5 w-5" /> : <Truck className="h-5 w-5" />}
+                    <span>{paymentMethod === 'Prepaid' ? 'Pay Now (Razorpay)' : 'Place Order (COD)'}</span>
                   </>
                 )}
               </button>

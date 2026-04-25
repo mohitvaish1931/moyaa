@@ -22,7 +22,8 @@ const OrderSchema = new Schema({
     pincode: { type: String, required: true },
     phone: { type: String, required: true }
   },
-  paymentStatus: { type: String, enum: ['Pending', 'Paid', 'Failed'], default: 'Pending' },
+  paymentMethod: { type: String, enum: ['Prepaid', 'COD'], default: 'Prepaid' },
+  paymentStatus: { type: String, enum: ['Pending', 'Paid', 'Failed', 'COD'], default: 'Pending' },
   razorpayOrderId: String,
   razorpayPaymentId: String,
   razorpaySignature: String,

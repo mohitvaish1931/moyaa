@@ -1846,8 +1846,9 @@ const Admin = () => {
                         }`}>
                           {order.status || 'Processing'}
                         </span>
-                        <div className="text-[10px] mt-1 text-text-muted">
-                          {order.paymentStatus === 'Paid' ? '✅ Paid' : '⏳ Pending'}
+                        <div className="text-[10px] mt-1 text-text-muted flex flex-col">
+                          <span>{order.paymentStatus === 'Paid' ? '✅ Paid' : '⏳ Pending'}</span>
+                          <span className="font-bold text-gold-primary">{order.paymentMethod === 'COD' ? '💵 COD' : '💳 Online'}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

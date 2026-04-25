@@ -16,40 +16,68 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET || 'rzp_test_YOUR_KEY_SECRET'
 });
 
-// 1. Create a Razorpay order
+// 1. Create an order (Prepaid or COD)
 router.post('/create', async (req, res) => {
   try {
-    const { userId, items, totalAmount, shippingAddress } = req.body;
+    const { userId, items, totalAmount, shippingAddress, paymentMethod = 'Prepaid' } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ error: 'No items in order' });
     }
 
-    // Amount needs to be in paise (₹1 = 100 paise)
-    const options = {
-      amount: Math.round(totalAmount * 100),
-      currency: 'INR',
-      receipt: `receipt_${Date.now()}`
-    };
+    let razorpayOrderId = null;
+    let razorpayAmount = 0;
+    let razorpayCurrency = 'INR';
 
-    const razorpayOrder = await razorpay.orders.create(options);
+    if (paymentMethod === 'Prepaid') {
+      // Amount needs to be in paise (₹1 = 100 paise)
+      const options = {
+        amount: Math.round(totalAmount * 100),
+        currency: 'INR',
+        receipt: `receipt_${Date.now()}`
+      };
+
+      const razorpayOrder = await razorpay.orders.create(options);
+      razorpayOrderId = razorpayOrder.id;
+      razorpayAmount = options.amount;
+      razorpayCurrency = options.currency;
+    }
 
     const newOrder = new Order({
       user: userId,
       items,
       totalAmount,
       shippingAddress,
-      razorpayOrderId: razorpayOrder.id,
-      paymentStatus: 'Pending'
+      paymentMethod,
+      razorpayOrderId,
+      paymentStatus: paymentMethod === 'COD' ? 'Pending' : 'Pending',
+      status: 'Processing'
     });
 
     await newOrder.save();
 
+    // For COD, trigger Shiprocket immediately
+    if (paymentMethod === 'COD') {
+      try {
+        const user = await User.findById(userId);
+        const srData = await createShiprocketOrder(newOrder, user?.email);
+
+        if (srData && srData.order_id) {
+          newOrder.shiprocketOrderId = String(srData.order_id);
+          newOrder.shiprocketShipmentId = String(srData.shipment_id);
+          await newOrder.save();
+        }
+      } catch (srError) {
+        console.error('Shiprocket creation error for COD:', srError.message);
+      }
+    }
+
     res.status(201).json({
       orderId: newOrder._id,
-      razorpayOrderId: razorpayOrder.id,
-      amount: options.amount,
-      currency: options.currency,
+      paymentMethod,
+      razorpayOrderId,
+      amount: razorpayAmount,
+      currency: razorpayCurrency,
       key_id: process.env.RAZORPAY_KEY_ID
     });
   } catch (err) {
