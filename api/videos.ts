@@ -1,18 +1,20 @@
-import { connectDB } from '../lib/mongodb';
-import Video from '../models/Video';
-
-export default async (req: any, res: any) => {
-  try {
-    await connectDB();
-    
-    if (req.method === 'GET') {
-      const videos = await Video.find().sort({ createdAt: -1 });
-      return res.json(videos);
+export default async (_req: any, res: any) => {
+  const videos = [
+    {
+      id: '1',
+      title: 'Elegant Gold Collection',
+      url: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+    },
+    {
+      id: '2',
+      title: 'Diamond Showcase',
+      url: 'https://www.youtube.com/embed/jNQXAC9IVRw'
+    },
+    {
+      id: '3',
+      title: 'Luxury Bracelets Tour',
+      url: 'https://www.youtube.com/embed/9bZkp7q19f0'
     }
-
-    return res.status(405).json({ error: 'Method not allowed' });
-  } catch (error: any) {
-    console.error('Videos fetch error:', error);
-    res.status(500).json({ error: error.message });
-  }
+  ];
+  res.json(videos);
 };
