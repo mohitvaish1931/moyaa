@@ -73,25 +73,6 @@ const AboutUs = () => {
             </p>
           </section>
 
-          {/* Founder Section */}
-          <section className="flex flex-col md:flex-row gap-12 items-center">
-             <div className="w-48 h-48 rounded-full overflow-hidden border-2 border-gold-primary p-2">
-               <div className="w-full h-full rounded-full overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&q=80&w=400" 
-                  alt="Founder" 
-                  className="w-full h-full object-cover"
-                />
-               </div>
-            </div>
-            <div className="flex-1">
-              <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">A Note from the Founder</h2>
-              <p className="italic text-primary-red leading-relaxed mb-4 text-xl font-bold">
-                "Jewelry is more than just an accessory; it's a reflection of one's journey and achievements. At MORAA JEWELS, we are honored to be a part of your smallest joys and biggest milestones."
-              </p>
-              <p className="font-bold text-text-primary uppercase tracking-widest text-sm">— Trivani, Creative Director</p>
-            </div>
-          </section>
         </div>
       </div>
     </div>
