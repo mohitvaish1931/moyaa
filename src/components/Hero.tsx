@@ -17,19 +17,19 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden py-0 bg-[#4A0404]">
+    <section className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden py-0">
       {/* Main Banner Background Image */}
       <div className="absolute inset-0 z-0">
         <img 
           src="/main-banner.jpeg" 
           alt="Luxury Jewelry Banner" 
-          className="w-full h-full object-contain opacity-100"
+          className="w-full h-full object-fill opacity-100 block"
         />
-        {/* Very subtle tint for text readability only if needed */}
+        {/* Subtle overlay for contrast */}
         <div className="absolute inset-0 bg-black/10" />
       </div>
 
-      {/* Main hero content */}
+      {/* Main hero content overlay */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         <div className="mb-12 animate-fade-in">
           <h2 className="text-primary-red text-sm tracking-[0.5em] font-bold luxury-serif mb-4 uppercase">Exquisite Craftsmanship</h2>
