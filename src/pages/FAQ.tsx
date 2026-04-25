@@ -61,14 +61,14 @@ const FAQ = () => {
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-16 bg-white/40 p-12 rounded-3xl border border-gold-primary/20 text-center shadow-lg backdrop-blur-sm">
-          <h2 className="luxury-serif text-3xl text-text-primary mb-4">Still have questions?</h2>
-          <p className="text-text-secondary mb-8 max-w-xl mx-auto font-medium">
+        <div className="mt-16 bg-luxury-dark/5 p-12 rounded-3xl border border-gold-primary/30 text-center shadow-lg backdrop-blur-sm">
+          <h2 className="luxury-serif text-3xl text-text-primary mb-4 font-bold">Still have questions?</h2>
+          <p className="text-text-primary/70 mb-8 max-w-xl mx-auto font-bold">
             Our luxury consultants are available to assist you with any inquiries you may have.
           </p>
           <a 
             href="/contact" 
-            className="inline-block bg-gradient-to-r from-gold-primary to-gold-soft text-luxury-dark px-10 py-4 rounded-xl font-bold tracking-widest text-sm hover:shadow-glow transition-all duration-300"
+            className="inline-block bg-text-primary text-white px-10 py-4 rounded-xl font-black tracking-widest text-sm hover:bg-primary-red transition-all duration-300 shadow-xl"
           >
             CONTACT CUSTOMER CARE
           </a>
