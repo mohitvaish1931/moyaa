@@ -1442,7 +1442,12 @@ const Admin = () => {
             <div className="bg-white border border-gold-primary/10 rounded-2xl shadow-sm overflow-hidden">
               <div className="px-8 py-6 border-b border-gold-primary/10 flex items-center justify-between">
                 <h3 className="text-sm font-black text-text-primary tracking-[0.2em] uppercase">RECENT ORDERS</h3>
-                <button className="text-[10px] font-bold text-primary-red hover:underline tracking-widest uppercase">VIEW ALL</button>
+                <button 
+                  onClick={() => setActiveTab('orders')}
+                  className="text-[10px] font-bold text-primary-red hover:underline tracking-widest uppercase"
+                >
+                  VIEW ALL
+                </button>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gold-primary/10">
@@ -1784,8 +1789,11 @@ const Admin = () => {
         {/* Orders Tab */}
         {activeTab === 'orders' && (
           <div className="bg-white border border-gold-primary/10 rounded-2xl overflow-hidden shadow-sm">
-            <div className="px-8 py-6 border-b border-gold-primary/10 bg-[#FDFBF9]">
+            <div className="px-8 py-6 border-b border-gold-primary/10 bg-[#FDFBF9] flex justify-between items-center">
               <h3 className="text-sm font-black text-text-primary tracking-widest uppercase">All Orders</h3>
+              <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest bg-luxury-dark/5 px-3 py-1 rounded-full border border-gold-primary/10">
+                {orders.length} Total Orders
+              </span>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gold-primary/5">
