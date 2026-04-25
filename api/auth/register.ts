@@ -1,26 +1,45 @@
-export default async (request: any, response: any) => {
+import { connectDB } from '../../lib/mongodb';
+import User from '../../models/User';
+import bcrypt from 'bcryptjs';
+
+export default async (req: any, res: any) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
-    const { email, password, name } = request.body;
+    await connectDB();
+    const { email, password, name } = req.body;
 
     if (!email || !password) {
-      return response.status(400).json({ error: 'Email and password required' });
+      return res.status(400).json({ error: 'Email and password required' });
     }
 
-    if (password.length < 6) {
-      return response.status(400).json({ error: 'Password must be at least 6 characters' });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Mock user creation - in production, connect to MongoDB
-    const newUser = {
-      id: Math.random().toString(36).substr(2, 9),
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = new User({
       email,
+      passwordHash,
       name: name || '',
       isAdmin: false
-    };
+    });
 
-    return response.status(201).json({ user: newUser });
-  } catch (error) {
+    await user.save();
+
+    res.status(201).json({
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        isAdmin: user.isAdmin
+      }
+    });
+  } catch (error: any) {
     console.error('Registration error:', error);
-    return response.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: error.message });
   }
 };

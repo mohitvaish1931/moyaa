@@ -1,20 +1,18 @@
-export default async (_req: any, res: any) => {
-  const banners = [
-    {
-      id: '1',
-      text: 'FREE SHIPPING ON ORDERS OVER $100',
-      type: 'info'
-    },
-    {
-      id: '2',
-      text: 'LIMITED TIME: 30% OFF ON SELECTED ITEMS',
-      type: 'hot'
-    },
-    {
-      id: '3',
-      text: 'NEW COLLECTION JUST ARRIVED',
-      type: 'new'
+import { connectDB } from '../lib/mongodb';
+import Banner from '../models/Banner';
+
+export default async (req: any, res: any) => {
+  try {
+    await connectDB();
+    
+    if (req.method === 'GET') {
+      const banners = await Banner.find().sort({ order: 1 });
+      return res.json(banners);
     }
-  ];
-  res.json(banners);
+
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (error: any) {
+    console.error('Banners fetch error:', error);
+    res.status(500).json({ error: error.message });
+  }
 };

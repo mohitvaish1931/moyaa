@@ -1,20 +1,33 @@
-export default async (_req: any, res: any) => {
-  // Mock products data for Vercel deployment
-  const products = [
-    {
-      id: 1,
-      name: 'CHERISH EARRING',
-      price: 799,
-      originalPrice: 1200,
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400',
-      category: 'earrings',
-      sale: true,
-      description: 'Premium gold earrings',
-      features: ['14K Gold', 'Diamond Cut'],
-      materials: ['Gold', 'Diamond'],
-      careInstructions: ['Handle with care']
+import { connectDB } from '../lib/mongodb';
+import Product from '../models/Product';
+
+export default async (req: any, res: any) => {
+  try {
+    await connectDB();
+    
+    if (req.method === 'GET') {
+      const { category, search } = req.query;
+      let query: any = { status: 'published' };
+      
+      if (category && category !== 'all') {
+        query.category = category.toLowerCase();
+      }
+      
+      if (search) {
+        query.$or = [
+          { name: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } },
+          { category: { $regex: search, $options: 'i' } }
+        ];
+      }
+      
+      const products = await Product.find(query).sort({ displayOrder: 1, createdAt: -1 });
+      return res.json(products);
     }
-  ];
-  
-  res.json(products);
+
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (error: any) {
+    console.error('Products fetch error:', error);
+    res.status(500).json({ error: error.message });
+  }
 };

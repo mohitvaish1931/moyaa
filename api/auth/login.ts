@@ -1,27 +1,48 @@
-export default async (request: any, response: any) => {
+import { connectDB } from '../../lib/mongodb';
+import User from '../../models/User';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+export default async (req: any, res: any) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
-    const { email, password } = request.body;
+    await connectDB();
+    const { email, password } = req.body;
 
     if (!email || !password) {
-      return response.status(400).json({ error: 'Email and password required' });
+      return res.status(400).json({ error: 'Email and password required' });
     }
 
-    // Mock authentication - in production, connect to MongoDB
-    if (email === 'admin@moraa.com' && password === 'changeme') {
-      return response.json({
-        user: {
-          id: 'admin123',
-          email: 'admin@moraa.com',
-          name: 'Admin',
-          isAdmin: true
-        }
-      });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    return response.status(400).json({ error: 'Invalid credentials' });
-  } catch (error) {
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET || 'your_jwt_secret',
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        isAdmin: user.isAdmin
+      }
+    });
+  } catch (error: any) {
     console.error('Login error:', error);
-    return response.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: error.message });
   }
 };
-
