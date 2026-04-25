@@ -28,10 +28,10 @@ const AboutUs = () => {
           {/* Heritage Section */}
           <section className="bg-white/50 p-8 rounded-2xl border border-gold-primary/30 backdrop-blur-sm shadow-sm">
             <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">The Legacy of MORAA</h2>
-            <p className="leading-relaxed text-text-secondary font-medium">
+            <p className="leading-relaxed text-black font-medium">
               Founded on the principles of exquisite artistry and uncompromising quality, MORAA JEWELS has emerged as a beacon of luxury in the world of high jewelry. Our journey began with a simple vision: to create pieces that don't just adorn, but tell a story of heritage and sophistication.
             </p>
-            <p className="mt-4 leading-relaxed text-text-secondary font-medium">
+            <p className="mt-4 leading-relaxed text-black font-medium">
               Every piece in our collection is a testament to the skill of our master artisans, who blend traditional techniques passed down through generations with contemporary design sensibilities.
             </p>
           </section>
@@ -39,7 +39,7 @@ const AboutUs = () => {
           <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-12">
             <div>
               <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">Meticulous Craftsmanship</h2>
-              <p className="leading-relaxed text-text-secondary font-medium">
+              <p className="leading-relaxed text-black font-medium">
                 We believe that true luxury lies in the details. From the initial hand-drawn sketch to the final polish, each creation undergoes a rigorous process of quality control.
               </p>
               <ul className="mt-6 space-y-3">
