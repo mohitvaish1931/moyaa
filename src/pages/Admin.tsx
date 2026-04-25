@@ -60,7 +60,8 @@ const Admin = () => {
   ];
 
   const recentOrders = orders.slice(0, 5).map(order => ({
-    id: order.razorpayOrderId || (order._id ? order._id.substring(0, 8) : 'N/A'),
+    id: order._id,
+    orderNumber: order.orderNumber,
     customer: order.shippingAddress?.name || order.user?.name || 'Guest',
     product: order.items?.[0]?.name + (order.items?.length > 1 ? ` +${order.items.length - 1}` : ''),
     amount: `₹${order.totalAmount?.toLocaleString()}`,
@@ -1495,7 +1496,7 @@ const Admin = () => {
                     {recentOrders.map((order) => (
                       <tr key={order.id}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-text-primary">
-                          {order.id}
+                          {order.orderNumber || (order.id ? order.id.substring(0, 8) : 'N/A')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                           {order.customer}
@@ -1844,7 +1845,7 @@ const Admin = () => {
                   {orders.map((order) => (
                     <tr key={order._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
-                        {order.razorpayOrderId || (order._id ? order._id.substring(0, 10) : 'N/A')}
+                        {order.orderNumber || (order._id ? order._id.substring(0, 10) : 'N/A')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
                         {order.shippingAddress?.name || order.user?.name || 'Guest'}

@@ -33,6 +33,7 @@ const OrderSchema = new Schema({
   courierName: String,
   trackingUrl: String,
   trackingStatus: String,
+  orderNumber: { type: String, unique: true },
   status: { type: String, enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], default: 'Processing' }
 }, { timestamps: true });
 

@@ -43,6 +43,15 @@ router.post('/create', async (req, res) => {
       razorpayCurrency = options.currency;
     }
 
+    // Generate sequential order number
+    const lastOrder = await Order.findOne().sort({ createdAt: -1 });
+    let nextNum = 1001;
+    if (lastOrder && lastOrder.orderNumber) {
+      const lastNum = parseInt(lastOrder.orderNumber.split('-')[1]);
+      if (!isNaN(lastNum)) nextNum = lastNum + 1;
+    }
+    const orderNumber = `MOR-${nextNum}`;
+
     const newOrder = new Order({
       user: userId,
       items,
@@ -50,6 +59,7 @@ router.post('/create', async (req, res) => {
       shippingAddress,
       paymentMethod,
       razorpayOrderId,
+      orderNumber,
       paymentStatus: paymentMethod === 'COD' ? 'Pending' : 'Pending',
       status: 'Processing'
     });
