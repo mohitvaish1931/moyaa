@@ -303,18 +303,18 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('Prepaid')}
-                    className={`p-3 rounded-lg border flex flex-col items-center justify-center space-y-1 transition-all ${paymentMethod === 'Prepaid' ? 'border-gold-primary bg-gold-primary/10' : 'border-gold-primary/20 bg-luxury-dark/30'}`}
+                    className={`p-4 rounded-xl border-2 flex flex-col items-center justify-center space-y-2 transition-all duration-300 ${paymentMethod === 'Prepaid' ? 'border-gold-primary bg-gold-primary/20 shadow-glow-gold' : 'border-platinum/20 bg-black/40 hover:border-gold-primary/50'}`}
                   >
-                    <CreditCard className={`h-5 w-5 ${paymentMethod === 'Prepaid' ? 'text-gold-primary' : 'text-platinum/40'}`} />
-                    <span className={`text-[10px] font-bold ${paymentMethod === 'Prepaid' ? 'text-platinum' : 'text-platinum/40'}`}>ONLINE PAYMENT</span>
+                    <CreditCard className={`h-6 w-6 ${paymentMethod === 'Prepaid' ? 'text-gold-primary' : 'text-platinum/60'}`} />
+                    <span className={`text-xs font-black tracking-widest ${paymentMethod === 'Prepaid' ? 'text-text-primary' : 'text-platinum/60'}`}>ONLINE PAYMENT</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('COD')}
-                    className={`p-3 rounded-lg border flex flex-col items-center justify-center space-y-1 transition-all ${paymentMethod === 'COD' ? 'border-gold-primary bg-gold-primary/10' : 'border-gold-primary/20 bg-luxury-dark/30'}`}
+                    className={`p-4 rounded-xl border-2 flex flex-col items-center justify-center space-y-2 transition-all duration-300 ${paymentMethod === 'COD' ? 'border-gold-primary bg-gold-primary/20 shadow-glow-gold' : 'border-platinum/20 bg-black/40 hover:border-gold-primary/50'}`}
                   >
-                    <Truck className={`h-5 w-5 ${paymentMethod === 'COD' ? 'text-gold-primary' : 'text-platinum/40'}`} />
-                    <span className={`text-[10px] font-bold ${paymentMethod === 'COD' ? 'text-platinum' : 'text-platinum/40'}`}>CASH ON DELIVERY</span>
+                    <Truck className={`h-6 w-6 ${paymentMethod === 'COD' ? 'text-gold-primary' : 'text-platinum/60'}`} />
+                    <span className={`text-xs font-black tracking-widest ${paymentMethod === 'COD' ? 'text-text-primary' : 'text-platinum/60'}`}>CASH ON DELIVERY</span>
                   </button>
                 </div>
               </div>
