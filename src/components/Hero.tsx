@@ -17,16 +17,16 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-0 bg-luxury-dark">
+    <section className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden py-0 bg-[#4A0404]">
       {/* Main Banner Background Image */}
       <div className="absolute inset-0 z-0">
         <img 
           src="/main-banner.jpeg" 
           alt="Luxury Jewelry Banner" 
-          className="w-full h-full object-cover opacity-92"
+          className="w-full h-full object-contain opacity-100"
         />
-        {/* Very subtle tint for text readability */}
-        <div className="absolute inset-0 bg-white/10" />
+        {/* Very subtle tint for text readability only if needed */}
+        <div className="absolute inset-0 bg-black/10" />
       </div>
 
       {/* Main hero content */}
