@@ -65,11 +65,11 @@ export const createShiprocketOrder = async (order, userEmail) => {
       shipping_is_billing: true,
       order_items: order.items.map(item => ({
         name: item.name,
-        sku: String(item.product?._id || item.product?.id || 'sku-unknown'),
+        sku: String(item.product?._id || item.product?.id || item.product || 'sku-unknown'),
         units: item.quantity,
         selling_price: item.price
       })),
-      payment_method: "Prepaid",
+      payment_method: order.paymentMethod === 'COD' ? 'COD' : 'Prepaid',
       sub_total: order.totalAmount,
       length: 10,
       width: 10,
@@ -77,6 +77,7 @@ export const createShiprocketOrder = async (order, userEmail) => {
       weight: 0.5
     };
 
+    console.log('Sending to Shiprocket:', JSON.stringify(shiprocketOrderData, null, 2));
     const res = await axios.post('https://apiv2.shiprocket.in/v1/external/orders/create/adhoc', shiprocketOrderData, {
       headers: { Authorization: `Bearer ${token}` }
     });
