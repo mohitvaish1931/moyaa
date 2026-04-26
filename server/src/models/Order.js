@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 const m = mongoose.default || mongoose;
-const { Schema, model } = m;
 
-const OrderSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+const OrderSchema = new m.Schema({
+  user: { type: m.Schema.Types.ObjectId, ref: 'User', required: true },
   items: [{
-    product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
+    product: { type: m.Schema.Types.ObjectId, ref: 'Product', required: true },
     name: String,
     price: Number,
     quantity: { type: Number, required: true },
@@ -37,5 +36,5 @@ const OrderSchema = new Schema({
   status: { type: String, enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], default: 'Processing' }
 }, { timestamps: true });
 
-const Order = model('Order', OrderSchema);
+const Order = m.model('Order', OrderSchema);
 export default Order;

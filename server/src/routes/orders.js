@@ -145,7 +145,65 @@ router.post('/verify', async (req, res) => {
   }
 });
 
-// 4. Get Tracking Info
+// 3. Track order by Order Number and Email
+router.post('/track', async (req, res) => {
+  try {
+    const { orderNumber, email } = req.body;
+    
+    if (!orderNumber || !email) {
+      return res.status(400).json({ error: 'Order number and email are required' });
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'No order found with this email and order number' });
+    }
+
+    // Find order by orderNumber and user
+    const order = await Order.findOne({ orderNumber, user: user._id });
+    if (!order) {
+      return res.status(404).json({ error: 'No order found with this email and order number' });
+    }
+
+    // If order has shiprocketShipmentId, fetch latest tracking
+    let trackingDetails = null;
+    if (order.shiprocketShipmentId) {
+      try {
+        const trackingData = await trackShipment(order.shiprocketShipmentId);
+        if (trackingData && trackingData.tracking_data) {
+          trackingDetails = trackingData.tracking_data;
+          
+          // Update order status if possible
+          const shipment = trackingDetails.shipment_track?.[0];
+          if (shipment) {
+            order.awbNumber = shipment.awb_code;
+            order.courierName = shipment.courier_name;
+            order.trackingStatus = shipment.current_status;
+            
+            if (shipment.current_status === 'Delivered') order.status = 'Delivered';
+            else if (shipment.current_status === 'In Transit' || shipment.current_status === 'Shipped') order.status = 'Shipped';
+            
+            await order.save();
+          }
+        }
+      } catch (trackErr) {
+        console.error('Shiprocket tracking fetch error:', trackErr.message);
+      }
+    }
+
+    res.json({
+      success: true,
+      order,
+      trackingDetails
+    });
+  } catch (err) {
+    console.error('Track order error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. Get Tracking Info by MongoDB ID
 router.get('/:orderId/tracking', async (req, res) => {
   try {
     const order = await Order.findById(req.params.orderId);
@@ -167,7 +225,7 @@ router.get('/:orderId/tracking', async (req, res) => {
         
         // Map status to our order status
         if (shipment.current_status === 'Delivered') order.status = 'Delivered';
-        else if (shipment.current_status === 'In Transit') order.status = 'Shipped';
+        else if (shipment.current_status === 'In Transit' || shipment.current_status === 'Shipped') order.status = 'Shipped';
         
         await order.save();
       }

@@ -32,6 +32,7 @@ export const API_ENDPOINTS = {
     CREATE: `${API_BASE_URL}/api/orders/create`,
     VERIFY: `${API_BASE_URL}/api/orders/verify`,
     USER_ORDERS: `${API_BASE_URL}/api/orders/user`,
+    TRACK: `${API_BASE_URL}/api/orders/track`,
   },
 };
 
