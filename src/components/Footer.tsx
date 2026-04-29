@@ -10,7 +10,7 @@ const Footer = () => {
           {/* Brand section */}
           <div className="md:col-span-1 space-y-8">
             <Link to="/" className="inline-block transform hover:scale-105 transition-transform duration-300">
-              <img src="/logo.png" alt="Logo" className="h-20 w-auto filter drop-shadow-md" />
+              <img src="/logo.png" alt="Logo" className="h-20 w-auto filter drop-shadow-md brightness-0 opacity-80" />
             </Link>
             <p className="text-text-primary text-sm leading-relaxed font-bold italic">
               Crafting timeless legacies since 2026. Our masterpieces are a celebration of deep passion and enduring gold.
@@ -110,7 +110,7 @@ const Footer = () => {
                 <p className="text-text-primary text-sm font-medium">moraajewel@gmail.com</p>
               </div>
             </div>
-            <div className="flex items-start gap-6 group">
+            <a href="tel:+917877937350" className="flex items-start gap-6 group cursor-pointer hover:text-primary-red transition-colors">
               <div className="w-12 h-12 rounded-full border border-gold-primary/20 flex items-center justify-center text-primary-red group-hover:bg-primary-red group-hover:text-white transition-all duration-300">
                 <Phone className="h-5 w-5" />
               </div>
@@ -118,7 +118,7 @@ const Footer = () => {
                 <p className="text-text-primary font-black text-[10px] tracking-widest luxury-serif mb-2">PHONE</p>
                 <p className="text-text-primary text-sm font-medium">+91 78779 37350</p>
               </div>
-            </div>
+            </a>
             <div className="flex items-start gap-6 group">
               <div className="w-12 h-12 rounded-full border border-gold-primary/20 flex items-center justify-center text-primary-red group-hover:bg-primary-red group-hover:text-white transition-all duration-300">
                 <MapPin className="h-5 w-5" />

@@ -201,7 +201,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
           {view === 'cart' ? (
             state.cart.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-platinum/70 text-lg">Your cart is empty</p>
+                <p className="text-text-primary text-lg font-medium">Your cart is empty</p>
                 <button
                   onClick={onClose}
                   className="mt-4 btn-premium-gold text-luxury-dark px-6 py-2 rounded-lg hover:shadow-glow transition-all duration-300"
@@ -276,14 +276,14 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 <input
                   required
                   placeholder="Full Name"
-                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-platinum outline-none focus:border-gold-primary/50"
+                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-text-primary placeholder-text-primary/60 outline-none focus:border-gold-primary/50"
                   value={shippingInfo.name}
                   onChange={e => setShippingInfo({...shippingInfo, name: e.target.value})}
                 />
                 <input
                   required
                   placeholder="Phone Number"
-                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-platinum outline-none focus:border-gold-primary/50"
+                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-text-primary placeholder-text-primary/60 outline-none focus:border-gold-primary/50"
                   value={shippingInfo.phone}
                   onChange={e => setShippingInfo({...shippingInfo, phone: e.target.value})}
                 />
@@ -292,7 +292,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 required
                 placeholder="Full Address"
                 rows={3}
-                className="w-full bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-platinum outline-none focus:border-gold-primary/50"
+                className="w-full bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-text-primary placeholder-text-primary/60 outline-none focus:border-gold-primary/50"
                 value={shippingInfo.address}
                 onChange={e => setShippingInfo({...shippingInfo, address: e.target.value})}
               />
@@ -300,21 +300,21 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 <input
                   required
                   placeholder="City"
-                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-platinum outline-none focus:border-gold-primary/50"
+                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-text-primary placeholder-text-primary/60 outline-none focus:border-gold-primary/50"
                   value={shippingInfo.city}
                   onChange={e => setShippingInfo({...shippingInfo, city: e.target.value})}
                 />
                 <input
                   required
                   placeholder="State"
-                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-platinum outline-none focus:border-gold-primary/50"
+                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-text-primary placeholder-text-primary/60 outline-none focus:border-gold-primary/50"
                   value={shippingInfo.state}
                   onChange={e => setShippingInfo({...shippingInfo, state: e.target.value})}
                 />
                 <input
                   required
                   placeholder="Pincode"
-                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-platinum outline-none focus:border-gold-primary/50"
+                  className="bg-luxury-dark/30 border border-gold-primary/20 rounded-lg p-3 text-text-primary placeholder-text-primary/60 outline-none focus:border-gold-primary/50"
                   value={shippingInfo.pincode}
                   onChange={e => setShippingInfo({...shippingInfo, pincode: e.target.value})}
                 />

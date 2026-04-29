@@ -28,7 +28,7 @@ const Wishlist: React.FC<WishlistProps> = ({ isOpen, onClose }) => {
           <h2 className="text-2xl font-bold text-gold-primary luxury-serif">Wishlist</h2>
           <button
             onClick={onClose}
-            className="text-platinum/60 hover:text-gold-primary transition-colors duration-300"
+            className="text-text-primary/60 hover:text-gold-primary transition-colors duration-300"
           >
             <X className="h-6 w-6" />
           </button>
@@ -38,7 +38,7 @@ const Wishlist: React.FC<WishlistProps> = ({ isOpen, onClose }) => {
           {state.wishlist.length === 0 ? (
             <div className="text-center py-8">
               <Heart className="h-16 w-16 text-ruby-luxury/30 mx-auto mb-4" />
-              <p className="text-platinum/70 text-lg">Your wishlist is empty</p>
+              <p className="text-text-primary text-lg font-medium">Your wishlist is empty</p>
               <button
                 onClick={onClose}
                 className="mt-4 btn-premium-gold text-luxury-dark px-6 py-2 rounded-lg hover:shadow-glow transition-all duration-300"

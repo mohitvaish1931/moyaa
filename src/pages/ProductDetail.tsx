@@ -177,17 +177,17 @@ const ProductDetail = () => {
         <div className="mb-8 flex items-center justify-between">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-text-muted hover:text-gold-primary transition-colors font-medium tracking-widest text-xs"
+            className="flex items-center text-text-primary hover:text-gold-primary transition-colors font-bold tracking-widest text-sm"
           >
-            <ChevronLeft className="h-4 w-4 mr-1" />
+            <ChevronLeft className="h-5 w-5 mr-1" />
             BACK
           </button>
-          <div className="hidden sm:flex items-center space-x-2 text-xs font-bold tracking-[0.2em] text-text-muted">
+          <div className="hidden sm:flex items-center space-x-2 text-sm font-bold tracking-[0.2em] text-text-primary/70">
             <span className="hover:text-gold-primary cursor-pointer" onClick={() => navigate('/')}>HOME</span>
             <span>/</span>
             <span className="hover:text-gold-primary cursor-pointer uppercase" onClick={() => navigate('/products')}>{product.category}</span>
             <span>/</span>
-            <span className="text-gold-primary truncate max-w-[150px] uppercase">{product.name}</span>
+            <span className="text-gold-primary truncate max-w-[200px] uppercase">{product.name}</span>
           </div>
         </div>
 
@@ -271,7 +271,7 @@ const ProductDetail = () => {
           {/* Product Info */}
           <div className="flex flex-col">
             <div className="mb-8">
-              <span className="inline-block text-[10px] font-bold tracking-[0.3em] text-gold-primary uppercase mb-3 px-3 py-1 bg-gold-primary/5 rounded-full border border-gold-primary/10">
+              <span className="inline-block text-xs font-bold tracking-[0.3em] text-text-primary uppercase mb-3 px-4 py-1.5 bg-gold-primary/10 rounded-full border border-gold-primary/30">
                 {product.category}
               </span>
               <h1 className="text-3xl sm:text-4xl font-bold text-text-primary luxury-serif tracking-tight leading-tight mb-4 uppercase">

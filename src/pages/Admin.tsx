@@ -23,6 +23,7 @@ const Admin = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [draggedProductIndex, setDraggedProductIndex] = useState<number | null>(null);
   const [dragOverProductIndex, setDragOverProductIndex] = useState<number | null>(null);
+  const [productSearch, setProductSearch] = useState('');
   
   const [orders, setOrders] = useState<any[]>([]);
   const [isLoadingOrders, setIsLoadingOrders] = useState(false);
@@ -1241,7 +1242,7 @@ const Admin = () => {
     const [text, setText] = useState('');
     const [type, setType] = useState<'info' | 'hot' | 'new' | 'sold-out'>('info');
     const addBanner = () => {
-      if (!text) return;
+      if (!text) { alert('Please enter banner text'); return; }
       const id = Date.now().toString();
       (async () => {
         try {
@@ -1603,18 +1604,27 @@ const Admin = () => {
         {/* Products Tab */}
         {activeTab === 'products' && (
           <div className="space-y-8">
-            <div className="flex justify-between items-center bg-white p-6 rounded-2xl border border-gold-primary/20 shadow-sm">
+            <div className="flex justify-between items-center bg-white p-6 rounded-2xl border border-gold-primary/20 shadow-sm flex-wrap gap-4">
               <div>
                 <h2 className="text-2xl font-black text-text-primary luxury-serif tracking-widest uppercase">Products</h2>
-                <p className="text-xs text-text-muted mt-1 uppercase tracking-widest">Inventory Management</p>
+                <p className="text-xs text-text-muted mt-1 uppercase tracking-widest">Inventory Management ({state.products.length} Total)</p>
               </div>
-              <button
-                onClick={() => setShowAddProduct(true)}
-                className="btn-premium-gold text-luxury-dark px-6 py-2.5 rounded-xl hover:shadow-glow-gold transition-all flex items-center space-x-2"
-              >
-                <Plus className="h-4 w-4" />
-                <span className="font-bold tracking-widest text-[10px]">ADD NEW PRODUCT</span>
-              </button>
+              <div className="flex items-center space-x-4">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  className="px-4 py-2 bg-luxury-dark/10 border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none w-64"
+                />
+                <button
+                  onClick={() => setShowAddProduct(true)}
+                  className="btn-premium-gold text-luxury-dark px-6 py-2.5 rounded-xl hover:shadow-glow-gold transition-all flex items-center space-x-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span className="font-bold tracking-widest text-[10px]">ADD NEW PRODUCT</span>
+                </button>
+              </div>
             </div>
 
             {showAddProduct && <ProductForm />}
@@ -1645,16 +1655,16 @@ const Admin = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-sapphire-luxury/20">
-                    {state.products.map((product, i) => (
+                    {state.products.filter(p => !productSearch || p.name.toLowerCase().includes(productSearch.toLowerCase()) || p.category.toLowerCase().includes(productSearch.toLowerCase())).map((product, i) => (
                       <tr 
                         key={(product as any)._id || product.id || i}
-                        draggable
-                        onDragStart={(e) => handleDragStartProduct(e, i)}
-                        onDragEnter={(e) => handleDragEnterProduct(e, i)}
+                        draggable={!productSearch}
+                        onDragStart={(e) => !productSearch && handleDragStartProduct(e, i)}
+                        onDragEnter={(e) => !productSearch && handleDragEnterProduct(e, i)}
                         onDragOver={handleDragOverProduct}
                         onDragEnd={handleDragEndProduct}
-                        className={`cursor-move transition-colors ${draggedProductIndex === i ? 'opacity-50' : dragOverProductIndex === i ? 'bg-gold-primary/10' : ''}`}
-                        title="Drag to reorder"
+                        className={`${!productSearch ? 'cursor-move' : ''} transition-colors ${draggedProductIndex === i ? 'opacity-50' : dragOverProductIndex === i ? 'bg-gold-primary/10' : ''}`}
+                        title={!productSearch ? "Drag to reorder" : ""}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -1825,6 +1835,9 @@ const Admin = () => {
                       Order ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
                       Customer
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-text-primary/70 uppercase tracking-wider">
@@ -1846,6 +1859,10 @@ const Admin = () => {
                     <tr key={order._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
                         {order.orderNumber || (order._id ? `MOR-OLD-${order._id.substring(0, 4)}` : 'N/A')}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
+                        {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN') : 'N/A'}
+                        <div className="text-[10px] text-text-muted">{order.createdAt ? new Date(order.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : ''}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary/70">
                         {order.shippingAddress?.name || order.user?.name || 'Guest'}
