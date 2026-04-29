@@ -1,5 +1,6 @@
 import React from 'react';
 import Hero from '../components/Hero';
+import DynamicBanners from '../components/DynamicBanners';
 import ShopByCategory from '../components/ShopByCategory';
 import NewArrivals from '../components/NewArrivals';
 import PromoPopup from '../components/PromoPopup';
@@ -21,6 +22,7 @@ const Home = () => {
   return (
     <>
       <Hero />
+      <DynamicBanners />
       <ShopByCategory />
       <NewArrivals />
       <BogoBanner />
