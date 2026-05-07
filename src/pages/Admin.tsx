@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit, Trash2, Eye, EyeOff, Package, Users, ShoppingBag, TrendingUp, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, Package, Users, ShoppingBag, TrendingUp, ArrowUp, ArrowDown, MessageSquare, CheckCircle, XCircle, Star } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
@@ -1240,20 +1240,38 @@ const Admin = () => {
 
   const BannerManager: React.FC = () => {
     const [text, setText] = useState('');
-    const [type, setType] = useState<'info' | 'hot' | 'new' | 'sold-out'>('info');
+    const [type, setType] = useState<'info' | 'hot' | 'new' | 'sold-out' | 'image-banner'>('info');
+    const [imageFile, setImageFile] = useState<File | null>(null);
+
     const addBanner = () => {
-      if (!text) { alert('Please enter banner text'); return; }
-      const id = Date.now().toString();
+      if (type !== 'image-banner' && !text) { alert('Please enter banner text'); return; }
+      if (type === 'image-banner' && !imageFile) { alert('Please select an image for the image banner'); return; }
+      
+      const fd = new FormData();
+      fd.append('text', text || (type === 'image-banner' ? 'Image Banner' : ''));
+      fd.append('type', type);
+      if (imageFile) {
+        fd.append('image', imageFile);
+      }
+
       (async () => {
         try {
-          const res = await fetch(API_ENDPOINTS.BANNERS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, type }) });
+          const res = await fetch(API_ENDPOINTS.BANNERS, { 
+            method: 'POST', 
+            body: fd 
+          });
           if (!res.ok) throw new Error('Add banner failed');
           const b = await res.json();
           dispatch({ type: 'SET_BANNERS', payload: [b, ...state.banners] });
+          setText('');
+          setImageFile(null);
+          // Clear file input
+          const fileInput = document.getElementById('banner-image') as HTMLInputElement;
+          if (fileInput) fileInput.value = '';
         } catch (e) {
-          dispatch({ type: 'ADD_BANNER', payload: { id, text, type } });
+          console.error(e);
+          alert('Failed to add banner');
         }
-        setText('');
       })();
     };
     return (
@@ -1274,7 +1292,18 @@ const Admin = () => {
             <option value="hot">Hot</option>
             <option value="new">New</option>
             <option value="sold-out">Sold Out</option>
+            <option value="image-banner">Image Banner</option>
           </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Banner Image (Required for Image Banner)</label>
+          <input
+            id="banner-image"
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+            className="w-full p-2 bg-white border border-primary-wine/30 rounded text-text-primary outline-none"
+          />
         </div>
         <div className="flex space-x-2 mb-4">
           <button
@@ -1288,8 +1317,13 @@ const Admin = () => {
           {state.banners.map((b, i) => (
             <div key={(b as any)._id || b.id || i} className="flex justify-between items-center p-2 bg-white border border-ruby-luxury/20 rounded">
               <div>
-                <div className="font-medium text-text-primary">{b.text}</div>
+                <div className="font-medium text-text-primary">{b.text || 'Image Banner'}</div>
                 <div className="text-sm text-text-primary/60">{b.type}</div>
+                {b.image && (
+                  <div className="mt-1">
+                    <img src={b.image} alt="Banner" className="h-10 w-auto rounded border border-gold-primary/20" />
+                  </div>
+                )}
               </div>
               <div className="flex space-x-2">
                 <button
@@ -1337,6 +1371,149 @@ const Admin = () => {
             </div>
           ))}
         </div>
+      </div>
+    );
+  };
+
+  const ReviewManager: React.FC = () => {
+    const [pendingReviews, setPendingReviews] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const fetchPendingReviews = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_ENDPOINTS.REVIEWS}/admin/pending`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setPendingReviews(data.reviews || []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch pending reviews:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    React.useEffect(() => {
+      fetchPendingReviews();
+    }, []);
+
+    const handleApprove = async (id: string) => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_ENDPOINTS.REVIEWS}/admin/${id}/approve`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          setPendingReviews(prev => prev.filter(r => (r._id || r.id) !== id));
+          alert('Review approved successfully');
+        }
+      } catch (err) {
+        console.error('Failed to approve review:', err);
+      }
+    };
+
+    const handleReject = async (id: string) => {
+      if (!window.confirm('Are you sure you want to reject and delete this review?')) return;
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_ENDPOINTS.REVIEWS}/admin/${id}/reject`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          setPendingReviews(prev => prev.filter(r => (r._id || r.id) !== id));
+          alert('Review rejected');
+        }
+      } catch (err) {
+        console.error('Failed to reject review:', err);
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-white p-8 rounded-2xl border border-gold-primary/20 shadow-sm flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-1">Pending Reviews</h2>
+            <div className="w-12 h-1 bg-gold-primary rounded-full"></div>
+          </div>
+          <div className="flex items-center space-x-3 bg-luxury-secondary/10 px-4 py-2 rounded-xl border border-gold-primary/10">
+            <MessageSquare className="h-4 w-4 text-gold-primary" />
+            <span className="text-xs font-bold text-text-muted uppercase tracking-wider">{pendingReviews.length} Pending</span>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-primary mx-auto"></div>
+            <p className="mt-4 text-text-muted uppercase tracking-widest text-[10px] font-bold">Loading reviews...</p>
+          </div>
+        ) : pendingReviews.length === 0 ? (
+          <div className="bg-white p-12 rounded-2xl border-2 border-dashed border-gold-primary/20 text-center">
+            <MessageSquare className="h-12 w-12 text-gold-primary/30 mx-auto mb-4" />
+            <p className="text-text-secondary font-bold tracking-widest text-xs uppercase">No pending reviews to moderate</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6">
+            {pendingReviews.map((review) => (
+              <div key={review._id || review.id} className="bg-white border border-gold-primary/10 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h4 className="text-lg font-bold text-text-primary">{review.title}</h4>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            size={14}
+                            className={star <= review.rating ? 'fill-gold-primary text-gold-primary' : 'text-gray-300'}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-xs text-text-muted font-medium">
+                        by {review.userName} ({review.userEmail})
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                    Product: <span className="text-gold-primary">{review.productId?.name || 'Unknown'}</span>
+                  </div>
+                </div>
+                
+                <p className="text-text-secondary text-sm mb-6 bg-luxury-secondary/5 p-4 rounded-xl italic">
+                  "{review.comment}"
+                </p>
+
+                <div className="flex justify-end gap-3">
+                  <button
+                    onClick={() => handleReject(review._id || review.id)}
+                    className="flex items-center gap-2 px-4 py-2 border border-ruby-luxury/20 text-ruby-luxury rounded-xl hover:bg-ruby-luxury/5 transition-all text-[10px] font-bold uppercase tracking-widest"
+                  >
+                    <XCircle size={14} />
+                    Reject
+                  </button>
+                  <button
+                    onClick={() => handleApprove(review._id || review.id)}
+                    className="flex items-center gap-2 px-4 py-2 bg-emerald-luxury/10 border border-emerald-luxury/20 text-emerald-luxury rounded-xl hover:bg-emerald-luxury/20 transition-all text-[10px] font-bold uppercase tracking-widest"
+                  >
+                    <CheckCircle size={14} />
+                    Approve & Publish
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   };
@@ -1426,6 +1603,7 @@ const Admin = () => {
               { id: 'content', name: 'Content' },
               { id: 'orders', name: 'Orders' },
               { id: 'customers', name: 'Customers' },
+              { id: 'reviews', name: 'Reviews' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -1965,6 +2143,11 @@ const Admin = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Reviews Tab */}
+        {activeTab === 'reviews' && (
+          <ReviewManager />
         )}
 
         {/* Edit Product Modal - Rendered at top level */}

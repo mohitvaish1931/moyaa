@@ -7,6 +7,7 @@ import PromoPopup from '../components/PromoPopup';
 import ShowcaseVideos from '../components/ShowcaseVideos';
 import Reviews from '../components/Reviews';
 import BogoBanner from '../components/BogoBanner';
+import ImageMarquee from '../components/ImageMarquee';
 import { useSEO } from '../utils/useSEO';
 
 const Home = () => {
@@ -26,6 +27,7 @@ const Home = () => {
       <ShopByCategory />
       <NewArrivals />
       <BogoBanner />
+      <ImageMarquee />
       <PromoPopup />
       <ShowcaseVideos />
       <Reviews />

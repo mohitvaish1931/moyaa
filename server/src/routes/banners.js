@@ -1,6 +1,18 @@
 import express from 'express';
 import Banner from '../models/Banner.js';
+import multer from 'multer';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import cloudinary from '../config/cloudinary.js';
 
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'moyaa-banners',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+  },
+});
+
+const upload = multer({ storage });
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -13,9 +25,13 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   try {
-    const b = new Banner(req.body);
+    const body = { ...req.body };
+    if (req.file) {
+      body.image = req.file.secure_url || req.file.path;
+    }
+    const b = new Banner(body);
     await b.save();
     res.status(201).json(b);
   } catch (err) {
@@ -24,9 +40,13 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', upload.single('image'), async (req, res) => {
   try {
-    const updated = await Banner.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const body = { ...req.body };
+    if (req.file) {
+      body.image = req.file.secure_url || req.file.path;
+    }
+    const updated = await Banner.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });
     res.json(updated);
   } catch (err) {

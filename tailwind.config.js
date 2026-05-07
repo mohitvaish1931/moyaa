@@ -58,6 +58,7 @@ export default {
         'shimmer': 'shimmer 3s ease-in-out infinite',
         'rotate-slow': 'rotate-slow 20s linear infinite',
         'scroll': 'scroll 30s linear infinite',
+        'scroll-slow': 'scroll 60s linear infinite',
       },
       keyframes: {
         float: {

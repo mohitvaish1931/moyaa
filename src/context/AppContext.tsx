@@ -46,8 +46,10 @@ export interface Video {
 
 export interface Banner {
   id: string;
+  _id?: string;
   text: string;
-  type?: 'info' | 'hot' | 'new' | 'sold-out';
+  image?: string;
+  type?: 'info' | 'hot' | 'new' | 'sold-out' | 'image-banner';
 }
 
 export interface Coupon {
