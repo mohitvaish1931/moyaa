@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
+import { getImageUrl } from '../utils/mediaHelper';
 
 const ImageMarquee = () => {
   const { state } = useAppContext();
@@ -25,7 +26,7 @@ const ImageMarquee = () => {
                 <div key={`${loopIdx}-${idx}`} className="inline-block px-4">
                   <div className="relative group/item overflow-hidden rounded-2xl shadow-xl border border-gold-primary/20 aspect-[4/5] h-[400px] w-auto">
                     <img 
-                      src={banner.image} 
+                      src={getImageUrl(banner.image)} 
                       alt={banner.text || 'Collection'} 
                       className="h-full w-full object-cover transform scale-100 group-hover/item:scale-110 transition-transform duration-[2000ms]"
                     />

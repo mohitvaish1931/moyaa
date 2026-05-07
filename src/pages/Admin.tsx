@@ -612,27 +612,33 @@ const Admin = () => {
   const VideoManager: React.FC = () => {
     const [title, setTitle] = useState('');
     const [url, setUrl] = useState('');
+    const [videoFile, setVideoFile] = useState<File | null>(null);
 
-    const addVideo = () => {
-      if (!url) return;
-      (async () => {
-        try {
-          const res = await fetch(API_ENDPOINTS.VIDEOS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: title || 'Video', url }) });
-          if (!res.ok) throw new Error('Video add failed');
-          const v = await res.json();
-          dispatch({ type: 'SET_VIDEOS', payload: [v, ...state.videos] });
-        } catch (e) {
-          const id = Date.now().toString();
-          dispatch({ type: 'ADD_VIDEO', payload: { id, title: title || 'Video', url } });
-        }
+    const addVideo = async () => {
+      if (!url && !videoFile) return;
+      const fd = new FormData();
+      fd.append('title', title || 'Video');
+      if (videoFile) fd.append('file', videoFile);
+      else fd.append('url', url);
+
+      try {
+        const res = await fetch(API_ENDPOINTS.VIDEOS, { method: 'POST', body: fd });
+        if (!res.ok) throw new Error('Video add failed');
+        const v = await res.json();
+        dispatch({ type: 'SET_VIDEOS', payload: [v, ...state.videos] });
         setTitle('');
         setUrl('');
-      })();
+        setVideoFile(null);
+        const fileInput = document.getElementById('video-upload-nested') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+      } catch (e) {
+        console.error(e);
+      }
     };
 
     return (
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -642,43 +648,56 @@ const Admin = () => {
           <input
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            placeholder="Video URL"
+            placeholder="External Video URL"
             className="p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
           />
-          <button
-            onClick={addVideo}
-            className="btn-premium-gold text-luxury-dark px-4 rounded hover:shadow-glow-gold transition-all"
-          >
-            Add Video
-          </button>
         </div>
-        <div className="space-y-2">
-          {state.videos.map((v, i) => (
-            <div key={(v as any)._id || v.id || i} className="flex justify-between items-center p-2 bg-white border border-teal-luxury/20 rounded">
-              <div>
-                <div className="font-medium text-text-primary">{v.title}</div>
-                <div className="text-sm text-text-primary/60 truncate max-w-md">{v.url}</div>
+        <div className="mb-4">
+          <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Or Upload Video File</label>
+          <input
+            id="video-upload-nested"
+            type="file"
+            accept="video/*"
+            onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+            className="w-full p-2 bg-white border border-teal-luxury/30 rounded text-text-primary outline-none"
+          />
+        </div>
+        <button
+          onClick={addVideo}
+          className="btn-premium-gold text-luxury-dark px-4 py-2 w-full rounded hover:shadow-glow-gold transition-all mb-4"
+        >
+          Add Video
+        </button>
+        <div className="space-y-2 max-h-60 overflow-y-auto">
+          {state.videos.map((v, i) => {
+            const videoAny = v as any;
+            const videoId = videoAny._id || v.id;
+            return (
+              <div key={videoId || i} className="flex justify-between items-center p-2 bg-white border border-teal-luxury/20 rounded">
+                <div className="truncate flex-1 mr-4">
+                  <div className="font-medium text-text-primary">{v.title}</div>
+                  <div className="text-xs text-text-primary/60 truncate">{v.url}</div>
+                </div>
+                <div className="flex space-x-2">
+                  <a href={v.url} target="_blank" rel="noreferrer" className="text-gold-primary hover:text-gold-soft transition-colors text-xs">View</a>
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await fetch(`${API_ENDPOINTS.VIDEOS}/${videoId}`, { method: 'DELETE' });
+                        if (!res.ok) throw new Error('Delete failed');
+                        dispatch({ type: 'SET_VIDEOS', payload: state.videos.filter(x => ((x as any)._id || x.id) !== videoId) });
+                      } catch (e) {
+                        dispatch({ type: 'REMOVE_VIDEO', payload: videoId });
+                      }
+                    }}
+                    className="text-ruby-luxury hover:text-gold-soft transition-colors text-xs"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-              <div className="flex space-x-2">
-                <a href={v.url} target="_blank" rel="noreferrer" className="text-gold-primary hover:text-gold-soft transition-colors">Open</a>
-                <button
-                  onClick={async () => {
-                    try {
-                      const videoAny = v as any;
-                      const res = await fetch(`${API_ENDPOINTS.VIDEOS}/${videoAny._id || v.id}`, { method: 'DELETE' });
-                      if (!res.ok) throw new Error('Delete failed');
-                      dispatch({ type: 'SET_VIDEOS', payload: state.videos.filter(x => x.id !== v.id && (x as any)._id !== videoAny._id) });
-                    } catch (e) {
-                      dispatch({ type: 'REMOVE_VIDEO', payload: v.id });
-                    }
-                  }}
-                  className="text-primary-wine hover:text-gold-soft transition-colors"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );

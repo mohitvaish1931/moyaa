@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
+import { getVideoUrl, isVideoEmbedUrl } from '../utils/mediaHelper';
 
 const ShowcaseVideos: React.FC = () => {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
@@ -143,14 +144,24 @@ const ShowcaseVideos: React.FC = () => {
             >
               <Link to="/products">
                 {item.type === 'video' ? (
-                  <video
-                    src={item.src}
-                    className="w-full h-[520px] object-cover group-hover:scale-105 transition-transform duration-700"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
+                  isVideoEmbedUrl(item.src) ? (
+                    <iframe
+                      src={getVideoUrl(item.src) || ''}
+                      className="w-full h-[520px] border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      title={item.title}
+                    />
+                  ) : (
+                    <video
+                      src={getVideoUrl(item.src) || item.src}
+                      className="w-full h-[520px] object-cover group-hover:scale-105 transition-transform duration-700"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                    />
+                  )
                 ) : (
                   <img 
                     src={(item as any).src} 
