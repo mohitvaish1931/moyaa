@@ -35,6 +35,9 @@ const SignInModal = () => {
           return;
         }
         // Save user in context
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
         dispatch({ type: 'SET_USER', payload: { id: data.user.id, email: data.user.email, name: data.user.name, isAdmin: data.user.isAdmin } });
         dispatch({ type: 'TOGGLE_SIGNIN', payload: false });
         setFormData({ name: '', email: '', password: '' });

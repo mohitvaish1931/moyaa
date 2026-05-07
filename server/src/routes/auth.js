@@ -1,6 +1,7 @@
 import express from 'express';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -15,7 +16,9 @@ router.post('/register', async (req, res) => {
     const passwordHash = await bcrypt.hash(password, salt);
     const user = new User({ email, passwordHash, name: name || 'User', isAdmin: false });
     await user.save();
-    res.json({ user: { id: user._id, email: user.email, name: user.name, isAdmin: user.isAdmin } });
+    const secret = process.env.JWT_SECRET || 'dev_secret';
+    const token = jwt.sign({ id: user._id, email: user.email, isAdmin: user.isAdmin }, secret, { expiresIn: '7d' });
+    res.json({ user: { id: user._id, email: user.email, name: user.name, isAdmin: user.isAdmin }, token });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -30,7 +33,9 @@ router.post('/login', async (req, res) => {
     // Use bcrypt to compare passwords
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) return res.status(400).json({ error: 'Invalid credentials' });
-    res.json({ user: { id: user._id, email: user.email, name: user.name, isAdmin: user.isAdmin } });
+    const secret = process.env.JWT_SECRET || 'dev_secret';
+    const token = jwt.sign({ id: user._id, email: user.email, isAdmin: user.isAdmin }, secret, { expiresIn: '7d' });
+    res.json({ user: { id: user._id, email: user.email, name: user.name, isAdmin: user.isAdmin }, token });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
