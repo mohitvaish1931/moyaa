@@ -4,6 +4,8 @@ import { X } from 'lucide-react';
 
 const PromoPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = ['/banner2.jpeg', '/moraa-promo-30.png'];
 
   useEffect(() => {
     // Check if the user has already dismissed the popup this session
@@ -17,6 +19,15 @@ const PromoPopup = () => {
       return () => clearTimeout(timer);
     }
   }, []);
+
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      }, 4000);
+      return () => clearInterval(timer);
+    }
+  }, [isVisible, images.length]);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -44,14 +55,31 @@ const PromoPopup = () => {
         </button>
 
         <div className="flex flex-col md:flex-row min-h-[400px]">
-          {/* Image Side */}
-          <div className="w-full md:w-1/2 relative h-[250px] md:h-auto">
-            <img 
-              src="/moraa-promo-30.png" 
-              alt="Exclusive 30% Off Offer" 
-              className="w-full h-full object-cover"
-            />
+          {/* Dynamic Image Side */}
+          <div className="w-full md:w-1/2 relative h-[250px] md:h-auto overflow-hidden">
+            {images.map((img, index) => (
+              <img 
+                key={img}
+                src={img} 
+                alt={`Promotion ${index + 1}`} 
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                  index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            ))}
             <div className="absolute inset-0 bg-gradient-to-r from-luxury-dark/40 to-transparent" />
+            
+            {/* Image Indicators */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+              {images.map((_, index) => (
+                <div 
+                  key={index}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    index === currentImageIndex ? 'w-6 bg-gold-primary' : 'w-1.5 bg-white/40'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
 
           {/* Text Side */}
@@ -85,3 +113,4 @@ const PromoPopup = () => {
 };
 
 export default PromoPopup;
+
