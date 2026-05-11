@@ -25,7 +25,7 @@ const DynamicBanners = () => {
   const getBannerStyles = (type?: string) => {
     switch (type) {
       case 'hot': return 'bg-primary-red text-white';
-      case 'new': return 'bg-gold-primary text-luxury-dark';
+      case 'new': return 'bg-gold-primary text-text-primary';
       case 'sold-out': return 'bg-gray-800 text-white';
       case 'info':
       default: return 'bg-luxury-dark text-text-primary border-b border-gold-primary/20';

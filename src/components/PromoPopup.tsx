@@ -98,7 +98,7 @@ const PromoPopup = () => {
               {activePopup.subtitle}
             </h2>
             <div className="mb-8">
-              <span className="block text-4xl md:text-5xl font-black text-white luxury-serif tracking-tighter mb-2 uppercase">
+              <span className="block text-4xl md:text-5xl font-black text-text-primary luxury-serif tracking-tighter mb-2 uppercase">
                 {activePopup.title}
               </span>
               {currentStep === 1 && (
@@ -110,7 +110,7 @@ const PromoPopup = () => {
               )}
             </div>
             
-            <p className="text-platinum/70 text-sm italic luxury-serif mb-8 max-w-xs leading-relaxed">
+            <p className="text-text-secondary text-sm italic luxury-serif mb-8 max-w-xs leading-relaxed">
               {activePopup.description}
             </p>
 
