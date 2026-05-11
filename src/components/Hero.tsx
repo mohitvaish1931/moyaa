@@ -1,36 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 
 const Hero = () => {
-  const [particles, setParticles] = useState<Array<{ id: number; left: number; top: number; delay: number }>>([]);
-
-  useEffect(() => {
-    // Generate random sparkle particles
-    const newParticles = Array.from({ length: 12 }, (_, index) => ({
-      id: index,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      delay: Math.random() * 0.5,
-    }));
-    setParticles(newParticles);
-  }, []);
-
   return (
     <section className="relative min-h-[55vh] md:min-h-screen flex items-center justify-center overflow-hidden py-0 bg-luxury-dark">
-      {/* Sparkle Particles for Luxury Feel */}
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className="absolute w-1 h-1 bg-gold-primary rounded-full animate-sparkle z-20 pointer-events-none opacity-40"
-          style={{
-            left: `${p.left}%`,
-            top: `${p.top}%`,
-            animationDelay: `${p.delay}s`,
-          }}
-        />
-      ))}
-
       {/* Main Banner Background Image with Ken Burns Effect */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img 
