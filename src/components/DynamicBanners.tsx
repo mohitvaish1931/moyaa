@@ -52,7 +52,7 @@ const DynamicBanners = () => {
         {/* Content */}
         <div className="flex-1 flex items-center justify-center space-x-3 text-center px-4 animate-fade-in" key={currentBanner.id || currentIndex}>
           {getBannerIcon(currentBanner.type)}
-          <span className="text-xs sm:text-sm font-bold tracking-[0.2em] uppercase truncate max-w-[80vw]">
+          <span className="text-xs sm:text-sm font-bold tracking-[0.2em] uppercase whitespace-normal">
             {currentBanner.text}
           </span>
           {getBannerIcon(currentBanner.type)}

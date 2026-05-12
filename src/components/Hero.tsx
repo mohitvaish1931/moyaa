@@ -4,16 +4,16 @@ import { ChevronRight } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-[85vh] md:min-h-screen flex items-center justify-center overflow-hidden py-0 bg-luxury-dark">
+    <section className="relative h-[45vh] sm:h-[70vh] lg:h-screen flex items-center justify-center overflow-hidden py-0 bg-luxury-dark">
       {/* Main Banner Background Image with Ken Burns Effect */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      <div className="absolute inset-0 z-0">
         <img 
           src="/main-banner.jpeg" 
           alt="Luxury Jewelry Banner" 
-          className="w-full h-full object-cover object-center opacity-100 block animate-ken-burns"
+          className="w-full h-full object-cover animate-ken-burns brightness-[1.05]"
         />
-        {/* Sophisticated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/40 md:bg-black/20" />
+        {/* Minimalist gradient overlay - significantly reduced opacity */}
+        <div className="absolute inset-0 bg-gradient-to-t from-luxury-dark/20 via-transparent to-transparent" />
       </div>
 
       {/* Main hero content overlay */}
@@ -25,7 +25,7 @@ const Hero = () => {
             <div className="h-px w-6 sm:w-8 bg-gold-primary/50" />
           </div>
           
-          <h1 className="text-4xl sm:text-5xl md:text-8xl font-black text-white mb-6 md:mb-8 tracking-tight luxury-serif drop-shadow-2xl">
+          <h1 className="text-3xl sm:text-5xl lg:text-8xl font-black text-white mb-6 md:mb-8 tracking-tight luxury-serif drop-shadow-2xl">
             MORAA <span className="text-gold-primary italic font-light">JEWELS</span>
           </h1>
           

@@ -18,7 +18,7 @@ const Footer = () => {
             <div className="flex gap-4">
               {[
                 { Icon: Instagram, url: 'https://www.instagram.com/moraajewels?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
-                { Icon: Facebook, url: '#' },
+                { Icon: Facebook, url: 'https://www.facebook.com/share/1PXzQcQH1R/' },
                 { Icon: Twitter, url: '#' }
               ].map((social, i) => (
                 <a 

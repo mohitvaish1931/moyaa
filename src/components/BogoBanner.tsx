@@ -28,7 +28,7 @@ const BogoBanner = () => {
               </span>
               <Sparkles className="w-4 h-4 text-gold-primary animate-pulse" />
             </div>
-            <h2 className="text-4xl md:text-6xl font-black text-white luxury-serif tracking-[0.1em] leading-tight uppercase">
+            <h2 className="text-3xl md:text-6xl font-black text-white luxury-serif tracking-[0.1em] leading-tight uppercase">
               BUY 1 GET 1 <span className="text-gold-primary italic">FREE</span>
             </h2>
             <p className="text-white/80 font-medium tracking-widest text-xs md:text-sm uppercase max-w-lg">
