@@ -6,14 +6,14 @@ const PromoBanner = () => {
     <section className="py-12 bg-luxury-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl group shadow-2xl border border-gold-primary/20">
-          <div className="aspect-[21/9] relative overflow-hidden">
+          <div className="aspect-[4/5] sm:aspect-[21/9] relative overflow-hidden">
             <img 
               src="/moraa-promo-30.png" 
               alt="Exclusive 30% Off Offer" 
               className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-1000"
             />
             {/* Elegant overlay for better transition */}
-            <div className="absolute inset-0 bg-gradient-to-t from-luxury-dark/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-luxury-dark/80 via-transparent to-transparent md:from-luxury-dark/60" />
           </div>
           
           <div className="absolute inset-0 flex items-center justify-center sm:justify-end sm:pr-12 md:pr-24">
