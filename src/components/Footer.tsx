@@ -16,9 +16,19 @@ const Footer = () => {
               Crafting timeless legacies since 2026. Our masterpieces are a celebration of deep passion and enduring gold.
             </p>
             <div className="flex gap-4">
-              {[Instagram, Facebook, Twitter].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-full border border-gold-primary/20 flex items-center justify-center text-text-primary hover:bg-primary-red hover:text-white hover:border-primary-red transition-all duration-300 shadow-sm">
-                  <Icon className="h-4 w-4" />
+              {[
+                { Icon: Instagram, url: 'https://www.instagram.com/moraajewels?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
+                { Icon: Facebook, url: '#' },
+                { Icon: Twitter, url: '#' }
+              ].map((social, i) => (
+                <a 
+                  key={i} 
+                  href={social.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full border border-gold-primary/20 flex items-center justify-center text-text-primary hover:bg-primary-red hover:text-white hover:border-primary-red transition-all duration-300 shadow-sm"
+                >
+                  <social.Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
