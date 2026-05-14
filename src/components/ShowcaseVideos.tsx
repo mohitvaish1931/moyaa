@@ -20,8 +20,8 @@ const ShowcaseVideos: React.FC = () => {
       setItems(state.videos as any[]);
     } else {
       setItems([
-        { id: 'mor', type: 'video', src: 'https://player.vimeo.com/external/447822549.sd.mp4?s=8d1b6e8f3f3c8e3c9d8b3b7d9b6a6c1f3c2d1e0f', title: 'mor' },
-        { id: 'showcase1', type: 'video', src: 'https://player.vimeo.com/external/452301931.sd.mp4?s=0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8g9', title: 'showcase1' },
+        { id: 'mor', type: 'video', src: 'https://vimeo.com/447822549', title: 'Luxury Craft' },
+        { id: 'showcase1', type: 'video', src: 'https://vimeo.com/452301931', title: 'Artisan Process' },
       ]);
     }
   }, [state.videos]);
