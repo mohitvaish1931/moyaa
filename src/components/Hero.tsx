@@ -10,7 +10,7 @@ const Hero = () => {
         <img 
           src="/main-banner.jpeg" 
           alt="Luxury Jewelry Banner" 
-          className="w-full h-full object-cover animate-ken-burns brightness-[1.05]"
+          className="w-full h-full object-cover object-[85%_center] sm:object-center animate-ken-burns brightness-[1.05]"
         />
         {/* Minimalist gradient overlay - significantly reduced opacity */}
         <div className="absolute inset-0 bg-gradient-to-t from-luxury-dark/20 via-transparent to-transparent" />
