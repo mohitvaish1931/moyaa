@@ -76,11 +76,11 @@ const PromoPopup = () => {
 
         <div className="flex flex-col md:flex-row min-h-[400px]">
           {/* Image Side */}
-          <div className="w-full md:w-1/2 relative h-[320px] sm:h-[400px] md:h-auto overflow-hidden">
+          <div className="w-full md:w-1/2 relative h-[400px] sm:h-[450px] md:h-auto bg-[#0a2622] flex items-center justify-center overflow-hidden">
             <img 
               src={activePopup.image} 
               alt={activePopup.title} 
-              className="w-full h-full object-cover animate-fade-in"
+              className="w-full h-full object-contain animate-fade-in"
               key={activePopup.image}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-luxury-dark/40 to-transparent" />
@@ -93,24 +93,24 @@ const PromoPopup = () => {
           </div>
 
           {/* Text Side */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center items-center text-center">
-            <h2 className="text-gold-primary text-xs tracking-[0.6em] font-bold luxury-serif mb-4 uppercase">
+          <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center items-center text-center">
+            <h2 className="text-gold-primary text-[10px] sm:text-xs tracking-[0.4em] sm:tracking-[0.6em] font-bold luxury-serif mb-3 sm:mb-4 uppercase">
               {activePopup.subtitle}
             </h2>
-            <div className="mb-8">
-              <span className="block text-4xl md:text-5xl font-black text-text-primary luxury-serif tracking-tighter mb-2 uppercase">
+            <div className="mb-6 sm:mb-8">
+              <span className="block text-3xl sm:text-4xl md:text-5xl font-black text-text-primary luxury-serif tracking-tighter mb-2 uppercase leading-tight">
                 {activePopup.title}
               </span>
               {currentStep === 1 && (
                 <div className="flex items-center justify-center space-x-2">
-                  <span className="h-px w-8 bg-gold-primary/40" />
-                  <span className="px-6 py-2 bg-gold-primary text-luxury-dark text-2xl font-black rounded-lg transform -rotate-2">30% OFF</span>
-                  <span className="h-px w-8 bg-gold-primary/40" />
+                  <span className="h-px w-6 sm:w-8 bg-gold-primary/40" />
+                  <span className="px-4 py-1.5 sm:px-6 sm:py-2 bg-gold-primary text-luxury-dark text-xl sm:text-2xl font-black rounded-lg transform -rotate-2">30% OFF</span>
+                  <span className="h-px w-6 sm:w-8 bg-gold-primary/40" />
                 </div>
               )}
             </div>
             
-            <p className="text-text-secondary text-sm italic luxury-serif mb-8 max-w-xs leading-relaxed">
+            <p className="text-text-secondary text-[13px] sm:text-sm italic luxury-serif mb-6 sm:mb-8 max-w-xs leading-relaxed">
               {activePopup.description}
             </p>
 
