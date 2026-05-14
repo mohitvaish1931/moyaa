@@ -76,7 +76,7 @@ const PromoPopup = () => {
 
         <div className="flex flex-col md:flex-row min-h-[400px]">
           {/* Image Side */}
-          <div className="w-full md:w-1/2 relative h-[250px] md:h-auto overflow-hidden">
+          <div className="w-full md:w-1/2 relative h-[320px] sm:h-[400px] md:h-auto overflow-hidden">
             <img 
               src={activePopup.image} 
               alt={activePopup.title} 

@@ -6,7 +6,7 @@ const PromoBanner = () => {
     <section className="py-12 bg-luxury-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl group shadow-2xl border border-gold-primary/20">
-          <div className="aspect-[4/5] sm:aspect-[21/9] relative overflow-hidden">
+          <div className="aspect-video sm:aspect-[21/9] relative overflow-hidden">
             <img 
               src="/moraa-promo-30.png" 
               alt="Exclusive 30% Off Offer" 
