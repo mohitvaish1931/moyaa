@@ -52,7 +52,7 @@ html {
 .animate-scroll {
   display: flex !important;
   width: max-content !important;
-  animation: scroll 40s linear infinite !important;
+  animation: scroll 100s linear infinite !important;
 }
 
 /* Premium Luxury Effects */
