@@ -11,7 +11,11 @@ const fixOutOfStock = async () => {
     console.log('🔧 Fixing out-of-stock products...');
     
     // Connect to MongoDB
-    const mongoUri = process.env.MONGO_URI || 'mongodb+srv://mohitlalwani1907:mohitlalwani%401931@cluster0.tzkp3vg.mongodb.net/rrjewel?appName=Cluster0&retryWrites=true&w=majority';
+    const mongoUri = process.env.MONGO_URI;
+    if (!mongoUri) {
+      console.error("Error: MONGO_URI environment variable is not defined.");
+      process.exit(1);
+    }
     
     await mongoose.connect(mongoUri);
     console.log('✅ Connected to MongoDB');
