@@ -10,16 +10,26 @@ const ProductSchema = new mongoose.Schema({
   sale: Boolean,
   soldOut: { type: Boolean, default: false },
   category: String,
+  subcategory: String,
   description: String,
   features: [String],
   materials: [String],
   dimensions: String,
   weight: String,
   careInstructions: [String],
+  specifications: [String],
   stock: { type: Number, default: 999, min: 0 },
   sku: { type: String, unique: true, sparse: true },
   averageRating: { type: Number, default: 0, min: 0, max: 5 },
-  reviewCount: { type: Number, default: 0, min: 0 }
+  reviewCount: { type: Number, default: 0, min: 0 },
+  colors: [String],
+  sizes: [String],
+  shapes: [String],
+  productLink: String,
+  status: { type: String, default: 'published' },
+  displayOrder: { type: Number, default: 0 },
+  isBOGO: { type: Boolean, default: false },
+  sizeStock: { type: Map, of: Number, default: {} }
 }, { timestamps: true });
 
 // Transform _id to id when converting to JSON

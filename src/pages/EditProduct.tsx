@@ -37,7 +37,8 @@ const EditProduct = () => {
     shapes: '',
     colors: '',
     careInstructions: '',
-    displayOrder: 0
+    displayOrder: 0,
+    sizeStock: {}
   });
   
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -109,7 +110,14 @@ const EditProduct = () => {
           }
           return Array.isArray(ci) ? ci.join('\n') : (ci || '');
         })(),
-        displayOrder: productAny.displayOrder || 0
+        displayOrder: productAny.displayOrder || 0,
+        sizeStock: (() => {
+          let ss = productAny.sizeStock;
+          if (typeof ss === 'string' && ss.startsWith('{')) {
+            try { ss = JSON.parse(ss); } catch (e) { /* ignore */ }
+          }
+          return ss || {};
+        })()
       });
       setVideoUrls((productAny.videos && productAny.videos.length > 0) ? productAny.videos : ['', '']);
     }
@@ -141,10 +149,14 @@ const EditProduct = () => {
         if (form[k] !== undefined && form[k] !== null && 
             k !== 'images' && k !== 'image' && k !== 'videos' && 
             k !== 'specifications' && k !== 'materials' && 
-            k !== 'sizes' && k !== 'shapes' && k !== 'colors') {
+            k !== 'sizes' && k !== 'shapes' && k !== 'colors' && k !== 'sizeStock') {
           fd.append(k, form[k]);
         }
       });
+
+      if (form.category === 'rings' && form.sizeStock) {
+        fd.append('sizeStock', JSON.stringify(form.sizeStock));
+      }
       
       // Handle specifications array
       if (form.specifications) {
@@ -424,6 +436,44 @@ const EditProduct = () => {
                   placeholder="5, 6, 7"
                 />
               </div>
+              {form.category === 'rings' && (() => {
+                const parsedSizes = form.sizes 
+                  ? (typeof form.sizes === 'string' 
+                      ? form.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0) 
+                      : form.sizes) 
+                  : [];
+                return parsedSizes.length > 0 ? (
+                  <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                    <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                      <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                      Size-Specific Stock (For Rings)
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {parsedSizes.map((size: string) => (
+                        <div key={size} className="space-y-1">
+                          <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">Size {size} Stock</label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={form.sizeStock?.[size] !== undefined ? form.sizeStock[size] : 10}
+                            onChange={(e) => {
+                              const stockVal = parseInt(e.target.value, 10) || 0;
+                              setForm({
+                                ...form,
+                                sizeStock: {
+                                  ...(form.sizeStock || {}),
+                                  [size]: stockVal
+                                }
+                              });
+                            }}
+                            className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Shapes (Comma separated)</label>
                 <input

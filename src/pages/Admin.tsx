@@ -152,6 +152,11 @@ const Admin = () => {
     const [isBOGO, setIsBOGO] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [sizesText, setSizesText] = useState('');
+    const [sizeStock, setSizeStock] = useState<Record<string, number>>({});
+    const parsedSizes = React.useMemo(() => {
+      return [...new Set(sizesText.split(',').map(s => s.trim()).filter(s => s.length > 0))];
+    }, [sizesText]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files: File[] = Array.from(e.target.files || []);
@@ -232,6 +237,10 @@ const Admin = () => {
           }
           fd.delete('sizes_raw');
 
+          if (selectedCategory === 'rings') {
+            fd.append('sizeStock', JSON.stringify(sizeStock));
+          }
+
           // Handle shapes
           const shapesRaw = fd.get('shapes_raw')?.toString() || '';
           if (shapesRaw) {
@@ -285,6 +294,8 @@ const Admin = () => {
           setVideoFiles([]);
           setVideoUrls(['', '']);
           setError('');
+          setSizeStock({});
+          setSizesText('');
         }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -368,10 +379,40 @@ const Admin = () => {
                 id="product-sizes"
                 name="sizes_raw"
                 type="text"
+                value={sizesText}
+                onChange={e => setSizesText(e.target.value)}
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="5, 6, 7, 8, 9"
               />
             </div>
+            {selectedCategory === 'rings' && parsedSizes.length > 0 && (
+              <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                  <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                  Size-Specific Stock (For Rings)
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {parsedSizes.map((size: string) => (
+                    <div key={size} className="space-y-1">
+                      <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">Size {size} Stock</label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={sizeStock[size] !== undefined ? sizeStock[size] : 10}
+                        onChange={(e) => {
+                          const stockVal = parseInt(e.target.value, 10) || 0;
+                          setSizeStock(prev => ({
+                            ...prev,
+                            [size]: stockVal
+                          }));
+                        }}
+                        className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div>
               <label htmlFor="product-shapes" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Shapes (e.g. Heart, Round, Comma separated)</label>
               <input
@@ -597,6 +638,8 @@ const Admin = () => {
                 setVideoUrls(['', '']); 
                 setSoldOut(false);
                 setError('');
+                setSizeStock({});
+                setSizesText('');
               }}
               className="bg-white text-text-primary px-6 py-2 rounded-lg border border-teal-luxury/30 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
 
@@ -772,6 +815,13 @@ const Admin = () => {
             return Array.isArray(ci) ? ci.join('\n') : (ci || '');
           })(),
           isBOGO: editProduct.isBOGO || false,
+          sizeStock: (() => {
+            let ss = editProduct.sizeStock;
+            if (typeof ss === 'string' && ss.startsWith('{')) {
+              try { ss = JSON.parse(ss); } catch (e) { /* ignore */ }
+            }
+            return ss || {};
+          })(),
         });
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
       } else {
@@ -803,10 +853,14 @@ const Admin = () => {
           if (localForm[k] !== undefined && localForm[k] !== null && 
               k !== 'images' && k !== 'image' && k !== 'videos' && 
               k !== 'specifications' && k !== 'materials' && 
-              k !== 'sizes' && k !== 'shapes' && k !== 'colors') {
+              k !== 'sizes' && k !== 'shapes' && k !== 'colors' && k !== 'sizeStock') {
             fd.append(k, localForm[k]);
           }
         });
+
+        if (localForm.category === 'rings' && localForm.sizeStock) {
+          fd.append('sizeStock', JSON.stringify(localForm.sizeStock));
+        }
 
         // Handle specifications array
         if (localForm.specifications) {
@@ -1008,6 +1062,44 @@ const Admin = () => {
                   placeholder="5, 6, 7"
                 />
               </div>
+              {localForm?.category === 'rings' && (() => {
+                const parsedSizes = localForm.sizes 
+                  ? (typeof localForm.sizes === 'string' 
+                      ? localForm.sizes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0) 
+                      : localForm.sizes) 
+                  : [];
+                return parsedSizes.length > 0 ? (
+                  <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                    <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                      <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                      Size-Specific Stock (For Rings)
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {parsedSizes.map((size: string) => (
+                        <div key={size} className="space-y-1">
+                          <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">Size {size} Stock</label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={localForm.sizeStock?.[size] !== undefined ? localForm.sizeStock[size] : 10}
+                            onChange={(e) => {
+                              const stockVal = parseInt(e.target.value, 10) || 0;
+                              setLocalForm({
+                                ...localForm,
+                                sizeStock: {
+                                  ...(localForm.sizeStock || {}),
+                                  [size]: stockVal
+                                }
+                              });
+                            }}
+                            className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Shapes (Comma separated)</label>
                 <input
@@ -1831,6 +1923,9 @@ const Admin = () => {
                 <table className="min-w-full divide-y divide-gold-primary/5">
                   <thead className="bg-[#FDFBF9]">
                     <tr>
+                      <th className="px-4 py-4 text-center text-[10px] font-bold text-text-muted uppercase tracking-widest w-20">
+                        Pos
+                      </th>
                       <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">
                         Product
                       </th>
@@ -1852,18 +1947,57 @@ const Admin = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-sapphire-luxury/20">
-                    {state.products.filter(p => !productSearch || p.name.toLowerCase().includes(productSearch.toLowerCase()) || p.category.toLowerCase().includes(productSearch.toLowerCase())).map((product, i) => (
-                      <tr 
-                        key={(product as any)._id || product.id || i}
-                        draggable={!productSearch}
-                        onDragStart={(e) => !productSearch && handleDragStartProduct(e, i)}
-                        onDragEnter={(e) => !productSearch && handleDragEnterProduct(e, i)}
-                        onDragOver={handleDragOverProduct}
-                        onDragEnd={handleDragEndProduct}
-                        className={`${!productSearch ? 'cursor-move' : ''} transition-colors ${draggedProductIndex === i ? 'opacity-50' : dragOverProductIndex === i ? 'bg-gold-primary/10' : ''}`}
-                        title={!productSearch ? "Drag to reorder" : ""}
-                      >
-                        <td className="px-6 py-4 whitespace-nowrap">
+                    {state.products.filter(p => !productSearch || p.name.toLowerCase().includes(productSearch.toLowerCase()) || p.category.toLowerCase().includes(productSearch.toLowerCase())).map((product, i) => {
+                      const realIndex = state.products.findIndex(p => (p as any)._id === (product as any)._id || p.id === product.id);
+                      return (
+                        <tr 
+                          key={(product as any)._id || product.id || i}
+                          draggable={!productSearch}
+                          onDragStart={(e) => !productSearch && handleDragStartProduct(e, i)}
+                          onDragEnter={(e) => !productSearch && handleDragEnterProduct(e, i)}
+                          onDragOver={handleDragOverProduct}
+                          onDragEnd={handleDragEndProduct}
+                          className={`${!productSearch ? 'cursor-move' : ''} transition-colors ${draggedProductIndex === i ? 'opacity-50' : dragOverProductIndex === i ? 'bg-gold-primary/10' : ''}`}
+                          title={!productSearch ? "Drag to reorder" : ""}
+                        >
+                          <td className="px-4 py-4 text-center whitespace-nowrap">
+                            <input
+                              type="number"
+                              min="1"
+                              max={state.products.length}
+                              value={realIndex + 1}
+                              onChange={async (e) => {
+                                const newPos = parseInt(e.target.value, 10);
+                                if (isNaN(newPos) || newPos < 1 || newPos > state.products.length || newPos === realIndex + 1) return;
+                                
+                                const newIndex = newPos - 1;
+                                const products = [...state.products];
+                                const item = products.splice(realIndex, 1)[0];
+                                products.splice(newIndex, 0, item);
+
+                                dispatch({ type: 'SET_PRODUCTS', payload: products });
+
+                                const reorderPayload = products.map((p, idx) => ({
+                                  id: (p as any)._id || p.id,
+                                  displayOrder: idx,
+                                }));
+
+                                try {
+                                  const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/reorder`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ products: reorderPayload }),
+                                  });
+                                  if (!res.ok) throw new Error('Reorder failed');
+                                } catch (err) {
+                                  console.error('Reorder update failed:', err);
+                                }
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                              className="w-16 px-2 py-1 text-center bg-luxury-dark/5 border border-gold-primary/20 rounded-lg text-xs font-bold text-text-primary focus:ring-2 focus:ring-gold-primary/40 focus:border-transparent outline-none transition-all shadow-inner"
+                            />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <img
                               className="h-10 w-10 rounded-lg object-cover border border-gold-primary"
@@ -1977,7 +2111,8 @@ const Admin = () => {
                           </div>
                         </td>
                       </tr>
-                    ))}
+                    );
+                    })}
                   </tbody>
                 </table>
               </div>

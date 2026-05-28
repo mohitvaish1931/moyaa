@@ -36,6 +36,7 @@ export interface Product {
   displayOrder?: number;
   quantity?: number;
   isBOGO?: boolean;
+  sizeStock?: Record<string, number>;
 }
 
 export interface Video {

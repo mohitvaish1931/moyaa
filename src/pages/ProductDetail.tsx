@@ -28,6 +28,19 @@ const ProductDetail = () => {
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [isQualityInfoOpen, setIsQualityInfoOpen] = useState(false);
 
+  const isSizeOutOfStock = (sizeStr: string) => {
+    if (!product || product.category.toLowerCase() !== 'rings' || !product.sizeStock) return false;
+    const val = product.sizeStock[sizeStr];
+    return val !== undefined ? val <= 0 : false;
+  };
+
+  const isCurrentSizeOutOfStock = useMemo(() => {
+    if (!product || product.category.toLowerCase() !== 'rings' || !product.sizeStock) return false;
+    if (!selectedSize) return false;
+    const val = product.sizeStock[selectedSize];
+    return val !== undefined ? val <= 0 : false;
+  }, [product, selectedSize]);
+
 
 
   const allSizes = useMemo(() => product ? parseList((product as any).sizes) : [], [product]);
@@ -435,19 +448,29 @@ const ProductDetail = () => {
                   <div className="flex flex-wrap gap-2">
                     {allSizes.length > 0 ? (
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {allSizes.map((size: string, idx: number) => (
-                          <button
-                            key={idx}
-                            onClick={() => setSelectedSize(size)}
-                            className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest ${
-                              selectedSize === size
-                                ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105'
-                                : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary'
-                            }`}
-                          >
-                            {size}
-                          </button>
-                        ))}
+                        {allSizes.map((size: string, idx: number) => {
+                          const isOutOfStock = isSizeOutOfStock(size);
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => setSelectedSize(size)}
+                              className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest relative overflow-hidden ${
+                                selectedSize === size
+                                  ? (isOutOfStock 
+                                      ? 'bg-gray-200 text-gray-500 border-gray-300 line-through cursor-not-allowed' 
+                                      : 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105')
+                                  : (isOutOfStock
+                                      ? 'bg-gray-100/50 border-gray-200 text-gray-400 line-through cursor-not-allowed opacity-60'
+                                      : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary')
+                              }`}
+                            >
+                              {size}
+                              {isOutOfStock && (
+                                <span className="absolute bottom-0 right-0 w-2 h-2 bg-ruby-luxury rounded-full" title="Out of Stock"></span>
+                              )}
+                            </button>
+                          );
+                        })}
                       </div>
                     ) : (
                       <p className="text-[10px] text-text-muted italic">Standard Ring Size</p>
@@ -504,15 +527,15 @@ const ProductDetail = () => {
               <div className="flex space-x-4">
                 <button
                   onClick={addToCart}
-                  disabled={product.soldOut}
+                  disabled={product.soldOut || isCurrentSizeOutOfStock}
                   className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-all ${
-                    product.soldOut 
+                    (product.soldOut || isCurrentSizeOutOfStock) 
                       ? 'bg-gray-300 cursor-not-allowed text-gray-500' 
                       : 'btn-premium-gold text-luxury-dark hover:shadow-glow-gold'
                   }`}
                 >
                   <ShoppingBag className="h-5 w-5" />
-                  <span>{product.soldOut ? 'Sold Out' : 'Add to Cart'}</span>
+                  <span>{(product.soldOut || isCurrentSizeOutOfStock) ? 'Sold Out' : 'Add to Cart'}</span>
                 </button>
                 <button
                   onClick={toggleWishlist}
