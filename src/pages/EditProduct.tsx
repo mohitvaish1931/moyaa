@@ -250,13 +250,21 @@ const EditProduct = () => {
         });
       }
       
-      const url = `${API_ENDPOINTS.PRODUCTS}/${form.id}`;
+      const productId = form.id ?? form._id;
+      const url = `${API_ENDPOINTS.PRODUCTS}/${productId}`;
       const res = await fetch(url, { method: 'PUT', body: fd });
       
       if (!res.ok) throw new Error('Update failed');
       
       const updated = await res.json();
-      dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
+      dispatch({
+        type: 'UPDATE_PRODUCT',
+        payload: {
+          ...updated,
+          id: updated.id ?? updated._id ?? productId,
+          _id: updated._id ?? updated.id ?? productId,
+        },
+      });
       setSuccess('✅ Product updated successfully!');
       
       setTimeout(() => {
@@ -269,7 +277,8 @@ const EditProduct = () => {
       // Fallback: update locally
       const updated = {
         ...form,
-        id: form.id,
+        id: form.id ?? form._id,
+        _id: form._id ?? form.id,
         name: form.name,
         category: form.category,
         price: Number(form.price) || 0,

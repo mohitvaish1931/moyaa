@@ -943,11 +943,19 @@ const Admin = () => {
           });
         }
         
-        const url = `${API_ENDPOINTS.PRODUCTS}/${localForm.id}`;
+        const productId = localForm.id ?? localForm._id;
+        const url = `${API_ENDPOINTS.PRODUCTS}/${productId}`;
         const res = await fetch(url, { method: 'PUT', body: fd });
         if (!res.ok) throw new Error('Update failed');
         const updated = await res.json();
-        dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
+        dispatch({
+          type: 'UPDATE_PRODUCT',
+          payload: {
+            ...updated,
+            id: updated.id ?? updated._id ?? productId,
+            _id: updated._id ?? updated.id ?? productId,
+          },
+        });
       } catch (err) {
         const updated = {
           ...localForm,

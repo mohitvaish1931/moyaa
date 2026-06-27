@@ -132,6 +132,18 @@ const initialState: AppState = {
   coupons: [],
 };
 
+const normalizeProduct = (product: any) => {
+  if (!product) return product;
+  const normalizedId = product.id ?? product._id;
+  return {
+    ...product,
+    id: normalizedId,
+    _id: product._id ?? normalizedId,
+  };
+};
+
+const getProductIdentity = (product: any) => product?.id ?? product?._id;
+
 const appReducer = (state: AppState, action: AppAction): AppState => {
   switch (action.type) {
     case 'SET_USER':
@@ -139,13 +151,24 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     case 'LOGOUT':
       return { ...state, user: null };
     case 'SET_PRODUCTS':
-      return { ...state, products: action.payload };
+      return { ...state, products: action.payload.map(normalizeProduct) };
     case 'ADD_PRODUCT':
-      return { ...state, products: [...state.products, action.payload] };
-    case 'UPDATE_PRODUCT':
-      return { ...state, products: state.products.map(p => p.id === action.payload.id ? action.payload : p) };
+      return { ...state, products: [...state.products, normalizeProduct(action.payload)] };
+    case 'UPDATE_PRODUCT': {
+      const payloadId = getProductIdentity(action.payload);
+      return {
+        ...state,
+        products: state.products.map((p) => {
+          const currentId = getProductIdentity(p);
+          if (currentId === payloadId) {
+            return normalizeProduct({ ...p, ...action.payload, id: action.payload.id ?? currentId, _id: action.payload._id ?? (p as any)._id ?? currentId });
+          }
+          return p;
+        }),
+      };
+    }
     case 'REMOVE_PRODUCT':
-      return { ...state, products: state.products.filter(p => p.id !== action.payload) };
+      return { ...state, products: state.products.filter(p => getProductIdentity(p) !== action.payload) };
     case 'SET_VIDEOS':
       return { ...state, videos: action.payload };
     case 'ADD_VIDEO':
