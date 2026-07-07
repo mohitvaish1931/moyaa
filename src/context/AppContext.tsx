@@ -192,9 +192,13 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     case 'REMOVE_COUPON':
       return { ...state, coupons: state.coupons.filter(c => c.code !== action.payload) };
     
-    case 'ADD_TO_CART':
+    case 'ADD_TO_CART': {
       const existingCartItem = state.cart.find(item => item.id === action.payload.id);
       if (existingCartItem) {
+        const productStock = existingCartItem.stock ?? Infinity;
+        if (existingCartItem.quantity >= productStock) {
+          return state;
+        }
         return {
           ...state,
           cart: state.cart.map(item =>
@@ -204,10 +208,16 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
           ),
         };
       }
+
+      const newStock = action.payload.stock ?? Infinity;
+      if (newStock < 1) {
+        return state;
+      }
       return {
         ...state,
         cart: [...state.cart, { ...action.payload, quantity: 1 }],
       };
+    }
     
     case 'REMOVE_FROM_CART':
       return {
@@ -218,11 +228,14 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     case 'UPDATE_CART_QUANTITY':
       return {
         ...state,
-        cart: state.cart.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: action.payload.quantity }
-            : item
-        ),
+        cart: state.cart.map(item => {
+          if (item.id === action.payload.id) {
+            const productStock = item.stock ?? Infinity;
+            const newQuantity = Math.min(action.payload.quantity, productStock);
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        }),
       };
     
     case 'UPDATE_CART_SHAPE':

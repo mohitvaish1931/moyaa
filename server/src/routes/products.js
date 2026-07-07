@@ -117,6 +117,7 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
   try {
     const body = { ...req.body };
     const files = req.files || [];
+    const existingProduct = await Product.findById(req.params.id);
 
     if (files.length > 0) {
       // Files uploaded to Cloudinary - extract URL from cloudinary response
@@ -132,6 +133,16 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
         } catch {
           body.images = [];
         }
+      }
+
+      if (!body.image && existingProduct?.image) {
+        body.image = existingProduct.image;
+      }
+
+      if (!body.images && existingProduct?.images?.length) {
+        body.images = existingProduct.images;
+      } else if (!body.images && existingProduct?.image) {
+        body.images = [existingProduct.image];
       }
     }
 

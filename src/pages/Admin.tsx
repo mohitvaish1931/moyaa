@@ -935,6 +935,11 @@ const Admin = () => {
           fd.append('videos', JSON.stringify(finalVideos));
         }
         
+        // Preserve existing images when no new files are selected
+        if (localForm.images && localForm.images.length > 0) {
+          fd.append('images', JSON.stringify(localForm.images));
+        }
+
         // Handle image upload if new images were selected
         const fileInput = (e.target as HTMLFormElement).querySelector('input[type="file"]') as HTMLInputElement;
         if (fileInput?.files?.length) {

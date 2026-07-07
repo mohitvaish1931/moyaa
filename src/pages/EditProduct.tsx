@@ -54,6 +54,9 @@ const EditProduct = () => {
     const product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
     if (product) {
       const productAny = product as any;
+      const existingImages = productAny.images && productAny.images.length > 0
+        ? productAny.images
+        : (productAny.image ? [productAny.image] : []);
       setForm({
         id: product.id || productAny._id,
         name: product.name || '',
@@ -79,7 +82,7 @@ const EditProduct = () => {
           return Array.isArray(specs) ? specs.join('\n') : (specs || '');
         })(),
         soldOut: productAny.soldOut || false,
-        images: product.images || [],
+        images: existingImages,
         videos: productAny.videos || [],
         stock: productAny.stock || 0,
         sizes: (() => {
@@ -243,6 +246,11 @@ const EditProduct = () => {
         fd.append('videos', JSON.stringify(finalVideos));
       }
       
+      // Preserve existing images when no new files are selected
+      if (form.images && form.images.length > 0) {
+        fd.append('images', JSON.stringify(form.images));
+      }
+
       // Handle image upload if new images were selected
       if (imageFiles.length > 0) {
         imageFiles.forEach(file => {
