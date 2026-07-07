@@ -514,7 +514,12 @@ const ProductDetail = () => {
                     </button>
                     <span className="px-4 py-2 border-x border-gray-300 text-gray-900">{quantity}</span>
                     <button
-                      onClick={() => setQuantity(quantity + 1)}
+                      onClick={() => {
+                        const maxStock = (product?.category.toLowerCase() === 'rings' && product?.sizeStock && selectedSize) 
+                          ? (product.sizeStock[selectedSize] ?? 0)
+                          : (product?.stock ?? Infinity);
+                        setQuantity(Math.min(quantity + 1, maxStock));
+                      }}
                       className="px-3 py-2 text-gray-900 hover:text-gold-primary transition-colors"
                     >
                       +
