@@ -194,8 +194,13 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     
     case 'ADD_TO_CART': {
       const existingCartItem = state.cart.find(item => item.id === action.payload.id);
+      
+      const payloadQuantity = action.payload.quantity || 1;
+      
       if (existingCartItem) {
         const productStock = existingCartItem.stock ?? Infinity;
+        const newQuantity = Math.min(existingCartItem.quantity + payloadQuantity, productStock);
+        
         if (existingCartItem.quantity >= productStock) {
           return state;
         }
@@ -203,7 +208,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
           ...state,
           cart: state.cart.map(item =>
             item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 }
+              ? { ...item, quantity: newQuantity }
               : item
           ),
         };
@@ -213,9 +218,10 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
       if (newStock < 1) {
         return state;
       }
+      const initialQuantity = Math.min(payloadQuantity, newStock);
       return {
         ...state,
-        cart: [...state.cart, { ...action.payload, quantity: 1 }],
+        cart: [...state.cart, { ...action.payload, quantity: initialQuantity }],
       };
     }
     
