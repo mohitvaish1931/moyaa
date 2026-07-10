@@ -48,6 +48,7 @@ const EditProduct = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [draggedImageIdx, setDraggedImageIdx] = useState<number | null>(null);
 
   useEffect(() => {
     // Find product in state
@@ -595,8 +596,32 @@ const EditProduct = () => {
                 <p className="text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">Current Images</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {form.images.map((img: string, idx: number) => (
-                    <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-gold-primary/20 bg-white shadow-sm group">
-                      <img src={img} alt={`Current ${idx + 1}`} className="w-full h-full object-cover" />
+                    <div 
+                      key={idx} 
+                      draggable
+                      onDragStart={(e) => {
+                        setDraggedImageIdx(idx);
+                        e.dataTransfer.effectAllowed = 'move';
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (draggedImageIdx !== null && draggedImageIdx !== idx) {
+                          const newImages = [...form.images];
+                          const draggedImg = newImages[draggedImageIdx];
+                          newImages.splice(draggedImageIdx, 1);
+                          newImages.splice(idx, 0, draggedImg);
+                          setForm({ ...form, images: newImages });
+                        }
+                        setDraggedImageIdx(null);
+                      }}
+                      onDragEnd={() => setDraggedImageIdx(null)}
+                      className={`relative aspect-square rounded-lg overflow-hidden border border-gold-primary/20 bg-white shadow-sm group cursor-move ${draggedImageIdx === idx ? 'opacity-50 border-primary-red' : ''}`}
+                    >
+                      <img src={img} alt={`Current ${idx + 1}`} className="w-full h-full object-cover pointer-events-none" />
                       <button
                         type="button"
                         onClick={() => {
