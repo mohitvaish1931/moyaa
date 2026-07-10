@@ -119,30 +119,32 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
     const files = req.files || [];
     const existingProduct = await Product.findById(req.params.id);
 
+    let existingImages = [];
+    if (typeof body.images === 'string') {
+      try {
+        const parsed = JSON.parse(body.images);
+        existingImages = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        existingImages = [];
+      }
+    } else if (Array.isArray(body.images)) {
+      existingImages = body.images;
+    }
+
     if (files.length > 0) {
       // Files uploaded to Cloudinary - extract URL from cloudinary response
       const urls = files.map((f) => f.secure_url || f.url || f.path);
-      body.image = urls[0];
-      body.images = urls;
+      body.images = [...existingImages, ...urls];
+      body.image = body.images[0] || '';
     } else {
-      // Keep existing images or handle direct Cloudinary URLs
-      if (typeof body.images === 'string') {
-        try {
-          const parsed = JSON.parse(body.images);
-          body.images = Array.isArray(parsed) ? parsed : [];
-        } catch {
-          body.images = [];
-        }
-      }
-
-      if (!body.image && existingProduct?.image) {
+      body.images = existingImages;
+      if (body.images.length > 0) {
+        body.image = body.images[0];
+      } else if (existingProduct?.image) {
         body.image = existingProduct.image;
-      }
-
-      if (!body.images && existingProduct?.images?.length) {
-        body.images = existingProduct.images;
-      } else if (!body.images && existingProduct?.image) {
         body.images = [existingProduct.image];
+      } else {
+        body.image = '';
       }
     }
 

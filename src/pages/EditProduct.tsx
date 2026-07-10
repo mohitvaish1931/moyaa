@@ -595,8 +595,22 @@ const EditProduct = () => {
                 <p className="text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">Current Images</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {form.images.map((img: string, idx: number) => (
-                    <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-gold-primary/20 bg-white shadow-sm">
+                    <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-gold-primary/20 bg-white shadow-sm group">
                       <img src={img} alt={`Current ${idx + 1}`} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newImages = [...form.images];
+                          newImages.splice(idx, 1);
+                          setForm({ ...form, images: newImages });
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        title="Remove image"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
                     </div>
                   ))}
                 </div>
