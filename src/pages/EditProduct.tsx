@@ -282,24 +282,7 @@ const EditProduct = () => {
     } catch (err) {
       console.error('Error:', err);
       setError(err instanceof Error ? err.message : 'Failed to update product');
-      
-      // Fallback: update locally
-      const updated = {
-        ...form,
-        id: form.id ?? form._id,
-        _id: form._id ?? form.id,
-        name: form.name,
-        category: form.category,
-        price: Number(form.price) || 0,
-        originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
-        description: form.description || ''
-      };
-      dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
-      setSuccess('✅ Product updated locally!');
-      
-      setTimeout(() => {
-        navigate('/admin');
-      }, 1500);
+      // DO NOT navigate or show success on error, let the user see what failed.
     } finally {
       setIsLoading(false);
     }
