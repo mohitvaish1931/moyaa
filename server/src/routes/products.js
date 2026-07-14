@@ -9,7 +9,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: 'moyaa-products',
     resource_type: 'auto',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'mov'],
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'mov', 'heic', 'heif'],
   },
 });
 
@@ -60,7 +60,19 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', upload.array('image', 10), async (req, res) => {
+const uploadMiddleware = upload.array('image', 10);
+
+const handleUpload = (req, res, next) => {
+  uploadMiddleware(req, res, function (err) {
+    if (err) {
+      console.error("Multer upload error:", err);
+      return res.status(400).json({ error: "Image upload failed: " + err.message + ". The image might be too large or an unsupported format." });
+    }
+    next();
+  });
+};
+
+router.post('/', handleUpload, async (req, res) => {
   try {
     const body = { ...req.body };
     const files = req.files || [];
@@ -113,7 +125,7 @@ router.post('/', upload.array('image', 10), async (req, res) => {
   }
 });
 
-router.put('/:id', upload.array('image', 10), async (req, res) => {
+router.put('/:id', handleUpload, async (req, res) => {
   try {
     const body = { ...req.body };
     const files = req.files || [];
