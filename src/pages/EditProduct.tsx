@@ -263,7 +263,10 @@ const EditProduct = () => {
       const url = `${API_ENDPOINTS.PRODUCTS}/${productId}`;
       const res = await fetch(url, { method: 'PUT', body: fd });
       
-      if (!res.ok) throw new Error('Update failed');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.error || 'Update failed on server. Please check file size and format.');
+      }
       
       const updated = await res.json();
       dispatch({
