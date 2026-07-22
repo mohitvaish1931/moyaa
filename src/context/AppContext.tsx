@@ -37,6 +37,8 @@ export interface Product {
   quantity?: number;
   isBOGO?: boolean;
   sizeStock?: Record<string, number>;
+  colorStock?: Record<string, number>;
+  shapeStock?: Record<string, number>;
 }
 
 export interface Video {
@@ -65,6 +67,7 @@ export interface Coupon {
 
 export interface CartItem extends Product {
   quantity: number;
+  cartItemId?: string;
 }
 
 export interface User {
@@ -108,8 +111,8 @@ type AppAction =
   | { type: 'REMOVE_COUPON'; payload: string }
   | { type: 'ADD_TO_CART'; payload: Product }
   | { type: 'REMOVE_FROM_CART'; payload: string | number }
-  | { type: 'UPDATE_CART_QUANTITY'; payload: { id: string | number; quantity: number } }
-  | { type: 'UPDATE_CART_SHAPE'; payload: { id: string | number; shape: string } }
+  | { type: 'UPDATE_CART_QUANTITY'; payload: { cartItemId: string | number; quantity: number } }
+  | { type: 'UPDATE_CART_SHAPE'; payload: { cartItemId: string | number; shape: string } }
   | { type: 'CLEAR_CART' }
   | { type: 'ADD_TO_WISHLIST'; payload: Product }
   | { type: 'REMOVE_FROM_WISHLIST'; payload: string | number }
@@ -193,12 +196,22 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
       return { ...state, coupons: state.coupons.filter(c => c.code !== action.payload) };
     
     case 'ADD_TO_CART': {
-      const existingCartItem = state.cart.find(item => item.id === action.payload.id);
+      const p = action.payload;
+      const cartItemId = `${p.id}-${p.selectedSize || ''}-${p.selectedColor || ''}-${p.selectedShape || ''}`;
+      const existingCartItem = state.cart.find(item => item.cartItemId === cartItemId || item.id === p.id && !item.cartItemId);
       
       const payloadQuantity = action.payload.quantity || 1;
       
       if (existingCartItem) {
-        const productStock = existingCartItem.stock ?? Infinity;
+        let productStock = existingCartItem.stock ?? Infinity;
+        if (existingCartItem.sizeStock && existingCartItem.selectedSize) {
+            productStock = existingCartItem.sizeStock[existingCartItem.selectedSize] ?? 0;
+        } else if ((existingCartItem as any).colorStock && existingCartItem.selectedColor) {
+            productStock = (existingCartItem as any).colorStock[existingCartItem.selectedColor] ?? 0;
+        } else if ((existingCartItem as any).shapeStock && existingCartItem.selectedShape) {
+            productStock = (existingCartItem as any).shapeStock[existingCartItem.selectedShape] ?? 0;
+        }
+
         const newQuantity = Math.min(existingCartItem.quantity + payloadQuantity, productStock);
         
         if (existingCartItem.quantity >= productStock) {
@@ -207,36 +220,52 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         return {
           ...state,
           cart: state.cart.map(item =>
-            item.id === action.payload.id
+            (item.cartItemId === cartItemId || item.id === p.id && !item.cartItemId)
               ? { ...item, quantity: newQuantity }
               : item
           ),
         };
       }
 
-      const newStock = action.payload.stock ?? Infinity;
+      let newStock = action.payload.stock ?? Infinity;
+      if (p.sizeStock && p.selectedSize) {
+          newStock = p.sizeStock[p.selectedSize] ?? 0;
+      } else if ((p as any).colorStock && p.selectedColor) {
+          newStock = (p as any).colorStock[p.selectedColor] ?? 0;
+      } else if ((p as any).shapeStock && p.selectedShape) {
+          newStock = (p as any).shapeStock[p.selectedShape] ?? 0;
+      }
+
       if (newStock < 1) {
         return state;
       }
       const initialQuantity = Math.min(payloadQuantity, newStock);
       return {
         ...state,
-        cart: [...state.cart, { ...action.payload, quantity: initialQuantity }],
+        cart: [...state.cart, { ...action.payload, quantity: initialQuantity, cartItemId }],
       };
     }
     
     case 'REMOVE_FROM_CART':
       return {
         ...state,
-        cart: state.cart.filter(item => item.id !== action.payload),
+        cart: state.cart.filter(item => (item.cartItemId || item.id) !== action.payload),
       };
+    
     
     case 'UPDATE_CART_QUANTITY':
       return {
         ...state,
         cart: state.cart.map(item => {
-          if (item.id === action.payload.id) {
-            const productStock = item.stock ?? Infinity;
+          if ((item.cartItemId || item.id) === action.payload.cartItemId) {
+            let productStock = item.stock ?? Infinity;
+            if (item.sizeStock && item.selectedSize) {
+                productStock = item.sizeStock[item.selectedSize] ?? 0;
+            } else if ((item as any).colorStock && item.selectedColor) {
+                productStock = (item as any).colorStock[item.selectedColor] ?? 0;
+            } else if ((item as any).shapeStock && item.selectedShape) {
+                productStock = (item as any).shapeStock[item.selectedShape] ?? 0;
+            }
             const newQuantity = Math.min(action.payload.quantity, productStock);
             return { ...item, quantity: newQuantity };
           }
@@ -248,8 +277,8 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
       return {
         ...state,
         cart: state.cart.map(item =>
-          item.id === action.payload.id
-            ? { ...item, selectedShape: action.payload.shape }
+          (item.cartItemId || item.id) === action.payload.cartItemId
+            ? { ...item, selectedShape: action.payload.shape, cartItemId: `${item.id}-${item.selectedSize || ''}-${item.selectedColor || ''}-${action.payload.shape || ''}` }
             : item
         ),
       };

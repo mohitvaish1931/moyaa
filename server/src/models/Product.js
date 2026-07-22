@@ -29,7 +29,9 @@ const ProductSchema = new mongoose.Schema({
   status: { type: String, default: 'published' },
   displayOrder: { type: Number, default: 0 },
   isBOGO: { type: Boolean, default: false },
-  sizeStock: { type: Map, of: Number, default: {} }
+  sizeStock: { type: Map, of: Number, default: {} },
+  colorStock: { type: Map, of: Number, default: {} },
+  shapeStock: { type: Map, of: Number, default: {} }
 }, { timestamps: true });
 
 // Transform _id to id when converting to JSON

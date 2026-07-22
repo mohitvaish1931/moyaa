@@ -38,7 +38,9 @@ const EditProduct = () => {
     colors: '',
     careInstructions: '',
     displayOrder: 0,
-    sizeStock: {}
+    sizeStock: {},
+    shapeStock: {},
+    colorStock: {}
   });
   
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -121,6 +123,20 @@ const EditProduct = () => {
             try { ss = JSON.parse(ss); } catch (e) { /* ignore */ }
           }
           return ss || {};
+        })(),
+        shapeStock: (() => {
+          let ss = productAny.shapeStock;
+          if (typeof ss === 'string' && ss.startsWith('{')) {
+            try { ss = JSON.parse(ss); } catch (e) { /* ignore */ }
+          }
+          return ss || {};
+        })(),
+        colorStock: (() => {
+          let ss = productAny.colorStock;
+          if (typeof ss === 'string' && ss.startsWith('{')) {
+            try { ss = JSON.parse(ss); } catch (e) { /* ignore */ }
+          }
+          return ss || {};
         })()
       });
       setVideoUrls((productAny.videos && productAny.videos.length > 0) ? productAny.videos : ['', '']);
@@ -153,13 +169,21 @@ const EditProduct = () => {
         if (form[k] !== undefined && form[k] !== null && 
             k !== 'images' && k !== 'image' && k !== 'videos' && 
             k !== 'specifications' && k !== 'materials' && 
-            k !== 'sizes' && k !== 'shapes' && k !== 'colors' && k !== 'sizeStock') {
+            k !== 'sizes' && k !== 'shapes' && k !== 'colors' && k !== 'sizeStock' && k !== 'shapeStock' && k !== 'colorStock') {
           fd.append(k, form[k]);
         }
       });
 
       if (form.category === 'rings' && form.sizeStock) {
         fd.append('sizeStock', JSON.stringify(form.sizeStock));
+      }
+
+      if (form.shapeStock) {
+        fd.append('shapeStock', JSON.stringify(form.shapeStock));
+      }
+
+      if (form.colorStock) {
+        fd.append('colorStock', JSON.stringify(form.colorStock));
       }
       
       // Handle specifications array
@@ -488,6 +512,44 @@ const EditProduct = () => {
                   placeholder="Heart, Round, Oval"
                 />
               </div>
+              {(() => {
+                const parsedShapes = form.shapes 
+                  ? (typeof form.shapes === 'string' 
+                      ? form.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0) 
+                      : form.shapes) 
+                  : [];
+                return parsedShapes.length > 0 ? (
+                  <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                    <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                      <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                      Shape-Specific Stock
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {parsedShapes.map((shape: string) => (
+                        <div key={shape} className="space-y-1">
+                          <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">{shape} Stock</label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={form.shapeStock?.[shape] !== undefined ? form.shapeStock[shape] : 10}
+                            onChange={(e) => {
+                              const stockVal = parseInt(e.target.value, 10) || 0;
+                              setForm({
+                                ...form,
+                                shapeStock: {
+                                  ...(form.shapeStock || {}),
+                                  [shape]: stockVal
+                                }
+                              });
+                            }}
+                            className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Colors (Comma separated)</label>
                 <input
@@ -498,6 +560,44 @@ const EditProduct = () => {
                   placeholder="Gold, Rose Gold, Silver"
                 />
               </div>
+              {(() => {
+                const parsedColors = form.colors 
+                  ? (typeof form.colors === 'string' 
+                      ? form.colors.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0) 
+                      : form.colors) 
+                  : [];
+                return parsedColors.length > 0 ? (
+                  <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                    <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                      <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                      Color-Specific Stock
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {parsedColors.map((color: string) => (
+                        <div key={color} className="space-y-1">
+                          <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">{color} Stock</label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={form.colorStock?.[color] !== undefined ? form.colorStock[color] : 10}
+                            onChange={(e) => {
+                              const stockVal = parseInt(e.target.value, 10) || 0;
+                              setForm({
+                                ...form,
+                                colorStock: {
+                                  ...(form.colorStock || {}),
+                                  [color]: stockVal
+                                }
+                              });
+                            }}
+                            className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
             </div>
           </div>
 

@@ -154,9 +154,20 @@ const Admin = () => {
     const [error, setError] = useState('');
     const [sizesText, setSizesText] = useState('');
     const [sizeStock, setSizeStock] = useState<Record<string, number>>({});
+    const [shapesText, setShapesText] = useState('');
+    const [shapeStock, setShapeStock] = useState<Record<string, number>>({});
+    const [colorsText, setColorsText] = useState('');
+    const [colorStock, setColorStock] = useState<Record<string, number>>({});
+
     const parsedSizes = React.useMemo(() => {
       return [...new Set(sizesText.split(',').map(s => s.trim()).filter(s => s.length > 0))];
     }, [sizesText]);
+    const parsedShapes = React.useMemo(() => {
+      return [...new Set(shapesText.split(',').map(s => s.trim()).filter(s => s.length > 0))];
+    }, [shapesText]);
+    const parsedColors = React.useMemo(() => {
+      return [...new Set(colorsText.split(',').map(s => s.trim()).filter(s => s.length > 0))];
+    }, [colorsText]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files: File[] = Array.from(e.target.files || []);
@@ -247,6 +258,7 @@ const Admin = () => {
             const shapesArray = [...new Set(shapesRaw.split(',').map(s => s.trim()).filter(s => s.length > 0))];
             fd.append('shapes', JSON.stringify(shapesArray));
           }
+          fd.append('shapeStock', JSON.stringify(shapeStock));
           fd.delete('shapes_raw');
 
           // Handle colors
@@ -255,6 +267,7 @@ const Admin = () => {
             const colorsArray = [...new Set(colorsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0))];
             fd.append('colors', JSON.stringify(colorsArray));
           }
+          fd.append('colorStock', JSON.stringify(colorStock));
           fd.delete('colors_raw');
 
           // Handle care instructions
@@ -296,6 +309,10 @@ const Admin = () => {
           setError('');
           setSizeStock({});
           setSizesText('');
+          setShapeStock({});
+          setShapesText('');
+          setColorStock({});
+          setColorsText('');
         }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -419,20 +436,80 @@ const Admin = () => {
                 id="product-shapes"
                 name="shapes_raw"
                 type="text"
+                value={shapesText}
+                onChange={e => setShapesText(e.target.value)}
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="Heart, Round, Oval"
               />
             </div>
+            {parsedShapes.length > 0 && (
+              <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                  <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                  Shape-Specific Stock
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {parsedShapes.map((shape: string) => (
+                    <div key={shape} className="space-y-1">
+                      <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">{shape} Stock</label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={shapeStock[shape] !== undefined ? shapeStock[shape] : 10}
+                        onChange={(e) => {
+                          const stockVal = parseInt(e.target.value, 10) || 0;
+                          setShapeStock(prev => ({
+                            ...prev,
+                            [shape]: stockVal
+                          }));
+                        }}
+                        className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div>
               <label htmlFor="product-colors" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Colors (Comma separated)</label>
               <input
                 id="product-colors"
                 name="colors_raw"
                 type="text"
+                value={colorsText}
+                onChange={e => setColorsText(e.target.value)}
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
                 placeholder="Gold, Rose Gold, Silver"
               />
             </div>
+            {parsedColors.length > 0 && (
+              <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                  <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                  Color-Specific Stock
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {parsedColors.map((color: string) => (
+                    <div key={color} className="space-y-1">
+                      <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">{color} Stock</label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={colorStock[color] !== undefined ? colorStock[color] : 10}
+                        onChange={(e) => {
+                          const stockVal = parseInt(e.target.value, 10) || 0;
+                          setColorStock(prev => ({
+                            ...prev,
+                            [color]: stockVal
+                          }));
+                        }}
+                        className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -640,6 +717,10 @@ const Admin = () => {
                 setError('');
                 setSizeStock({});
                 setSizesText('');
+                setShapeStock({});
+                setShapesText('');
+                setColorStock({});
+                setColorsText('');
               }}
               className="bg-white text-text-primary px-6 py-2 rounded-lg border border-teal-luxury/30 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
 
@@ -822,6 +903,20 @@ const Admin = () => {
             }
             return ss || {};
           })(),
+          shapeStock: (() => {
+            let ss = editProduct.shapeStock;
+            if (typeof ss === 'string' && ss.startsWith('{')) {
+              try { ss = JSON.parse(ss); } catch (e) { /* ignore */ }
+            }
+            return ss || {};
+          })(),
+          colorStock: (() => {
+            let ss = editProduct.colorStock;
+            if (typeof ss === 'string' && ss.startsWith('{')) {
+              try { ss = JSON.parse(ss); } catch (e) { /* ignore */ }
+            }
+            return ss || {};
+          })(),
         });
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
       } else {
@@ -853,13 +948,21 @@ const Admin = () => {
           if (localForm[k] !== undefined && localForm[k] !== null && 
               k !== 'images' && k !== 'image' && k !== 'videos' && 
               k !== 'specifications' && k !== 'materials' && 
-              k !== 'sizes' && k !== 'shapes' && k !== 'colors' && k !== 'sizeStock') {
+              k !== 'sizes' && k !== 'shapes' && k !== 'colors' && k !== 'sizeStock' && k !== 'shapeStock' && k !== 'colorStock') {
             fd.append(k, localForm[k]);
           }
         });
 
         if (localForm.category === 'rings' && localForm.sizeStock) {
           fd.append('sizeStock', JSON.stringify(localForm.sizeStock));
+        }
+
+        if (localForm.shapeStock) {
+          fd.append('shapeStock', JSON.stringify(localForm.shapeStock));
+        }
+
+        if (localForm.colorStock) {
+          fd.append('colorStock', JSON.stringify(localForm.colorStock));
         }
 
         // Handle specifications array
@@ -1123,6 +1226,44 @@ const Admin = () => {
                   placeholder="Heart, Round, Oval"
                 />
               </div>
+              {(() => {
+                const parsedShapes = localForm?.shapes 
+                  ? (typeof localForm.shapes === 'string' 
+                      ? localForm.shapes.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0) 
+                      : localForm.shapes) 
+                  : [];
+                return parsedShapes.length > 0 ? (
+                  <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                    <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                      <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                      Shape-Specific Stock
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {parsedShapes.map((shape: string) => (
+                        <div key={shape} className="space-y-1">
+                          <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">{shape} Stock</label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={localForm.shapeStock?.[shape] !== undefined ? localForm.shapeStock[shape] : 10}
+                            onChange={(e) => {
+                              const stockVal = parseInt(e.target.value, 10) || 0;
+                              setLocalForm({
+                                ...localForm,
+                                shapeStock: {
+                                  ...(localForm.shapeStock || {}),
+                                  [shape]: stockVal
+                                }
+                              });
+                            }}
+                            className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Colors (Comma separated)</label>
                 <input
@@ -1133,6 +1274,44 @@ const Admin = () => {
                   placeholder="Gold, Rose Gold, Silver"
                 />
               </div>
+              {(() => {
+                const parsedColors = localForm?.colors 
+                  ? (typeof localForm.colors === 'string' 
+                      ? localForm.colors.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0) 
+                      : localForm.colors) 
+                  : [];
+                return parsedColors.length > 0 ? (
+                  <div className="col-span-1 md:col-span-2 bg-[#FDFBF9] border border-gold-primary/20 p-6 rounded-2xl space-y-4">
+                    <h4 className="text-[10px] font-black text-text-primary uppercase tracking-widest flex items-center">
+                      <span className="w-6 h-px bg-gold-primary/30 mr-2"></span>
+                      Color-Specific Stock
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {parsedColors.map((color: string) => (
+                        <div key={color} className="space-y-1">
+                          <label className="block text-[9px] font-bold text-text-muted uppercase tracking-wider">{color} Stock</label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={localForm.colorStock?.[color] !== undefined ? localForm.colorStock[color] : 10}
+                            onChange={(e) => {
+                              const stockVal = parseInt(e.target.value, 10) || 0;
+                              setLocalForm({
+                                ...localForm,
+                                colorStock: {
+                                  ...(localForm.colorStock || {}),
+                                  [color]: stockVal
+                                }
+                              });
+                            }}
+                            className="w-full px-3 py-2 bg-white border border-gold-primary/20 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>

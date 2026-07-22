@@ -111,9 +111,17 @@ router.post('/', handleUpload, async (req, res) => {
     if (typeof body.sizeStock === 'string') {
       try {
         body.sizeStock = JSON.parse(body.sizeStock);
-      } catch (e) {
-        // Keep as is
-      }
+      } catch (e) {}
+    }
+    if (typeof body.colorStock === 'string') {
+      try {
+        body.colorStock = JSON.parse(body.colorStock);
+      } catch (e) {}
+    }
+    if (typeof body.shapeStock === 'string') {
+      try {
+        body.shapeStock = JSON.parse(body.shapeStock);
+      } catch (e) {}
     }
 
     const p = new Product(body);
@@ -175,9 +183,17 @@ router.put('/:id', handleUpload, async (req, res) => {
     if (typeof body.sizeStock === 'string') {
       try {
         body.sizeStock = JSON.parse(body.sizeStock);
-      } catch (e) {
-        // Keep as is
-      }
+      } catch (e) {}
+    }
+    if (typeof body.colorStock === 'string') {
+      try {
+        body.colorStock = JSON.parse(body.colorStock);
+      } catch (e) {}
+    }
+    if (typeof body.shapeStock === 'string') {
+      try {
+        body.shapeStock = JSON.parse(body.shapeStock);
+      } catch (e) {}
     }
 
     const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });

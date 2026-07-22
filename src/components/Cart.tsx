@@ -28,16 +28,16 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
     return state.cart.filter(i => i.name === name).length > 1;
   };
 
-  const updateQuantity = (id: string | number, quantity: number) => {
+  const updateQuantity = (cartItemId: string | number, quantity: number) => {
     if (quantity <= 0) {
-      dispatch({ type: 'REMOVE_FROM_CART', payload: id });
+      dispatch({ type: 'REMOVE_FROM_CART', payload: cartItemId });
     } else {
-      dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { id, quantity } });
+      dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { cartItemId, quantity } });
     }
   };
 
-  const removeFromCart = (id: string | number) => {
-    dispatch({ type: 'REMOVE_FROM_CART', payload: id });
+  const removeFromCart = (cartItemId: string | number) => {
+    dispatch({ type: 'REMOVE_FROM_CART', payload: cartItemId });
   };
 
   const getBogoDiscount = () => {
@@ -99,6 +99,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
             quantity: item.quantity,
             selectedSize: item.selectedSize,
             selectedShape: item.selectedShape,
+            selectedColor: item.selectedColor,
             image: item.image
           })),
           totalAmount: getTotalPrice(),
@@ -212,7 +213,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
             ) : (
               <div className="space-y-4">
                 {state.cart.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4 border-b border-sapphire-luxury/20 pb-4">
+                  <div key={item.cartItemId || item.id} className="flex items-center space-x-4 border-b border-sapphire-luxury/20 pb-4">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -224,20 +225,11 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                         {item.selectedSize && (
                           <p className="text-xs text-gold-primary italic">Size: {item.selectedSize}</p>
                         )}
-                        {item.shapes && item.shapes.length > 0 && (
-                          <div className="flex items-center space-x-2">
-                            <span className="text-[10px] text-text-muted uppercase tracking-widest">Shape:</span>
-                            <select
-                              value={item.selectedShape || ''}
-                              onChange={(e) => dispatch({ type: 'UPDATE_CART_SHAPE', payload: { id: item.id, shape: e.target.value } })}
-                              className="bg-luxury-dark/30 border border-gold-primary/20 rounded px-2 py-0.5 text-[10px] text-platinum outline-none focus:border-gold-primary/50"
-                            >
-                              <option value="">Select Shape</option>
-                              {parseList(item.shapes).map((shape, idx) => (
-                                <option key={idx} value={shape}>{shape}</option>
-                              ))}
-                            </select>
-                          </div>
+                        {item.selectedColor && (
+                          <p className="text-xs text-gold-primary italic">Color: {item.selectedColor}</p>
+                        )}
+                        {item.selectedShape && (
+                          <p className="text-xs text-gold-primary italic">Shape: {item.selectedShape}</p>
                         )}
                       </div>
                       <p className="text-gold-primary font-bold">Rs. {item.price.toLocaleString()}.00</p>
@@ -247,21 +239,21 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.cartItemId || item.id, item.quantity - 1)}
                         className="p-1 hover:bg-ruby-luxury/30 rounded text-platinum hover:text-ruby-luxury transition-colors duration-300"
                       >
                         <Minus className="h-4 w-4" />
                       </button>
                       <span className="w-8 text-center text-platinum">{item.quantity}</span>
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.cartItemId || item.id, item.quantity + 1)}
                         className="p-1 hover:bg-emerald-luxury/30 rounded text-platinum hover:text-emerald-luxury transition-colors duration-300"
                       >
                         <Plus className="h-4 w-4" />
                       </button>
                     </div>
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(item.cartItemId || item.id)}
                       className="text-ruby-luxury hover:text-ruby-luxury/80 transition-colors hover-ruby-glow"
                     >
                       <Trash2 className="h-4 w-4" />

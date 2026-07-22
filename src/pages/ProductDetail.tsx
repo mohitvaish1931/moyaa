@@ -41,6 +41,20 @@ const ProductDetail = () => {
     return val !== undefined ? val <= 0 : false;
   }, [product, selectedSize]);
 
+  const isCurrentShapeOutOfStock = useMemo(() => {
+    if (!product || !(product as any).shapeStock) return false;
+    if (!selectedShape) return false;
+    const val = (product as any).shapeStock[selectedShape];
+    return val !== undefined ? val <= 0 : false;
+  }, [product, selectedShape]);
+
+  const isCurrentColorOutOfStock = useMemo(() => {
+    if (!product || !(product as any).colorStock) return false;
+    if (!selectedColor) return false;
+    const val = (product as any).colorStock[selectedColor];
+    return val !== undefined ? val <= 0 : false;
+  }, [product, selectedColor]);
+
 
 
   const allSizes = useMemo(() => product ? parseList((product as any).sizes) : [], [product]);
@@ -399,19 +413,29 @@ const ProductDetail = () => {
                   <label className="text-sm font-medium text-gray-900">Choose Shape:</label>
                   <div className="flex flex-wrap gap-2">
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {allShapes.map((shape: string, idx: number) => (
-                          <button
-                            key={idx}
-                            onClick={() => setSelectedShape(shape)}
-                            className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest ${
-                              selectedShape === shape
-                                ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105'
-                                : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary'
-                            }`}
-                          >
-                            {shape}
-                          </button>
-                        ))}
+                        {allShapes.map((shape: string, idx: number) => {
+                          const isOutOfStock = (product as any).shapeStock?.[shape] !== undefined && (product as any).shapeStock[shape] <= 0;
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => setSelectedShape(shape)}
+                              className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest relative overflow-hidden ${
+                                selectedShape === shape
+                                  ? (isOutOfStock
+                                      ? 'bg-gray-200 text-gray-500 border-gray-300 line-through cursor-not-allowed'
+                                      : 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105')
+                                  : (isOutOfStock
+                                      ? 'bg-gray-100/50 border-gray-200 text-gray-400 line-through cursor-not-allowed opacity-60'
+                                      : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary')
+                              }`}
+                            >
+                              {shape}
+                              {isOutOfStock && (
+                                <span className="absolute bottom-0 right-0 w-2 h-2 bg-ruby-luxury rounded-full" title="Out of Stock"></span>
+                              )}
+                            </button>
+                          );
+                        })}
                       </div>
                   </div>
                 </div>
@@ -423,19 +447,29 @@ const ProductDetail = () => {
                   <label className="text-sm font-medium text-gray-900">Choose Color:</label>
                   <div className="flex flex-wrap gap-2">
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {allColors.map((color: string, idx: number) => (
-                          <button
-                            key={idx}
-                            onClick={() => setSelectedColor(color)}
-                            className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest ${
-                              selectedColor === color
-                                ? 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105'
-                                : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary'
-                            }`}
-                          >
-                            {color}
-                          </button>
-                        ))}
+                        {allColors.map((color: string, idx: number) => {
+                          const isOutOfStock = (product as any).colorStock?.[color] !== undefined && (product as any).colorStock[color] <= 0;
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => setSelectedColor(color)}
+                              className={`min-w-[45px] px-4 py-2.5 border rounded-xl transition-all text-xs font-bold tracking-widest relative overflow-hidden ${
+                                selectedColor === color
+                                  ? (isOutOfStock
+                                      ? 'bg-gray-200 text-gray-500 border-gray-300 line-through cursor-not-allowed'
+                                      : 'bg-gold-primary text-luxury-dark border-gold-primary shadow-glow-gold scale-105')
+                                  : (isOutOfStock
+                                      ? 'bg-gray-100/50 border-gray-200 text-gray-400 line-through cursor-not-allowed opacity-60'
+                                      : 'bg-white/50 border-gold-primary/20 text-text-primary hover:border-gold-primary')
+                              }`}
+                            >
+                              {color}
+                              {isOutOfStock && (
+                                <span className="absolute bottom-0 right-0 w-2 h-2 bg-ruby-luxury rounded-full" title="Out of Stock"></span>
+                              )}
+                            </button>
+                          );
+                        })}
                       </div>
                   </div>
                 </div>
@@ -515,9 +549,14 @@ const ProductDetail = () => {
                     <span className="px-4 py-2 border-x border-gray-300 text-gray-900">{quantity}</span>
                     <button
                       onClick={() => {
-                        const maxStock = (product?.category.toLowerCase() === 'rings' && product?.sizeStock && selectedSize) 
-                          ? (product.sizeStock[selectedSize] ?? 0)
-                          : (product?.stock ?? Infinity);
+                        let maxStock = product?.stock ?? Infinity;
+                        if (product?.category.toLowerCase() === 'rings' && product?.sizeStock && selectedSize) {
+                           maxStock = product.sizeStock[selectedSize] ?? 0;
+                        } else if ((product as any)?.colorStock && selectedColor) {
+                           maxStock = (product as any).colorStock[selectedColor] ?? 0;
+                        } else if ((product as any)?.shapeStock && selectedShape) {
+                           maxStock = (product as any).shapeStock[selectedShape] ?? 0;
+                        }
                         setQuantity(Math.min(quantity + 1, maxStock));
                       }}
                       className="px-3 py-2 text-gray-900 hover:text-gold-primary transition-colors"
@@ -532,15 +571,15 @@ const ProductDetail = () => {
               <div className="flex space-x-4">
                 <button
                   onClick={addToCart}
-                  disabled={product.soldOut || isCurrentSizeOutOfStock}
+                  disabled={product.soldOut || isCurrentSizeOutOfStock || isCurrentShapeOutOfStock || isCurrentColorOutOfStock}
                   className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-all ${
-                    (product.soldOut || isCurrentSizeOutOfStock) 
+                    (product.soldOut || isCurrentSizeOutOfStock || isCurrentShapeOutOfStock || isCurrentColorOutOfStock) 
                       ? 'bg-gray-300 cursor-not-allowed text-gray-500' 
                       : 'btn-premium-gold text-luxury-dark hover:shadow-glow-gold'
                   }`}
                 >
                   <ShoppingBag className="h-5 w-5" />
-                  <span>{(product.soldOut || isCurrentSizeOutOfStock) ? 'Sold Out' : 'Add to Cart'}</span>
+                  <span>{(product.soldOut || isCurrentSizeOutOfStock || isCurrentShapeOutOfStock || isCurrentColorOutOfStock) ? 'Sold Out' : 'Add to Cart'}</span>
                 </button>
                 <button
                   onClick={toggleWishlist}
