@@ -12,7 +12,7 @@ const BogoBanner = () => {
         {/* Animated Background */}
         <div className="absolute inset-0">
           <img 
-            src="/WhatsApp%20Image%202026-07-20%20at%2014.34.24.jpeg" 
+            src="/bogo.png" 
             alt="Background" 
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
           />

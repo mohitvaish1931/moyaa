@@ -8,7 +8,7 @@ const Hero = () => {
       {/* Main Banner Background Image with Ken Burns Effect */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="/WhatsApp%20Image%202026-07-20%20at%2014.50.56.jpeg" 
+          src="/hero.png" 
           alt="Rakhi Collection Banner" 
           className="w-full h-full object-cover object-center animate-ken-burns"
         />
