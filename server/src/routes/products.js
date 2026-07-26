@@ -1,5 +1,6 @@
 import express from 'express';
 import Product from '../models/Product.js';
+import mongoose from 'mongoose';
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../config/cloudinary.js';
@@ -16,6 +17,20 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 const router = express.Router();
+
+router.get('/debug-db', async (req, res) => {
+  try {
+    const db = mongoose.connection.db;
+    const collections = await db.listCollections().toArray();
+    const stats = {};
+    for (const c of collections) {
+      stats[c.name] = await db.collection(c.name).countDocuments();
+    }
+    res.json({ databaseName: db.databaseName, stats });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.get('/', async (req, res) => {
   try {
