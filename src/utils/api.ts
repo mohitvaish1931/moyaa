@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = 'https://moyaa-3kxy.onrender.com';
+export const API_BASE_URL = 'https://moyaa-j88t.onrender.com';
 
 export const API_ENDPOINTS = {
   // Health Check
