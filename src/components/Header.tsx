@@ -47,7 +47,7 @@ const Header = () => {
 
       {/* Main Header Nav */}
       <header className={`fixed top-0 left-0 z-50 transition-all duration-500 w-full`}>
-        <nav className={`${(isHomePage && scrollY < 50) ? 'bg-transparent border-transparent text-text-primary' : 'bg-bg-primary/95 shadow-lg border-black/5 text-text-primary'} backdrop-blur-md transition-all duration-500 px-6 py-2 sm:py-3`}>
+        <nav className={`${(isHomePage && scrollY < 50) ? 'bg-transparent border-transparent text-black' : 'bg-bg-primary/95 shadow-lg border-black/5 text-text-primary'} backdrop-blur-md transition-all duration-500 px-6 py-2 sm:py-3`}>
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             {/* Logo Left-aligned group */}
             <div className="flex items-center gap-12 lg:gap-20">
@@ -60,7 +60,7 @@ const Header = () => {
               </Link>
 
               <div className="hidden lg:flex items-center gap-10">
-                <Link to="/" className="text-text-primary text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300">HOME</Link>
+                <Link to="/" className="text-current text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300">HOME</Link>
                 
                 {/* Collections Dropdown */}
                 <div 
@@ -68,7 +68,7 @@ const Header = () => {
                   onMouseEnter={() => setIsCollectionsDropdownOpen(true)}
                   onMouseLeave={() => setIsCollectionsDropdownOpen(false)}
                 >
-                  <button className="flex items-center gap-2 text-text-primary text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 uppercase">
+                  <button className="flex items-center gap-2 text-current text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 uppercase">
                     COLLECTIONS
                     <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${isCollectionsDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
@@ -104,7 +104,7 @@ const Header = () => {
                   <Link
                     key={item.label}
                     to={item.path}
-                    className="text-text-primary text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 relative group"
+                    className="text-current text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 relative group"
                   >
                     {item.label}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-primary group-hover:w-full transition-all duration-300" />
@@ -117,17 +117,17 @@ const Header = () => {
             <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
               <div className="h-4 w-px bg-white/20 hidden sm:block mr-2" />
               
-              <div className="flex items-center gap-2.5 sm:gap-4 text-text-primary">
-                <button onClick={() => setIsSearchOpen(true)} className="p-1.5 text-text-primary hover:text-gold-primary transition-colors">
+              <div className="flex items-center gap-2.5 sm:gap-4 text-current">
+                <button onClick={() => setIsSearchOpen(true)} className="p-1.5 text-current hover:text-gold-primary transition-colors">
                   <Search className="w-4 h-4 sm:w-5 h-5" />
                 </button>
                 
-                <button onClick={handleUserClick} className="p-1.5 text-text-primary hover:text-gold-primary transition-colors relative text-center">
+                <button onClick={handleUserClick} className="p-1.5 text-current hover:text-gold-primary transition-colors relative text-center">
                   <User className="w-4 h-4 sm:w-5 h-5" />
                   {state.user && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-gold-primary rounded-full" />}
                 </button>
                 
-                <button onClick={() => setIsWishlistOpen(true)} className="p-1.5 text-text-primary hover:text-primary-red transition-colors relative">
+                <button onClick={() => setIsWishlistOpen(true)} className="p-1.5 text-current hover:text-primary-red transition-colors relative">
                   <Heart className="w-4 h-4 sm:w-5 h-5" />
                   {state.wishlist.length > 0 && (
                     <span className="absolute -top-1 -right-1 bg-primary-red text-text-primary text-[8px] rounded-full h-3.5 w-3.5 flex items-center justify-center font-bold">
@@ -136,7 +136,7 @@ const Header = () => {
                   )}
                 </button>
 
-                <button onClick={() => setIsCartOpen(true)} className="p-1.5 text-text-primary hover:text-gold-primary transition-colors relative">
+                <button onClick={() => setIsCartOpen(true)} className="p-1.5 text-current hover:text-gold-primary transition-colors relative">
                   <ShoppingBag className="w-4 h-4 sm:w-5 h-5" />
                   {state.cart.length > 0 && (
                     <span className="absolute -top-1 -right-1 bg-gold-primary text-text-primary text-[8px] rounded-full h-3.5 w-3.5 flex items-center justify-center font-bold">
@@ -145,7 +145,7 @@ const Header = () => {
                   )}
                 </button>
 
-                <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-1.5 text-text-primary hover:text-gold-primary transition-colors">
+                <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-1.5 text-current hover:text-gold-primary transition-colors">
                   <Menu className="w-5 h-5" />
                 </button>
               </div>

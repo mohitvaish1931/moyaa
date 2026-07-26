@@ -25,11 +25,11 @@ const Hero = () => {
             <div className="h-px w-6 sm:w-8 bg-gold-primary/50" />
           </div>
           
-          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 md:mb-8 tracking-tight luxury-serif drop-shadow-2xl max-w-4xl mx-auto">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6 tracking-tight luxury-serif drop-shadow-2xl max-w-3xl mx-auto">
             Celebrate The Bond That Lasts Forever
           </h1>
           
-          <p className="text-platinum/90 text-sm sm:text-lg md:text-xl max-w-sm sm:max-w-2xl mx-auto font-normal luxury-serif leading-relaxed drop-shadow-lg px-4">
+          <p className="text-platinum/90 text-xs sm:text-base md:text-lg max-w-sm sm:max-w-xl mx-auto font-normal luxury-serif leading-relaxed drop-shadow-lg px-4">
             Handcrafted Rakhi & Jewellery that celebrate the purest bond.
           </p>
         </div>
