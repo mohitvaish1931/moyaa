@@ -1,16 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-primary: #E8D5C4;
-  --accent-nude: #DBCBC0;
-  --accent-beige: #DBCBC0;
-  --accent-dark: #C9B7A2;
-  --accent-teal: #8B0000; /* Reusing for Red */
-  --gold: #C5A059;
-  --text-primary: #3D1F1F;
-  --text-secondary: #5E4B43;
+  --bg-primary: #F7EFE6;
+  --accent-nude: #0E2822;
+  --accent-beige: #0E2822;
+  --accent-dark: #0E2822;
+  --accent-teal: #0E2822;
+  --gold: #D4AF37;
+  --text-primary: #846A4A;
+  --text-secondary: #684F38;
 }
 
 body {
@@ -100,14 +101,14 @@ html {
 
   /* Ruby Glass Card */
   .glass-card-ruby {
-    @apply bg-glass-dark backdrop-blur-xl border border-primary-red/30 rounded-2xl shadow-glow-ruby;
+    @apply bg-white/80 backdrop-blur-xl border border-gold-primary/30 rounded-2xl shadow-glow;
   }
 
 
   /* Forest Teal Glass Card */
   .glass-card-emerald, 
   .glass-card-sapphire {
-    @apply bg-glass-dark backdrop-blur-xl border border-teal-luxury/30 rounded-2xl shadow-glow-emerald;
+    @apply bg-white/80 backdrop-blur-xl border border-gold-primary/30 rounded-2xl shadow-glow;
   }
 
 
@@ -171,15 +172,15 @@ html {
   }
 
   .hover-ruby-glow {
-    @apply transition-all duration-300 hover:shadow-glow-ruby hover:text-gold-primary cursor-pointer;
+    @apply transition-all duration-300 hover:shadow-glow hover:text-gold-primary cursor-pointer;
   }
 
   .hover-emerald-glow {
-    @apply transition-all duration-300 hover:shadow-glow-emerald hover:text-gold-primary cursor-pointer;
+    @apply transition-all duration-300 hover:shadow-glow hover:text-gold-primary cursor-pointer;
   }
 
   .hover-sapphire-glow {
-    @apply transition-all duration-300 hover:shadow-glow-sapphire hover:text-gold-primary cursor-pointer;
+    @apply transition-all duration-300 hover:shadow-glow hover:text-gold-primary cursor-pointer;
   }
 
   /* Hero spotlight container with jewel gradients */
@@ -216,11 +217,11 @@ html {
   /* Premium Button Styles */
   .btn-premium-gold {
     @apply relative px-8 py-3 text-white font-semibold rounded-lg overflow-hidden border;
-    background: linear-gradient(135deg, #d4af37, #e8c547);
-    color: #0b1a2b;
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    background: linear-gradient(135deg, #BA9444 0%, #E5C37A 50%, #BA9444 100%);
+    color: #684F38; /* Dark brown text */
+    box-shadow: 0 0 30px rgba(186, 148, 68, 0.4);
     transition: all 0.3s ease;
-    border-color: rgba(212, 175, 55, 0.5);
+    border-color: rgba(186, 148, 68, 0.5);
   }
 
   .btn-premium-gold:hover {
@@ -256,13 +257,13 @@ html {
   }
 
   .border-ruby-glow {
-    @apply border-primary-nude/40 border-2;
+    @apply border-gold-primary/40 border-2;
     box-shadow: inset 0 0 20px rgba(213, 189, 175, 0.2);
   }
 
   .border-emerald-glow,
   .border-sapphire-glow {
-    @apply border-teal-luxury/40 border-2;
+    @apply border-emerald-luxury/40 border-2;
     box-shadow: inset 0 0 20px rgba(213, 189, 175, 0.2);
   }
 

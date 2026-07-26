@@ -30,6 +30,7 @@ const EditProduct = () => {
     materials: '',
     specifications: '',
     soldOut: false,
+    isBOGO: false,
     images: [],
     videos: [],
     stock: 0,
@@ -85,6 +86,7 @@ const EditProduct = () => {
           return Array.isArray(specs) ? specs.join('\n') : (specs || '');
         })(),
         soldOut: productAny.soldOut || false,
+        isBOGO: productAny.isBOGO || false,
         images: existingImages,
         videos: productAny.videos || [],
         stock: productAny.stock || 0,
@@ -169,10 +171,13 @@ const EditProduct = () => {
         if (form[k] !== undefined && form[k] !== null && 
             k !== 'images' && k !== 'image' && k !== 'videos' && 
             k !== 'specifications' && k !== 'materials' && 
-            k !== 'sizes' && k !== 'shapes' && k !== 'colors' && k !== 'sizeStock' && k !== 'shapeStock' && k !== 'colorStock') {
+            k !== 'sizes' && k !== 'shapes' && k !== 'colors' && k !== 'sizeStock' && k !== 'shapeStock' && k !== 'colorStock' && k !== 'isBOGO' && k !== 'soldOut') {
           fd.append(k, form[k]);
         }
       });
+
+      fd.append('isBOGO', String(form.isBOGO));
+      fd.append('soldOut', String(form.soldOut));
 
       if (form.category === 'rings' && form.sizeStock) {
         fd.append('sizeStock', JSON.stringify(form.sizeStock));
@@ -809,15 +814,27 @@ const EditProduct = () => {
           </div>
 
           <div className="flex items-center justify-between py-6 border-t border-gold-primary/10">
-            <label className="flex items-center space-x-3 text-text-primary cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={!!form.soldOut}
-                onChange={e => setForm({ ...form, soldOut: e.target.checked })}
-                className="w-5 h-5 rounded border-gold-primary/30 text-primary-red focus:ring-primary-red/20 transition-all cursor-pointer"
-              />
-              <span className="text-[10px] font-black tracking-widest uppercase group-hover:text-primary-red transition-colors">Mark as Sold Out</span>
-            </label>
+            <div className="flex items-center space-x-8">
+              <label className="flex items-center space-x-3 text-text-primary cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={!!form.soldOut}
+                  onChange={e => setForm({ ...form, soldOut: e.target.checked })}
+                  className="w-5 h-5 rounded border-gold-primary/30 text-primary-red focus:ring-primary-red/20 transition-all cursor-pointer"
+                />
+                <span className="text-[10px] font-black tracking-widest uppercase group-hover:text-primary-red transition-colors">Mark as Sold Out</span>
+              </label>
+              
+              <label className="flex items-center space-x-3 text-text-primary cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={!!form.isBOGO}
+                  onChange={e => setForm({ ...form, isBOGO: e.target.checked })}
+                  className="w-5 h-5 rounded border-gold-primary/30 text-primary-red focus:ring-primary-red/20 transition-all cursor-pointer"
+                />
+                <span className="text-[10px] font-black tracking-widest uppercase group-hover:text-primary-red transition-colors text-primary-red">Buy 1 Get 1 (BOGO)</span>
+              </label>
+            </div>
 
             <div className="flex space-x-4">
               <button

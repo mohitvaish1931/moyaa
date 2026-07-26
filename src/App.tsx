@@ -35,7 +35,7 @@ const AppContent = () => {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-luxury-dark via-luxury-secondary to-luxury-tertiary overflow-x-hidden">
+    <div className="min-h-screen bg-bg-primary overflow-x-hidden">
       <Header />
       <main className={`${isHomePage ? 'pt-0' : 'pt-20 lg:pt-28'}`}>
         <Routes>

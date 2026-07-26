@@ -4,48 +4,39 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Premium Luxury Backgrounds (Medium Shade Theme)
-        'luxury-dark': '#E8D5C4',        // Warm Champagne
-        'luxury-secondary': '#DBCBC0',   // Soft Sandstone
-        'luxury-tertiary': '#C9B7A2',    // Muted Taupe-Sand
+        // Rakhi Collection Theme
+        'luxury-dark': '#F7EFE6',        // Updated to off-white so most sections are white
+        'luxury-secondary': '#F7EFE6',
+        'luxury-tertiary': '#F7EFE6',
+        'bg-primary': '#F7EFE6',         // Beige/Off-white Background
         
         // Brand Accents
-        'primary-red': '#8B0000',        // Deep Garnet Red
-        'primary-nude': '#DBCBC0',
-        'secondary-nude': '#E8D5C4',
-        'accent-nude': '#DBCBC0',
-        'gold-primary': '#C5A059',       // Antique Gold
-        'accent-gold': '#C5A059',        // Alias
-        'teal-luxury': '#8B0000',        // Alias for Red
-        'emerald-luxury': '#C5A059',     // Alias
-        'sapphire-luxury': '#C9B7A2',    // Alias
-        'dark-chocolate': '#3D1F1F',      // Deep Burgundy-Brown
+        'primary-red': '#846A4A',        // Changed red to dark brown to override old red text
+        'gold-primary': '#BA9444',       // Less yellow, more metallic gold
+        'accent-gold': '#BA9444',        
+        'emerald-luxury': '#0E2822',
         
-        // Premium Text Colors
-        'text-primary': '#3D1F1F',       // Deep Dark Brown
-        'text-secondary': '#5E4B43',     // Muted Chestnut
-        'text-muted': '#8C7A72',         // Taupe-Gray
-        'text-accent': '#C5A059',        // Gold accent text
-        'rose-gold': '#B76E79',
-        'platinum': '#E8D5C4',           // Light base
+        // Text Colors
+        'text-primary': '#846A4A',       // Main Heading/Text Color
+        'text-secondary': '#684F38',     // Secondary Brown
+        'text-muted': '#846A4A',
+        'text-accent': '#D4AF37',        
+        'platinum': '#F7EFE6',           
         
         // Glass & Overlay
-        'glass-light': 'rgba(255, 255, 255, 0.6)',
-        'glass-dark': 'rgba(61, 31, 31, 0.15)',
+        'glass-light': 'rgba(247, 239, 230, 0.8)',
+        'glass-dark': 'rgba(14, 40, 34, 0.8)',
       },
 
       fontFamily: {
-        'serif': ['Georgia', 'Garamond', 'serif'],
-        'sans': ['Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'sans-serif'],
+        'serif': ['"Playfair Display"', 'serif'],
+        'sans': ['Poppins', 'sans-serif'],
       },
       boxShadow: {
         'glow': '0 0 30px rgba(212, 175, 55, 0.35)',
         'glow-lg': '0 0 60px rgba(212, 175, 55, 0.25)',
-        'glow-ruby': '0 0 40px rgba(139, 69, 87, 0.4)',
-        'glow-emerald': '0 0 40px rgba(26, 107, 106, 0.4)',
-        'glow-sapphire': '0 0 40px rgba(26, 107, 106, 0.4)',
         'inner-glow': 'inset 0 0 20px rgba(212, 175, 55, 0.2)',
-        'premium': '0 20px 50px rgba(45, 19, 32, 0.6), 0 0 40px rgba(212, 175, 55, 0.25)',
+        'premium': '0 20px 50px rgba(14, 40, 34, 0.1), 0 0 40px rgba(212, 175, 55, 0.15)',
       },
 
       backdropFilter: {
@@ -70,8 +61,8 @@ export default {
           '50%': { opacity: '1', transform: 'scale(1)' },
         },
         'pulse-glow': {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(255, 215, 0, 0.4)' },
-          '50%': { boxShadow: '0 0 50px rgba(255, 215, 0, 0.8)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(212, 175, 55, 0.4)' },
+          '50%': { boxShadow: '0 0 50px rgba(212, 175, 55, 0.8)' },
         },
         shimmer: {
           '0%, 100%': { backgroundPosition: '200% center' },

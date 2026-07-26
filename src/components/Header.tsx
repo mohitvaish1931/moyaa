@@ -47,7 +47,7 @@ const Header = () => {
 
       {/* Main Header Nav */}
       <header className={`fixed top-0 left-0 z-50 transition-all duration-500 w-full`}>
-        <nav className={`${(isHomePage && scrollY < 50) ? 'bg-transparent border-transparent' : 'bg-text-primary/95 shadow-2xl border-white/5'} backdrop-blur-md transition-all duration-500 px-6 py-2 sm:py-3`}>
+        <nav className={`${(isHomePage && scrollY < 50) ? 'bg-transparent border-transparent text-text-primary' : 'bg-bg-primary/95 shadow-lg border-black/5 text-text-primary'} backdrop-blur-md transition-all duration-500 px-6 py-2 sm:py-3`}>
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             {/* Logo Left-aligned group */}
             <div className="flex items-center gap-12 lg:gap-20">
@@ -55,12 +55,12 @@ const Header = () => {
                 <img 
                   src="/logo.png" 
                   alt="Logo" 
-                  className="h-16 sm:h-20 lg:h-24 w-auto object-contain brightness-110" 
+                  className={`h-16 sm:h-20 lg:h-24 w-auto object-contain transition-all duration-500 ${(isHomePage && scrollY < 50) ? 'brightness-0' : ''}`} 
                 />
               </Link>
 
               <div className="hidden lg:flex items-center gap-10">
-                <Link to="/" className="text-white text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300">HOME</Link>
+                <Link to="/" className="text-text-primary text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300">HOME</Link>
                 
                 {/* Collections Dropdown */}
                 <div 
@@ -68,13 +68,13 @@ const Header = () => {
                   onMouseEnter={() => setIsCollectionsDropdownOpen(true)}
                   onMouseLeave={() => setIsCollectionsDropdownOpen(false)}
                 >
-                  <button className="flex items-center gap-2 text-white text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 uppercase">
+                  <button className="flex items-center gap-2 text-text-primary text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 uppercase">
                     COLLECTIONS
                     <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${isCollectionsDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
                   
                   {/* Dropdown Menu */}
-                  <div className={`absolute top-full left-0 w-64 bg-text-primary/95 backdrop-blur-3xl border border-white/10 rounded-xl py-6 shadow-3xl transition-all duration-300 ${
+                  <div className={`absolute top-full left-0 w-64 bg-white/95 backdrop-blur-3xl border border-gold-primary/20 rounded-xl py-6 shadow-3xl transition-all duration-300 ${
                     isCollectionsDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'
                   }`}>
                     <div className="grid grid-cols-1 gap-1 px-4">
@@ -91,7 +91,7 @@ const Header = () => {
                         <Link
                           key={item.label}
                           to={item.path}
-                          className="px-4 py-3 text-[10px] text-white/80 hover:text-gold-primary hover:bg-white/5 rounded-lg transition-all tracking-[0.2em] font-medium"
+                          className="px-4 py-3 text-[10px] text-text-primary/80 hover:text-gold-primary hover:bg-white/5 rounded-lg transition-all tracking-[0.2em] font-medium"
                         >
                           {item.label}
                         </Link>
@@ -104,7 +104,7 @@ const Header = () => {
                   <Link
                     key={item.label}
                     to={item.path}
-                    className="text-white text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 relative group"
+                    className="text-text-primary text-[11px] font-bold tracking-[0.2em] hover:text-gold-primary transition-colors duration-300 relative group"
                   >
                     {item.label}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-primary group-hover:w-full transition-all duration-300" />
@@ -117,26 +117,26 @@ const Header = () => {
             <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
               <div className="h-4 w-px bg-white/20 hidden sm:block mr-2" />
               
-              <div className="flex items-center gap-2.5 sm:gap-4 text-white">
-                <button onClick={() => setIsSearchOpen(true)} className="p-1.5 text-white hover:text-gold-primary transition-colors">
+              <div className="flex items-center gap-2.5 sm:gap-4 text-text-primary">
+                <button onClick={() => setIsSearchOpen(true)} className="p-1.5 text-text-primary hover:text-gold-primary transition-colors">
                   <Search className="w-4 h-4 sm:w-5 h-5" />
                 </button>
                 
-                <button onClick={handleUserClick} className="p-1.5 text-white hover:text-gold-primary transition-colors relative text-center">
+                <button onClick={handleUserClick} className="p-1.5 text-text-primary hover:text-gold-primary transition-colors relative text-center">
                   <User className="w-4 h-4 sm:w-5 h-5" />
                   {state.user && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-gold-primary rounded-full" />}
                 </button>
                 
-                <button onClick={() => setIsWishlistOpen(true)} className="p-1.5 text-white hover:text-primary-red transition-colors relative">
+                <button onClick={() => setIsWishlistOpen(true)} className="p-1.5 text-text-primary hover:text-primary-red transition-colors relative">
                   <Heart className="w-4 h-4 sm:w-5 h-5" />
                   {state.wishlist.length > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-primary-red text-white text-[8px] rounded-full h-3.5 w-3.5 flex items-center justify-center font-bold">
+                    <span className="absolute -top-1 -right-1 bg-primary-red text-text-primary text-[8px] rounded-full h-3.5 w-3.5 flex items-center justify-center font-bold">
                       {state.wishlist.length}
                     </span>
                   )}
                 </button>
 
-                <button onClick={() => setIsCartOpen(true)} className="p-1.5 text-white hover:text-gold-primary transition-colors relative">
+                <button onClick={() => setIsCartOpen(true)} className="p-1.5 text-text-primary hover:text-gold-primary transition-colors relative">
                   <ShoppingBag className="w-4 h-4 sm:w-5 h-5" />
                   {state.cart.length > 0 && (
                     <span className="absolute -top-1 -right-1 bg-gold-primary text-text-primary text-[8px] rounded-full h-3.5 w-3.5 flex items-center justify-center font-bold">
@@ -145,7 +145,7 @@ const Header = () => {
                   )}
                 </button>
 
-                <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-1.5 text-white hover:text-gold-primary transition-colors">
+                <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-1.5 text-text-primary hover:text-gold-primary transition-colors">
                   <Menu className="w-5 h-5" />
                 </button>
               </div>
@@ -159,7 +159,7 @@ const Header = () => {
         <div className="fixed inset-0 z-[100] bg-text-primary/60 backdrop-blur-md animate-fade-in lg:hidden">
           <div className="absolute top-0 left-0 h-full w-80 bg-luxury-dark shadow-2xl border-r border-gold-primary/20 p-8 flex flex-col">
             <div className="flex items-center justify-between mb-12">
-              <img src="/logo.jpeg" alt="Logo" className="h-10 w-auto" />
+              <img src="/logo.png" alt="Logo" className="h-10 w-auto brightness-0" />
               <button onClick={() => setIsSidebarOpen(false)} className="p-2 text-text-primary hover:text-primary-red transition-colors">
                 <X className="w-6 h-6" />
               </button>

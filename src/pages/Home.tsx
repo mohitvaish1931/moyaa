@@ -8,6 +8,7 @@ import ShowcaseVideos from '../components/ShowcaseVideos';
 import Reviews from '../components/Reviews';
 import BogoBanner from '../components/BogoBanner';
 import ImageMarquee from '../components/ImageMarquee';
+import RakhiBanner from '../components/RakhiBanner';
 import { useSEO } from '../utils/useSEO';
 
 const Home = () => {

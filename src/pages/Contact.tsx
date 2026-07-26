@@ -37,7 +37,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-luxury-dark">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary-wine/20 via-teal-luxury/10 to-primary-wine/20 py-16 shadow-[inset_0_1px_0_rgba(255,215,0,0.1)]">
+      <div className="bg-gradient-to-r from-gold-primary/10 via-transparent to-gold-primary/10 py-16 shadow-[inset_0_1px_0_rgba(212,175,55,0.1)]">
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-black text-text-primary mb-6 luxury-serif uppercase tracking-widest drop-shadow-sm">CONTACT US</h1>

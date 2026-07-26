@@ -36,8 +36,8 @@ export const products: Product[] = [
       'https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?auto=compress&cs=tinysrgb&w=600'
-    ],
     sale: true,
+    isBOGO: true,
     category: 'earrings',
     description: 'The Cherish Earrings are a perfect blend of elegance and sophistication. Crafted with precision and attention to detail, these earrings feature a timeless design that complements any outfit. Whether you\'re dressing up for a special occasion or adding a touch of glamour to your everyday look, the Cherish Earrings are the perfect choice.',
     features: [
@@ -68,8 +68,8 @@ export const products: Product[] = [
       'https://images.pexels.com/photos/2697598/pexels-photo-2697598.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/8891773/pexels-photo-8891773.jpeg?auto=compress&cs=tinysrgb&w=600'
-    ],
     sale: true,
+    isBOGO: true,
     category: 'bracelets',
     description: 'The Serenity Kada embodies tranquility and grace. This beautifully crafted bracelet features a smooth, polished finish that catches the light beautifully. Its comfortable fit and timeless design make it perfect for both casual and formal occasions.',
     features: [
@@ -100,8 +100,8 @@ export const products: Product[] = [
       'https://images.pexels.com/photos/10984235/pexels-photo-10984235.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg?auto=compress&cs=tinysrgb&w=600'
-    ],
     sale: true,
+    isBOGO: true,
     category: 'earrings',
     description: 'The Duo Love Earrings celebrate the beauty of connection and harmony. Featuring a unique dual-element design, these earrings symbolize love and unity. Perfect for romantic occasions or as a meaningful gift for someone special.',
     features: [

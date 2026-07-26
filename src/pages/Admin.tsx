@@ -860,6 +860,7 @@ const Admin = () => {
             return Array.isArray(specs) ? specs.join('\n') : (specs || '');
           })(),
           soldOut: editProduct.soldOut || false,
+          isBOGO: editProduct.isBOGO || false,
           images: editProduct.images || [],
           videos: editProduct.videos || [],
           stock: editProduct.stock || 0,
@@ -1074,6 +1075,7 @@ const Admin = () => {
           originalPrice: localForm.originalPrice ? Number(localForm.originalPrice) : undefined,
           description: localForm.description || '',
           soldOut: !!localForm.soldOut,
+          isBOGO: !!localForm.isBOGO,
         };
         dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
       }

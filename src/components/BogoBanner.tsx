@@ -10,7 +10,14 @@ const BogoBanner = () => {
         className="relative block w-full overflow-hidden rounded-[40px] shadow-2xl group transition-all duration-700 hover:shadow-glow-ruby"
       >
         {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-luxury-dark via-primary-red/80 to-luxury-dark bg-[length:200%_auto] animate-gradient-slow"></div>
+        <div className="absolute inset-0">
+          <img 
+            src="/WhatsApp%20Image%202026-07-20%20at%2014.34.24.jpeg" 
+            alt="Background" 
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-black/60 group-hover:bg-black/70 transition-colors duration-500"></div>
+        </div>
         
         {/* Decorative Elements */}
         <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity">
@@ -28,11 +35,11 @@ const BogoBanner = () => {
               </span>
               <Sparkles className="w-4 h-4 text-gold-primary animate-pulse" />
             </div>
-            <h2 className="text-3xl md:text-6xl font-black text-white luxury-serif tracking-[0.1em] leading-tight uppercase">
-              BUY 1 GET 1 <span className="text-gold-primary italic">FREE</span>
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white luxury-serif tracking-wide leading-tight drop-shadow-lg">
+              IT'S TIME TO GIFT <span className="text-gold-primary italic">HAPPINESS</span><br/>TO YOUR HAPPINESS ONE
             </h2>
-            <p className="text-white/80 font-medium tracking-widest text-xs md:text-sm uppercase max-w-lg">
-              Double the elegance, half the price. Shop our exclusive Buy 1 Get 1 Free collection and elevate your jewelry game today.
+            <p className="text-white/90 font-medium tracking-widest text-xs md:text-sm uppercase max-w-lg drop-shadow-md">
+              Celebrate the bond of love with our exclusive Rakhi collection. Specially curated for your loved ones.
             </p>
           </div>
           
