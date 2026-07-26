@@ -96,11 +96,18 @@ const ProductDetail = () => {
         try {
           setLoading(true);
           const response = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
-          if (!response.ok) throw new Error('Product not found');
+          if (!response.ok) {
+            throw new Error('Product not found');
+          }
           const data = await response.json();
           setProduct(data);
         } catch (err) {
           console.error('Fetch error:', err);
+          // Fallback to seed products / context products if API fails or returns 404/500
+          const fallbackProduct = state.products.find((p: any) => String(p._id) === id || String(p.id) === id);
+          if (fallbackProduct) {
+            setProduct(fallbackProduct);
+          }
         } finally {
           setLoading(false);
         }
@@ -109,7 +116,7 @@ const ProductDetail = () => {
     } else {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, state.products]);
 
   const addToCart = () => {
     if (!product) return;
