@@ -36,6 +36,7 @@ export const products: Product[] = [
       'https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?auto=compress&cs=tinysrgb&w=600'
+    ],
     sale: true,
     isBOGO: true,
     category: 'earrings',
@@ -68,6 +69,7 @@ export const products: Product[] = [
       'https://images.pexels.com/photos/2697598/pexels-photo-2697598.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/8891773/pexels-photo-8891773.jpeg?auto=compress&cs=tinysrgb&w=600'
+    ],
     sale: true,
     isBOGO: true,
     category: 'bracelets',
@@ -100,6 +102,7 @@ export const products: Product[] = [
       'https://images.pexels.com/photos/10984235/pexels-photo-10984235.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600',
       'https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg?auto=compress&cs=tinysrgb&w=600'
+    ],
     sale: true,
     isBOGO: true,
     category: 'earrings',
