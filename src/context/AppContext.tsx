@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
-import { products as seedProducts, Product as SeedProduct } from '../data/products';
+import { Product as SeedProduct } from '../data/products';
 import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
 
 export interface Product {
@@ -129,7 +129,7 @@ const initialState: AppState = {
   searchQuery: '',
   searchResults: [],
   isSearchOpen: false,
-  products: seedProducts as unknown as Product[],
+  products: [],
   videos: [],
   banners: [],
   coupons: [],
@@ -360,7 +360,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         
         if (prodRes.ok) {
           const prods = await prodRes.json();
-          if (mounted && prods && prods.length > 0) {
+          if (mounted && prods) {
             dispatch({ type: 'SET_PRODUCTS', payload: prods });
             hasBackendData = true;
           }
@@ -379,14 +379,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           if (mounted) dispatch({ type: 'SET_COUPONS', payload: coups });
         }
 
-        // If no backend products, keep showing seed data
+        // Fallback logic removed
         if (!hasBackendData && mounted) {
-          console.warn('Backend returned no products, keeping seed data');
+          console.warn('Backend returned no products');
         }
       } catch (e) {
         console.error('Failed to fetch from backend:', e);
-        // Keep showing seed data as fallback
-        console.log('Using seed data as fallback');
+        // Fallback logic removed
+        console.log('Failed to fetch from backend, state remains empty');
       }
     };
     hydrate();
