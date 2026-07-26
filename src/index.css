@@ -4,14 +4,14 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #F7EFE6;
+  --bg-primary: #F0EBE1;
   --accent-nude: #0E2822;
   --accent-beige: #0E2822;
   --accent-dark: #0E2822;
   --accent-teal: #0E2822;
-  --gold: #D4AF37;
-  --text-primary: #846A4A;
-  --text-secondary: #684F38;
+  --gold: #D1BA8E;
+  --text-primary: #684F38;
+  --text-secondary: #503A2B;
 }
 
 body {
@@ -115,13 +115,13 @@ html {
   /* Premium Gold Text Gradient */
   .text-gold-gradient {
     @apply text-transparent bg-clip-text;
-    background: linear-gradient(135deg, #d4af37 0%, #e8c547 50%, #d4af37 100%);
+    background: linear-gradient(135deg, #D1BA8E 0%, #E6DAC3 50%, #D1BA8E 100%);
   }
 
   /* Red to Gold Gradient */
   .text-ruby-gradient {
     @apply text-transparent bg-clip-text;
-    background: linear-gradient(135deg, #8B0000 0%, #C5A059 100%);
+    background: linear-gradient(135deg, #C59489 0%, #D1BA8E 100%);
   }
 
   /* Teal Gradient */
@@ -201,7 +201,7 @@ html {
 
   /* Premium Animated Gradients (Warm) */
   .animated-gradient {
-    background: linear-gradient(-45deg, #E8D5C4, #DBCBC0, #8B0000, #E8D5C4);
+    background: linear-gradient(-45deg, #E8D5C4, #DBCBC0, #C59489, #E8D5C4);
     background-size: 400% 400%;
     animation: gradientPremium 20s ease infinite;
   }
@@ -217,8 +217,8 @@ html {
   /* Premium Button Styles */
   .btn-premium-gold {
     @apply relative px-8 py-3 text-white font-semibold rounded-lg overflow-hidden border;
-    background: linear-gradient(135deg, #BA9444 0%, #E5C37A 50%, #BA9444 100%);
-    color: #684F38; /* Dark brown text */
+    background: linear-gradient(135deg, #D1BA8E 0%, #E6DAC3 50%, #D1BA8E 100%);
+    color: #937A65; /* Muted brown text */
     box-shadow: 0 0 30px rgba(186, 148, 68, 0.4);
     transition: all 0.3s ease;
     border-color: rgba(186, 148, 68, 0.5);
@@ -231,10 +231,10 @@ html {
 
   .btn-premium-ruby {
     @apply relative px-8 py-3 text-white font-semibold rounded-lg overflow-hidden border;
-    background: linear-gradient(135deg, #8B0000, #A52A2A);
-    box-shadow: 0 0 30px rgba(139, 0, 0, 0.3);
+    background: linear-gradient(135deg, #C59489, #D4A396);
+    box-shadow: 0 0 30px rgba(197, 148, 137, 0.3);
     transition: all 0.3s ease;
-    border-color: rgba(139, 0, 0, 0.5);
+    border-color: rgba(197, 148, 137, 0.5);
   }
 
   .btn-premium-ruby:hover {

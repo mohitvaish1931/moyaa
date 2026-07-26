@@ -5,26 +5,26 @@ export default {
     extend: {
       colors: {
         // Rakhi Collection Theme
-        'luxury-dark': '#F7EFE6',        // Updated to off-white so most sections are white
-        'luxury-secondary': '#F7EFE6',
-        'luxury-tertiary': '#F7EFE6',
-        'bg-primary': '#F7EFE6',         // Beige/Off-white Background
+        'luxury-dark': '#F0EBE1',        // Milder, less bright background
+        'luxury-secondary': '#F0EBE1',
+        'luxury-tertiary': '#F0EBE1',
+        'bg-primary': '#F0EBE1',         // Muted Beige Background
         
         // Brand Accents
-        'primary-red': '#846A4A',        // Changed red to dark brown to override old red text
-        'gold-primary': '#BA9444',       // Less yellow, more metallic gold
-        'accent-gold': '#BA9444',        
-        'emerald-luxury': '#0E2822',
+        'primary-red': '#C59489',        // Changed to soft dusty rose/mild red
+        'gold-primary': '#D1BA8E',       // Mild champagne gold
+        'accent-gold': '#D1BA8E',        
+        'emerald-luxury': '#4A6B63',
         
         // Text Colors
-        'text-primary': '#846A4A',       // Main Heading/Text Color
-        'text-secondary': '#684F38',     // Secondary Brown
-        'text-muted': '#846A4A',
-        'text-accent': '#D4AF37',        
-        'platinum': '#F7EFE6',           
+        'text-primary': '#684F38',       // Darker brown text
+        'text-secondary': '#503A2B',     // Even darker secondary text
+        'text-muted': '#C59489',
+        'text-accent': '#D1BA8E',        
+        'platinum': '#F0EBE1',           
         
         // Glass & Overlay
-        'glass-light': 'rgba(247, 239, 230, 0.8)',
+        'glass-light': 'rgba(240, 235, 225, 0.8)',
         'glass-dark': 'rgba(14, 40, 34, 0.8)',
       },
 
