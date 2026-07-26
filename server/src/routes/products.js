@@ -51,6 +51,9 @@ router.post('/reorder', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ error: 'Not found' });
+    }
     const item = await Product.findById(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
     res.json(item);

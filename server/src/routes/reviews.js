@@ -8,6 +8,9 @@ const router = express.Router();
 // Get all reviews for a product
 router.get('/product/:productId', async (req, res) => {
   try {
+    if (!req.params.productId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.json({ reviews: [], totalReviews: 0, ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 } });
+    }
     const { sort = 'newest', rating } = req.query;
     let query = { productId: req.params.productId, status: 'approved' };
 
