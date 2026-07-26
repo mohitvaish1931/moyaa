@@ -15,29 +15,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://127.0.0.1:5173',
-      'https://moraajewles.com',
-      'https://www.moraajewles.com',
-      'https://moraajewels.com',
-      'https://www.moraajewels.com',
-      'https://moraajewles.com/'
-    ];
-
-    const isAllowed = allowedOrigins.includes(origin) ||
-      origin.includes('vercel.app') ||
-      origin.includes('moraajewles.com') ||
-      origin.includes('moraajewels.com');
-
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    // Allow all origins to prevent CORS errors
+    callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
