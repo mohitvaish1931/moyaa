@@ -129,7 +129,7 @@ const initialState: AppState = {
   searchQuery: '',
   searchResults: [],
   isSearchOpen: false,
-  products: [],
+  products: seedProducts as unknown as Product[],
   videos: [],
   banners: [],
   coupons: [],
