@@ -583,6 +583,7 @@ const Admin = () => {
               rows={2}
               className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
               placeholder="Stainless Steel&#10;18k Gold PVD"
+              defaultValue={`Base Material: Stainless Steel\nFinishing: 18K Gold PVD Finish`}
             />
           </div>
           <div>
@@ -590,9 +591,10 @@ const Admin = () => {
             <textarea
               id="product-specifications"
               name="specifications_raw"
-              rows={3}
+              rows={5}
               className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
               placeholder="Waterproof&#10;Anti-Tarnish&#10;Hypoallergenic"
+              defaultValue={`* Anti-Tarnish\n* Waterproof\n* Hypoallergenic\n* Long-lasting Shine\n* 1 Year Warranty`}
             />
           </div>
           <div>
